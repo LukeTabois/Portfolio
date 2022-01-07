@@ -46,7 +46,8 @@ Console.Clear();
 
 Console.WriteLine("Thats is it from JeevesBot for now though...");
 Console.WriteLine("You should now talk to Steven so he can teach you some more about repository & devops");
-Console.WriteLine("(aka I have already types a whole 53 lines of code for this and cba to do any more)");
+// it was 52 lines of code you melt xoxo
+Console.WriteLine("(aka I have already types a whole 52 lines of code for this and cba to do any more)");
 Console.WriteLine("...");
 Console.ReadLine();
 Console.Clear();
