@@ -1,0 +1,51 @@
+Ships (5 in total per player)
+==============================
+1 boat 5 long (carrier)
+1 boat 4 long (battleship)
+2 boats 3 long (destroyer, submarine)
+1 2 long (patrol)
+==============================
+Grid (per player)
+==============================
+10 x 10
+X axis is A to J
+Y axis is 1 to 10
+H = hit
+M = miss
+C = Carrier
+B = Battleship
+D = Destroyer
+S = Submarine
+P = Patrol Boat
+==============================
+Function
+==============================
+Fire (coordinate of shot)
+	is the shot in the grid*
+	check if already been guessed
+	if not, check if hit
+	if so, check if sunk
+	if so, check if sunk all
+Position (boat, start coordinate, end coordinate)
+	stayed within grid*
+	check boat is not at an angle
+	check that same boat is not used twice
+	check if there is boat in that position
+Turn (whose turn is it)
+	check if all boats have been placed
+	if not, postion (all boats must be placed)
+	if so, draw then fire (one shot per turn)
+Draw (with or without boats)
+	
+	
+==============================
+Things to note
+==============================
+Grids are going to be arrays
+need to convert player input (A4) to zero based input (03)
+set of boat variables for each player
+we rewriting the array with H when a ship is hit
+
+	
+
+

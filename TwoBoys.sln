@@ -7,11 +7,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		azure-pipelines.yml = azure-pipelines.yml
+		Plan.txt = Plan.txt
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleships", "Battleships\Battleships.csproj", "{6B286A44-0A49-414C-9238-6360F20799BF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Battleships", "Battleships\Battleships.csproj", "{6B286A44-0A49-414C-9238-6360F20799BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardGameEngines", "BoardGameEngines\BoardGameEngines.csproj", "{C288C8EA-FCEE-4DEC-8535-DBAE5481D926}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardGameEngines", "BoardGameEngines\BoardGameEngines.csproj", "{C288C8EA-FCEE-4DEC-8535-DBAE5481D926}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
