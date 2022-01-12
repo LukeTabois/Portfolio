@@ -1,3 +1,10 @@
-﻿using BoardGameEngines;
+﻿using Battleships;
+using BoardGameEngines;
 
-Console.WriteLine("Hello, World!");
+string[,] grid = BattleshipsEngine.CreateNewGrid();
+
+BattleshipsConsole.PrintGrid(grid);
+
+
+
+
