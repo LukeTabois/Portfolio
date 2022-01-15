@@ -1,9 +1,10 @@
 ﻿using Battleships;
 using BoardGameEngines;
 
-string[,] grid = BattleshipsEngine.CreateNewGrid();
+string[,] playerOneGrid = BattleshipsEngine.CreateNewGrid();
+string[,] computerAiGrid = BattleshipsEngine.CreateNewGrid();
 
-BattleshipsConsole.PrintGrid(grid);
+BattleshipsConsole.PrintGridHomework(playerOneGrid);
 
 
 
