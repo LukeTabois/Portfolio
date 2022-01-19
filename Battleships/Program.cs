@@ -1,10 +1,16 @@
 ﻿using Battleships;
 using BoardGameEngines;
 
-string[,] playerOneGrid = BattleshipsEngine.CreateNewGrid();
-string[,] computerAiGrid = BattleshipsEngine.CreateNewGrid();
+//string[,] playerOneGrid = BattleshipsEngine.CreateNewGrid();
 
-BattleshipsConsole.PrintGridHomework(playerOneGrid);
+ArrayCoordinate coordinate = BattleshipsConsole.GetCoordinate();
+
+Console.WriteLine($"The array friendly coordinate is {coordinate.Column},{coordinate.Row}");
+
+
+//BattleshipsEngine.Fire(coordinate, playerOneGrid);
+
+
 
 
 
