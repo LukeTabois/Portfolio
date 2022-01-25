@@ -38,6 +38,45 @@
             return grid;
         }
 
+        /// <summary>
+        /// FOR TESTING PURPOSES
+        /// adds hard coded boats to a grid to simulate grid within game play
+        /// </summary>
+        /// <param name="grid">the grid to add the mock boats to</param>
+        /// <returns>the grid with the mock boats added</returns>
+        public static string[,] MockAddBoatsToGrid(string[,] grid)
+        {
+            // carrier boat added from B2 to B6
+            grid[1, 1] = "C";
+            grid[1, 2] = "C";
+            grid[1, 3] = "C";
+            grid[1, 4] = "C";
+            grid[1, 5] = "C";
+
+            // battleship boat added from E9 to H9
+            grid[5, 8] = "B";
+            grid[6, 8] = "B";
+            grid[7, 8] = "B";
+            grid[8, 8] = "B";
+
+            // destroyer boat added from D4 to D7
+            grid[4, 3] = "B";
+            grid[4, 4] = "B";
+            grid[4, 5] = "B";
+
+            // submarine boat added from H10 to J10
+            grid[7, 9] = "B";
+            grid[8, 9] = "B";
+            grid[9, 9] = "B";
+
+            // patrol boat added from A1 to A2
+            grid[0, 0] = "P";
+            grid[0, 1] = "P";
+
+            // return the updated grid
+            return grid;
+        }
+
         public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid )
         {            
             bool result = false;

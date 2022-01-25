@@ -5,6 +5,12 @@ using BoardGameEngines;
 string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
 string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
 
+#if DEBUG
+    // FOR TESTING ONLY, SHOULD BE REMOVED LATER
+    // add hard coded boats to grid to simulate game
+    BattleshipsEngine.MockAddBoatsToGrid(aiGrid);
+#endif
+
 // print grid before Fire
 BattleshipsConsole.PrintGrid(aiGrid);
 
