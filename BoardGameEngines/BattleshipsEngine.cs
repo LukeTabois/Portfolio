@@ -60,14 +60,14 @@
             grid[8, 8] = "B";
 
             // destroyer boat added from D4 to D7
-            grid[4, 3] = "B";
-            grid[4, 4] = "B";
-            grid[4, 5] = "B";
+            grid[4, 3] = "D";
+            grid[4, 4] = "D";
+            grid[4, 5] = "D";
 
             // submarine boat added from H10 to J10
-            grid[7, 9] = "B";
-            grid[8, 9] = "B";
-            grid[9, 9] = "B";
+            grid[7, 9] = "S";
+            grid[8, 9] = "S";
+            grid[9, 9] = "S";
 
             // patrol boat added from A1 to A2
             grid[0, 0] = "P";
