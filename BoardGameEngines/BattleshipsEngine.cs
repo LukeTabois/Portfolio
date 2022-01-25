@@ -81,7 +81,16 @@
         {            
             bool result = false;
 
-            inputGrid[coordinate.Column, coordinate.Row] = "!";
+            // inputGrid[coordinate.Column, coordinate.Row] = "!";
+
+            if (inputGrid[coordinate.Column, coordinate.Row] == "O")
+            {
+                inputGrid[coordinate.Column, coordinate.Row] = "M";
+            }
+            else
+            {
+                inputGrid[coordinate.Column, coordinate.Row] = "H";
+            }
             
             outputGrid = inputGrid;
             return result;
