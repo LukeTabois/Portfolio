@@ -70,8 +70,9 @@ namespace Battleships
                             break;
                     }
 
-                    string row = (y + 1).ToString();                                   
-                    Console.Write(column + row);                  
+                    string row = (y + 1).ToString();
+                    
+                    Console.Write(grid[x,y]);                  
                     
                 }
                 Console.WriteLine();

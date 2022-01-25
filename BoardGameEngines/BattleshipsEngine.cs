@@ -44,7 +44,7 @@
 
             inputGrid[coordinate.Column, coordinate.Row] = "!";
             
-            outputGrid = null;
+            outputGrid = inputGrid;
             return result;
         }
     }

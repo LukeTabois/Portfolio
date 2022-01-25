@@ -1,14 +1,27 @@
 ﻿using Battleships;
 using BoardGameEngines;
 
-//string[,] playerOneGrid = BattleshipsEngine.CreateNewGrid();
+// initialise grids for player and AI
+string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
+string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
 
+// print grid before Fire
+BattleshipsConsole.PrintGrid(aiGrid);
+
+// get a coordinate from the player
 ArrayCoordinate coordinate = BattleshipsConsole.GetCoordinate();
 
-Console.WriteLine($"The array friendly coordinate is {coordinate.Column},{coordinate.Row}");
+// fire based on player input against aiGrid
+BattleshipsEngine.Fire(coordinate, aiGrid, out aiGrid);
 
+// print grid after Fire
+BattleshipsConsole.PrintGrid(aiGrid);
 
-//BattleshipsEngine.Fire(coordinate, playerOneGrid);
+#if DEBUG
+    // stop point for debugging purposes
+    Console.ReadLine();
+#endif
+
 
 
 
