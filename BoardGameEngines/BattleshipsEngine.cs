@@ -70,30 +70,81 @@
             grid[9, 9] = "S";
 
             // patrol boat added from A1 to A2
-            grid[0, 0] = "P";
+            grid[0, 0] = "H";
             grid[0, 1] = "P";
 
             // return the updated grid
             return grid;
         }
 
-        public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid )
-        {            
-            bool result = false;
+        /// <summary>
+        /// checks if a boat is sunk
+        /// </summary>
+        /// <param name="boatLetter">represents a type of boat</param>
+        /// <param name="grid">the battleship grid</param>
+        /// <returns>true or false value if a boat has been sunk</returns>
+        public static bool IsShipSunk(string boatLetter, string[,] grid)
+        {
+            // initilise sunk
+            bool sunk = true;
 
-            // inputGrid[coordinate.Column, coordinate.Row] = "!";
-
-            if (inputGrid[coordinate.Column, coordinate.Row] == "O")
+            // check if the boat letter is in the array
+            // this loops through x axis (a b c...)
+            for (int x = 0; x < 10; x++)
             {
-                inputGrid[coordinate.Column, coordinate.Row] = "M";
+                // changed index of y to match battleships grid
+                for (int y = 0; y < 10; y++)
+                {
+                    // check is boatletter is in the cell
+                    if (boatLetter == grid[x, y])
+                    {
+                        sunk = false;
+                    }
+                }
+            }
+
+            // return sunk
+            return sunk;
+        }
+
+
+        public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid, out bool boatWasHit, out bool boatWasSunk )
+        {
+            boatWasHit = false;
+            bool shotAlready = false;
+            boatWasSunk = false;
+
+                     
+            // check if coordinate has NOT been fired upon already
+            if (!(inputGrid[coordinate.Column, coordinate.Row] == "M") && !(inputGrid[coordinate.Column, coordinate.Row] == "H"))
+            {
+                // if not fired upon and no boat
+                if (inputGrid[coordinate.Column, coordinate.Row] == "O")
+                {
+                    // set to miss
+                    inputGrid[coordinate.Column, coordinate.Row] = "M";
+                }
+                // otherwise
+                else
+                {
+                    string boatLetter = inputGrid[coordinate.Column, coordinate.Row];
+
+                    // set to hit
+                    inputGrid[coordinate.Column, coordinate.Row] = "H";
+                    boatWasHit = true;
+
+                    // check if boat sunk
+                    boatWasSunk = IsShipSunk(boatLetter, inputGrid);
+
+                }
             }
             else
             {
-                inputGrid[coordinate.Column, coordinate.Row] = "H";
+                shotAlready = true;
             }
             
             outputGrid = inputGrid;
-            return result;
+            return shotAlready;
         }
     }
 

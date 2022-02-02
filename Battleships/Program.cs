@@ -4,6 +4,8 @@ using BoardGameEngines;
 // initialise grids for player and AI
 string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
 string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
+bool boatWasHit = false;
+bool boatWasSunk = false;
 
 #if DEBUG
     // FOR TESTING ONLY, SHOULD BE REMOVED LATER
@@ -14,11 +16,26 @@ string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
 // print grid before Fire
 BattleshipsConsole.PrintGrid(aiGrid);
 
-// get a coordinate from the player
-ArrayCoordinate coordinate = BattleshipsConsole.GetCoordinate();
+// initialise shotAlready to enter loop and the coordinate object
+bool shotAlready = true;
+ArrayCoordinate coordinate = null;
 
-// fire based on player input against aiGrid
-BattleshipsEngine.Fire(coordinate, aiGrid, out aiGrid);
+while (shotAlready == true)
+{    
+    coordinate = BattleshipsConsole.GetCoordinate();
+    shotAlready = BattleshipsEngine.Fire(coordinate, aiGrid, out aiGrid, out boatWasHit, out boatWasSunk);
+    if (shotAlready == true)
+    {
+        Console.WriteLine("You stupid fuckin moron pick another");
+    }
+}
+
+if (boatWasSunk == true)
+{
+    // TODO: tell the user which battleship they sunk
+    Console.WriteLine("YOU SUNK A BATTLESHIP");
+}
+
 
 // print grid after Fire
 BattleshipsConsole.PrintGrid(aiGrid);

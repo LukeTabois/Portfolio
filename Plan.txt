@@ -24,7 +24,9 @@ Fire (coordinate of shot)
 	is the shot in the grid*
 	check if already been guessed
 	if not, check if hit
+		say which boat was hit
 	if so, check if sunk
+		say which boat has sunk
 	if so, check if sunk all
 Position (boat, start coordinate, end coordinate)
 	stayed within grid*
