@@ -14,7 +14,9 @@ bool boatWasSunk = false;
 #endif
 
 // print grid before Fire
-BattleshipsConsole.PrintGrid(aiGrid);
+BattleshipsConsole.PrintGrid(aiGrid, true);
+
+return;
 
 // initialise shotAlready to enter loop and the coordinate object
 bool shotAlready = true;
