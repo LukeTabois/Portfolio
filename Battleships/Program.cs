@@ -5,7 +5,8 @@ using BoardGameEngines;
 string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
 string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
 bool boatWasHit = false;
-bool boatWasSunk = false;
+string boatWasSunk = null;
+string boatName = null;
 
 #if DEBUG
     // FOR TESTING ONLY, SHOULD BE REMOVED LATER
@@ -32,10 +33,10 @@ while (shotAlready == true)
     }
 }
 
-if (boatWasSunk == true)
+if (boatWasSunk != null)
 {
-    // TODO: tell the user which battleship they sunk
-    Console.WriteLine("YOU SUNK A BATTLESHIP");
+    boatName = BattleshipsConsole.GetNameOfBattleShip(boatWasSunk);
+    Console.WriteLine($"YOU SUNK A {boatName.ToUpper()}");
 }
 
 

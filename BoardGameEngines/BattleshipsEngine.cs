@@ -108,11 +108,11 @@
         }
 
 
-        public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid, out bool boatWasHit, out bool boatWasSunk )
+        public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid, out bool boatWasHit, out string boatWasSunk )
         {
             boatWasHit = false;
             bool shotAlready = false;
-            boatWasSunk = false;
+            boatWasSunk = null;
 
                      
             // check if coordinate has NOT been fired upon already
@@ -133,8 +133,11 @@
                     inputGrid[coordinate.Column, coordinate.Row] = "H";
                     boatWasHit = true;
 
-                    // check if boat sunk
-                    boatWasSunk = IsShipSunk(boatLetter, inputGrid);
+                    // check if boat sunk and set to boat letter                 
+                    if (IsShipSunk(boatLetter, inputGrid))
+                    {
+                        boatWasSunk = boatLetter;
+                    }
 
                 }
             }

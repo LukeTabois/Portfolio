@@ -143,6 +143,43 @@ namespace Battleships
             throw new Exception("Error occurred trying to get coordinate");
         }
 
+        /// <summary>
+        /// gets a full name of a boat based on the letter
+        /// </summary>
+        /// <param name="boatLetter">first initial of a boat (P, B, D, S, C)</param>
+        /// <returns>boat name based on corrisponding boat letter</returns>
+        public static string GetNameOfBattleShip(string boatLetter)
+        {
+            // initialise boat name
+            string boatName = null;
+
+            // sets boat name based on the letter
+            switch (boatLetter)
+            {
+                case "P":
+                    boatName = "Patrol Boat";
+                    break;
+                case "B":
+                    boatName = "Battleship";
+                    break;
+                case "D":
+                    boatName = "Destroyer";
+                    break;
+                case "S":
+                    boatName = "Submarine";
+                    break;
+                case "C":
+                    boatName = "Carrier";
+                    break;
+                // give an error if boat letter is not valid
+                default:
+                    Console.WriteLine($"{boatLetter} is not a valid boat letter. It must be P, D, S, B or C");
+                    break;
+            }
+
+            return boatName;
+
+        }
 
     }
 }
