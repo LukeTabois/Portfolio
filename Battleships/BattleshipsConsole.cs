@@ -17,28 +17,56 @@ namespace Battleships
                 // if its the first time through the columns, add the column headers
                 if (x == 0)
                 {
-                    Console.WriteLine("==========================================================================================");
-                    Console.WriteLine("||      ||   A   |   B   |   C   |   D   |   E   |   F   |   G   |   H   |   I   |   J   |");
-                    Console.WriteLine("==========================================================================================");
+                    Console.WriteLine("=========================================================================================");
+                    Console.WriteLine("||     ||   1   |   2   |   3   |   4   |   5   |   6   |   7   |   8   |   9   |   10  |");
+                    Console.WriteLine("=========================================================================================");
                 }
 
                 // changed index of y to match battleships grid
                 for (int y = 0; y < grid.GetLength(1); y++)
                 {
+                    // convert coordinate to array grid ready 
+                    string column = null;
+                    switch (x)
+                    {
+                        case 0:
+                            column = "A";
+                            break;
+                        case 1:
+                            column = "B";
+                            break;
+                        case 2:
+                            column = "C";
+                            break;
+                        case 3:
+                            column = "D";
+                            break;
+                        case 4:
+                            column = "E";
+                            break;
+                        case 5:
+                            column = "F";
+                            break;
+                        case 6:
+                            column = "G";
+                            break;
+                        case 7:
+                            column = "H";
+                            break;
+                        case 8:
+                            column = "I";
+                            break;
+                        case 9:
+                            column = "J";
+                            break;
+                        default:
+                            break;
+                    }
                     // if its the first time through the rows, add a row header
                     if (y == 0)
                     {
-                        // handles the number 10 to keep the grid aligned
-                        int rowNumber = x + 1;
-                        if (rowNumber < 10)
-                        {
-                            Console.Write($"||  0{rowNumber}  ||");
-                        }
-                        else
-                        {
-                            Console.Write($"||  {rowNumber}  ||");
-                        }
-                        
+                        Console.Write($"||  {column}  ||");
+
                     }
 
                     // get the cell value
@@ -63,7 +91,7 @@ namespace Battleships
                 Console.WriteLine();
 
                 // add a dashed line between each row
-                Console.WriteLine("------------------------------------------------------------------------------------------");
+                Console.WriteLine("-----------------------------------------------------------------------------------------");
             }
         }
 

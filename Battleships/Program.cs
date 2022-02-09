@@ -4,7 +4,7 @@ using BoardGameEngines;
 // initialise grids for player and AI
 string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
 string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
-bool boatWasHit = false;
+string boatWasHit = null;
 string boatWasSunk = null;
 string boatName = null;
 bool allBoatsWereSunk = false;
@@ -29,21 +29,35 @@ while (shotAlready == true)
     if (shotAlready == true)
     {
         Console.WriteLine("You stupid fuckin moron pick another");
+        Console.WriteLine();
     }
 }
 
-if (boatWasSunk != null)
+boatName = BattleshipsConsole.GetNameOfBattleShip(boatWasHit);
+
+if (boatWasHit != null)
 {
-    boatName = BattleshipsConsole.GetNameOfBattleShip(boatWasSunk);
-    Console.WriteLine($"YOU SUNK A {boatName.ToUpper()}");
-    
-    if(allBoatsWereSunk == true)
+    Console.WriteLine($"YOU HIT A {boatName.ToUpper()}");
+    Console.WriteLine();
+
+    if (boatWasSunk != null)
     {
-        Console.WriteLine("YOU WIN!!");
-        // TODO: write code to play again, for now end
-        return;
+
+        Console.WriteLine($"YOU SUNK A {boatName.ToUpper()}");
+        Console.WriteLine();
+
+        if (allBoatsWereSunk == true)
+        {
+            Console.WriteLine("YOU WIN!!");
+            Console.WriteLine();
+
+            // TODO: write code to play again, for now end
+            return;
+        }
     }
 }
+
+
 
 
 // print grid after Fire
