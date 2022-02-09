@@ -4,21 +4,55 @@ using BoardGameEngines;
 // initialise grids for player and AI
 string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
 string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
-string boatWasHit = null;
-string boatWasSunk = null;
-string boatName = null;
-bool allBoatsWereSunk = false;
 
 #if DEBUG
     // FOR TESTING ONLY, SHOULD BE REMOVED LATER
     // add hard coded boats to grid to simulate game
-    BattleshipsEngine.MockAddBoatsToGrid(aiGrid);
+    // BattleshipsEngine.MockAddBoatsToGrid(aiGrid);
 #endif
 
-// print grid before Fire
-BattleshipsConsole.PrintGrid(aiGrid, true);
+// print grid before
+BattleshipsConsole.PrintGrid(playerGrid, true);
+Console.WriteLine();
 
-// initialise shotAlready to enter loop and the coordinate object
+// intialising variables for place ship
+ArrayCoordinate startCoordinate = null;
+ArrayCoordinate endCoordinate = null;
+string boatLetter = null;
+
+// get basic inputs for place ship
+Console.WriteLine("Enter a Boat Letter");
+boatLetter = Console.ReadLine();
+Console.WriteLine();
+
+Console.WriteLine("(start coordinate)");
+startCoordinate = BattleshipsConsole.GetCoordinate();
+
+Console.WriteLine("(end coordinate)");
+endCoordinate = BattleshipsConsole.GetCoordinate();
+
+// call place ship passing inputs
+BattleshipsEngine.PlaceShip(playerGrid, startCoordinate, endCoordinate, boatLetter);
+
+// print grid before
+BattleshipsConsole.PrintGrid(playerGrid, true);
+Console.WriteLine();
+
+// FOR TESTING ONLY, SHOULD BE REMOVED LATER
+return;
+
+
+
+
+
+
+
+
+// initialise variables for fire
+string boatWasHit = null;
+string boatWasSunk = null;
+string boatName = null;
+bool allBoatsWereSunk = false;
 bool shotAlready = true;
 ArrayCoordinate coordinate = null;
 

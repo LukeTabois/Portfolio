@@ -77,6 +77,11 @@
             return grid;
         }
 
+        public static string[,] PlaceShip(string[,] grid, ArrayCoordinate startCoordinate, ArrayCoordinate endCoordinate, string boatLetter)
+        {
+            return grid;
+        }
+
         /// <summary>
         /// checks if a boat is sunk
         /// </summary>
