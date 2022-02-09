@@ -83,10 +83,11 @@
         /// <param name="boatLetter">represents a type of boat</param>
         /// <param name="grid">the battleship grid</param>
         /// <returns>true or false value if a boat has been sunk</returns>
-        public static bool IsShipSunk(string boatLetter, string[,] grid)
+        public static bool IsShipSunk(string boatLetter, string[,] grid, out bool areAllShipsSunk)
         {
             // initilise sunk
-            bool sunk = true;
+            bool isShipSunk = true;
+            areAllShipsSunk = false;
 
             // check if the boat letter is in the array
             // this loops through x axis (a b c...)
@@ -98,23 +99,65 @@
                     // check is boatletter is in the cell
                     if (boatLetter == grid[x, y])
                     {
-                        sunk = false;
+                        isShipSunk = false;
                     }
                 }
             }
 
+            // if the ship was sunk
+            if (isShipSunk == true)
+            {
+                areAllShipsSunk = AreAllShipsSunk(grid);
+            }
+
             // return sunk
-            return sunk;
+            return isShipSunk;
         }
 
+        /// <summary>
+        /// checks if all boats have been sunk
+        /// </summary>
+        /// <param name="grid">battleship grid</param>
+        /// <returns>if all the boats have been sunk</returns>
+        public static bool AreAllShipsSunk(string[,] grid)
+        {
+            // initialise the hit counter
+            int hitCounter = 0;
 
-        public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid, out bool boatWasHit, out string boatWasSunk )
+            // check if H is in the array
+            // this loops through x axis (a b c...)
+            for (int x = 0; x < 10; x++)
+            {
+                // changed index of y to match battleships grid
+                for (int y = 0; y < 10; y++)
+                {
+                    // check if H is in the cell
+                    if ("H" == grid[x, y])
+                    {
+                        hitCounter++;
+                    }
+                }
+            }
+
+            // using 17 as that is the total boat slots
+            if (hitCounter == 17)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }            
+        }
+
+        public static bool Fire(ArrayCoordinate coordinate, string[,] inputGrid, out string[,] outputGrid, out bool boatWasHit, out string boatWasSunk, out bool allBoatsWereSunk)
         {
             boatWasHit = false;
             bool shotAlready = false;
             boatWasSunk = null;
+            allBoatsWereSunk = false;
 
-                     
+
             // check if coordinate has NOT been fired upon already
             if (!(inputGrid[coordinate.Column, coordinate.Row] == "M") && !(inputGrid[coordinate.Column, coordinate.Row] == "H"))
             {
@@ -134,7 +177,7 @@
                     boatWasHit = true;
 
                     // check if boat sunk and set to boat letter                 
-                    if (IsShipSunk(boatLetter, inputGrid))
+                    if (IsShipSunk(boatLetter, inputGrid, out allBoatsWereSunk))
                     {
                         boatWasSunk = boatLetter;
                     }

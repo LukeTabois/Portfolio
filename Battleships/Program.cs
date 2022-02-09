@@ -7,6 +7,7 @@ string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
 bool boatWasHit = false;
 string boatWasSunk = null;
 string boatName = null;
+bool allBoatsWereSunk = false;
 
 #if DEBUG
     // FOR TESTING ONLY, SHOULD BE REMOVED LATER
@@ -17,8 +18,6 @@ string boatName = null;
 // print grid before Fire
 BattleshipsConsole.PrintGrid(aiGrid, true);
 
-return;
-
 // initialise shotAlready to enter loop and the coordinate object
 bool shotAlready = true;
 ArrayCoordinate coordinate = null;
@@ -26,7 +25,7 @@ ArrayCoordinate coordinate = null;
 while (shotAlready == true)
 {    
     coordinate = BattleshipsConsole.GetCoordinate();
-    shotAlready = BattleshipsEngine.Fire(coordinate, aiGrid, out aiGrid, out boatWasHit, out boatWasSunk);
+    shotAlready = BattleshipsEngine.Fire(coordinate, aiGrid, out aiGrid, out boatWasHit, out boatWasSunk, out allBoatsWereSunk);
     if (shotAlready == true)
     {
         Console.WriteLine("You stupid fuckin moron pick another");
@@ -37,6 +36,13 @@ if (boatWasSunk != null)
 {
     boatName = BattleshipsConsole.GetNameOfBattleShip(boatWasSunk);
     Console.WriteLine($"YOU SUNK A {boatName.ToUpper()}");
+    
+    if(allBoatsWereSunk == true)
+    {
+        Console.WriteLine("YOU WIN!!");
+        // TODO: write code to play again, for now end
+        return;
+    }
 }
 
 

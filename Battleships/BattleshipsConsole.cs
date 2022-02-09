@@ -147,7 +147,7 @@ namespace Battleships
         /// gets a full name of a boat based on the letter
         /// </summary>
         /// <param name="boatLetter">first initial of a boat (P, B, D, S, C)</param>
-        /// <returns>boat name based on corrisponding boat letter</returns>
+        /// <returns>boat name based on corresponding boat letter</returns>
         public static string GetNameOfBattleShip(string boatLetter)
         {
             // initialise boat name
