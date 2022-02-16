@@ -76,10 +76,239 @@
             // return the updated grid
             return grid;
         }
-
-        public static string[,] PlaceShip(string[,] grid, ArrayCoordinate startCoordinate, ArrayCoordinate endCoordinate, string boatLetter)
+        /*
+        public static bool PlaceShipBackup(string[,] inputGrid, ArrayCoordinate startCoordinate, ArrayCoordinate endCoordinate, string boatLetter, out string[,] outputGrid)
         {
-            return grid;
+            // initialise
+            bool isValid = false;
+            outputGrid = inputGrid;
+            int expectedBoatLength = -1;
+
+            // check boat is not at an angle
+            if (startCoordinate.Column != endCoordinate.Column && startCoordinate.Row != endCoordinate.Row)
+            {
+                return isValid;
+            }
+
+            // check size of boat is correct
+            switch (boatLetter)
+            {
+                case "P":
+                    expectedBoatLength = 2;
+                    break;
+                case "S":
+                    expectedBoatLength = 3;
+                    break;
+                case "D":
+                    expectedBoatLength = 3;
+                    break;
+                case "B":
+                    expectedBoatLength = 4;
+                    break;
+                case "C":
+                    expectedBoatLength = 5;
+                    break;
+                default:
+                    return isValid;
+                    break;
+            }
+
+            // check that same boat is not used twice
+
+
+            // check if there is boat in that position
+
+
+
+
+            ArrayCoordinate coordinateCounter = new ArrayCoordinate();
+            int providedBoatLength = -1;
+
+            // if the boat is horizontal                       
+            if (startCoordinate.Column == endCoordinate.Column)
+            {
+                // check and set start coordinate as the "smaller" value
+                if (startCoordinate.Row > endCoordinate.Row)
+                {
+                    ArrayCoordinate tempCoordinate = startCoordinate;
+                    startCoordinate = endCoordinate;
+                    endCoordinate = tempCoordinate;
+                }
+
+                // check boat length is valid
+                providedBoatLength = (endCoordinate.Row - startCoordinate.Row) + 1;
+                if (providedBoatLength != expectedBoatLength)
+                {
+                    return isValid;
+                }
+
+                // set coordinate couter as start coordinate 
+                coordinateCounter = startCoordinate;
+
+                isValid = true;
+
+                // setting the boat letter for the start to end coordinates
+                while (coordinateCounter.Row <= endCoordinate.Row)
+                {
+                    outputGrid[coordinateCounter.Column, coordinateCounter.Row] = boatLetter;
+                    coordinateCounter.Row++;
+                }
+            }
+            // if the boat is vertical
+            else
+            {
+                // check and set start coordinate as the "smaller" value
+                if (startCoordinate.Column > endCoordinate.Column)
+                {
+                    ArrayCoordinate tempCoordinate = startCoordinate;
+                    startCoordinate = endCoordinate;
+                    endCoordinate = tempCoordinate;
+                }
+
+                // check boat length is valid
+                providedBoatLength = (endCoordinate.Column - startCoordinate.Column) + 1;
+                if (providedBoatLength != expectedBoatLength)
+                {
+                    return isValid;
+                }
+
+                // set coordinate couter as start coordinate 
+                coordinateCounter = startCoordinate;
+
+                isValid = true;
+
+                // setting the boat letter for the start to end coordinates
+                while (coordinateCounter.Column <= endCoordinate.Column)
+                {
+                    outputGrid[coordinateCounter.Column, coordinateCounter.Row] = boatLetter;
+                    coordinateCounter.Column++;
+                }
+            }
+
+            return isValid;
+        }
+        */
+
+
+
+
+
+
+
+
+
+
+
+
+        public static bool PlaceShip(string[,] inputGrid, ArrayCoordinate startCoordinate, ArrayCoordinate endCoordinate, string boatLetter, out string[,] outputGrid)
+        {
+            // initialise
+            bool isValid = false;
+            outputGrid = inputGrid;
+            int expectedBoatLength = -1;
+
+            // check boat is not at an angle
+            if (startCoordinate.Column != endCoordinate.Column && startCoordinate.Row != endCoordinate.Row)
+            {
+                return isValid; 
+            }
+
+            // check size of boat is correct
+            switch (boatLetter)
+            {
+                case "P":
+                    expectedBoatLength = 2;
+                    break;
+                case "S":
+                    expectedBoatLength = 3;
+                    break;
+                case "D":
+                    expectedBoatLength = 3;
+                    break;
+                case "B":
+                    expectedBoatLength = 4;
+                    break;
+                case "C":
+                    expectedBoatLength = 5;
+                    break;
+                default:
+                    return isValid;
+                    break;
+            }
+
+            // check that same boat is not used twice
+
+
+            // check if there is boat in that position
+
+
+            
+           
+            ArrayCoordinate coordinateCounter = new ArrayCoordinate();
+            int providedBoatLength = -1;
+
+            // if the boat is horizontal                       
+            if (startCoordinate.Column == endCoordinate.Column)
+            {
+                // check and set start coordinate as the "smaller" value
+                if (startCoordinate.Row > endCoordinate.Row)
+                {
+                    ArrayCoordinate tempCoordinate = startCoordinate;                    
+                    startCoordinate = endCoordinate;
+                    endCoordinate = tempCoordinate;           
+                }
+
+                // check boat length is valid
+                providedBoatLength = (endCoordinate.Row - startCoordinate.Row) + 1;
+                if (providedBoatLength != expectedBoatLength)
+                {
+                    return isValid;
+                }
+
+                // set coordinate couter as start coordinate 
+                coordinateCounter = startCoordinate;
+
+                isValid = true;
+
+                // setting the boat letter for the start to end coordinates
+                while (coordinateCounter.Row <= endCoordinate.Row)
+                {
+                    outputGrid[coordinateCounter.Column, coordinateCounter.Row] = boatLetter;
+                    coordinateCounter.Row++;
+                }
+            }
+            // if the boat is vertical
+            else
+            {
+                // check and set start coordinate as the "smaller" value
+                if (startCoordinate.Column > endCoordinate.Column)
+                {
+                    ArrayCoordinate tempCoordinate = startCoordinate;
+                    startCoordinate = endCoordinate;
+                    endCoordinate = tempCoordinate;
+                }
+
+                // check boat length is valid
+                providedBoatLength = (endCoordinate.Column - startCoordinate.Column) + 1;
+                if (providedBoatLength != expectedBoatLength)
+                {
+                    return isValid;
+                }
+
+                // set coordinate couter as start coordinate 
+                coordinateCounter = startCoordinate;
+
+                isValid = true;
+
+                // setting the boat letter for the start to end coordinates
+                while (coordinateCounter.Column <= endCoordinate.Column)
+                {
+                    outputGrid[coordinateCounter.Column, coordinateCounter.Row] = boatLetter;
+                    coordinateCounter.Column++;
+                }
+            }
+
+            return isValid;
         }
 
         /// <summary>

@@ -5,6 +5,9 @@ using BoardGameEngines;
 string[,] playerGrid = BattleshipsEngine.CreateNewGrid();
 string[,] aiGrid = BattleshipsEngine.CreateNewGrid();
 
+// initialise boat name for place boat and fire
+string boatName = null;
+
 #if DEBUG
     // FOR TESTING ONLY, SHOULD BE REMOVED LATER
     // add hard coded boats to grid to simulate game
@@ -19,6 +22,7 @@ Console.WriteLine();
 ArrayCoordinate startCoordinate = null;
 ArrayCoordinate endCoordinate = null;
 string boatLetter = null;
+bool isBoatPlacementValid = false;
 
 // get basic inputs for place ship
 Console.WriteLine("Enter a Boat Letter");
@@ -32,8 +36,12 @@ Console.WriteLine("(end coordinate)");
 endCoordinate = BattleshipsConsole.GetCoordinate();
 
 // call place ship passing inputs
-BattleshipsEngine.PlaceShip(playerGrid, startCoordinate, endCoordinate, boatLetter);
+isBoatPlacementValid = BattleshipsEngine.PlaceShip(playerGrid, startCoordinate, endCoordinate, boatLetter, out playerGrid);
 
+if (isBoatPlacementValid == false)
+{// TODO: make the error nicer
+    Console.WriteLine("Boat placement was not valid");
+}
 // print grid before
 BattleshipsConsole.PrintGrid(playerGrid, true);
 Console.WriteLine();
@@ -51,7 +59,6 @@ return;
 // initialise variables for fire
 string boatWasHit = null;
 string boatWasSunk = null;
-string boatName = null;
 bool allBoatsWereSunk = false;
 bool shotAlready = true;
 ArrayCoordinate coordinate = null;

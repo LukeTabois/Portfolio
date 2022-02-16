@@ -31,6 +31,7 @@ Fire (coordinate of shot)
 Position (boat, start coordinate, end coordinate)
 	stayed within grid*
 	check boat is not at an angle
+	check size of boat is correct
 	check that same boat is not used twice
 	check if there is boat in that position
 Turn (whose turn is it)
