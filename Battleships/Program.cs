@@ -64,7 +64,7 @@ bool shotAlready = true;
 ArrayCoordinate coordinate = null;
 
 while (shotAlready == true)
-{    
+{
     coordinate = BattleshipsConsole.GetCoordinate();
     shotAlready = BattleshipsEngine.Fire(coordinate, aiGrid, out aiGrid, out boatWasHit, out boatWasSunk, out allBoatsWereSunk);
     if (shotAlready == true)
