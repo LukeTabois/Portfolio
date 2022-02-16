@@ -6,8 +6,13 @@ using System.Threading.Tasks;
 
 namespace CodingChallenges
 {
-    internal class CodingChallenges
+    public static class CodeChallengeMethod
     {
         // METHODS HERE...
+        public static string PrintFullName(string firstName, string lastName)
+        {
+            string fullName = $"{lastName}, {firstName}";
+            return fullName;
+        }
     }
 }

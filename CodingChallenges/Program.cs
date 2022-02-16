@@ -1,10 +1,20 @@
-﻿Console.WriteLine("===========================");
+﻿using CodingChallenges;
+
+Console.WriteLine("===========================");
 Console.WriteLine("           LEVEL 1         ");
 Console.WriteLine("===========================");
 
 Console.WriteLine("1. Given two strings, firstName and lastName, return a single string in the format last, first.");
 
 // ANSWER HERE...
+Console.WriteLine("Please enter your first name");
+string firstName = Console.ReadLine();
+
+Console.WriteLine("Please enter your last name");
+string lastName = Console.ReadLine();
+
+string fullName = CodeChallengeMethod.PrintFullName(firstName, lastName);
+Console.WriteLine($"The full name is {fullName}");
 
 Console.WriteLine("---------------------------");
 
