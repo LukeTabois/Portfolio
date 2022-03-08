@@ -1,15 +1,115 @@
-﻿using BoardGameEngines;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Battleships
+﻿namespace Battleships
 {
-    internal static class BattleshipsConsole
+    public static class BattleshipsConsole
     {
-        internal static void PrintGrid(string[,] grid, bool showBoats = false)
+        /// <summary>
+        /// gets a coordinate from a user
+        /// </summary>
+        public static ArrayCoordinate GetCoordinate()
+        {
+            // get input from user
+            Console.WriteLine("Please enter a coordinate");
+            string coordinate = Console.ReadLine().ToUpper();
+            Console.WriteLine();
+
+            // initialise row value
+            int row = -1;
+
+            // check coordinate is not empty
+            if (!string.IsNullOrWhiteSpace(coordinate) &&
+                // check first character between A and J
+                (coordinate[0] >= 'A' && coordinate[0] <= 'J') &&
+                // check subsequent characters are numbers between 1 and 10
+                int.TryParse(coordinate.Substring(1), out row) && row >= 1 && row <= 10)
+            {
+                // convert coordinate to array grid ready 
+                int column = -1;
+                switch (coordinate[0])
+                {
+                    case 'A':
+                        column = 0;
+                        break;
+                    case 'B':
+                        column = 1;
+                        break;
+                    case 'C':
+                        column = 2;
+                        break;
+                    case 'D':
+                        column = 3;
+                        break;
+                    case 'E':
+                        column = 4;
+                        break;
+                    case 'F':
+                        column = 5;
+                        break;
+                    case 'G':
+                        column = 6;
+                        break;
+                    case 'H':
+                        column = 7;
+                        break;
+                    case 'I':
+                        column = 8;
+                        break;
+                    case 'J':
+                        column = 9;
+                        break;
+                    default:
+                        break;
+                }
+                row--;
+
+                ArrayCoordinate result = new ArrayCoordinate();
+                result.Column = column;
+                result.Row = row;
+
+                return result;
+
+            }
+            else // display error and recall this method
+            {
+                Console.WriteLine("The coordinate you entered is invalid");
+                Console.WriteLine("Please enter a column (A-J) and row (1-10) with no spaces");
+                Console.WriteLine("For example, A1");
+                Console.WriteLine();
+                return GetCoordinate();
+            }
+
+
+            throw new Exception("Error occurred trying to get coordinate");
+        }
+
+        /// <summary>
+        /// creates a new 10 x 10 battleships grid
+        /// </summary>
+        /// <returns>a battleships grid</returns>
+        public static string[,] CreateNewGrid()
+        {
+            // Two-dimensional array (X, Y).
+            string[,] grid = new string[10, 10];
+
+            // this loops through x axis (a b c...)
+            for (int x = 0; x < 10; x++)
+            {
+                // changed index of y to match battleships grid
+                for (int y = 0; y < 10; y++)
+                {
+                    grid[x, y] = "O";
+                }
+            }
+
+            // return array
+            return grid;
+        }
+
+        /// <summary>
+        /// displays a battleship grid on the console
+        /// </summary>
+        /// <param name="grid">grid to display</param>
+        /// <param name="showBoats">determines if boats should be displayed or hidden</param>
+        public static void PrintGrid(string[,] grid, bool showBoats = false)
         {
             // this loops through x axis (a b c...)
             for (int x = 0; x < grid.GetLength(0); x++)
@@ -86,7 +186,7 @@ namespace Battleships
 
                     // write the cell value with spacing either side
                     Console.Write($"   {valueAtCoordinate}   |");
-                    
+
                 }
                 Console.WriteLine();
 
@@ -95,80 +195,277 @@ namespace Battleships
             }
         }
 
-        internal static ArrayCoordinate GetCoordinate()
+        /// <summary>
+        /// places a specified boat onto a provided grid
+        /// </summary>
+        /// <param name="inputGrid">grid to place the boat on</param>
+        /// <param name="outputGrid">grid with the newly placed boat</param>
+        /// <returns>true/false value to determine if the boat was placed successfully</returns>
+        public static bool PlaceShip(string[,] inputGrid, out string[,] outputGrid)
         {
-            // get input from user
-            Console.WriteLine("Please enter a coordinate");
-            string coordinate = Console.ReadLine().ToUpper();
+            // initialise outputs
+            bool isValid = false;
+            outputGrid = inputGrid;
+            
+            // get basic inputs for place ship
+            Console.WriteLine("Enter a boat Letter");
+            string boatLetter = Console.ReadLine();
             Console.WriteLine();
 
-            // initialise row value
-            int row = -1;
+            Console.WriteLine("(start coordinate)");
+            ArrayCoordinate startCoordinate = GetCoordinate();
 
-                // check coordinate is not empty
-            if (!string.IsNullOrWhiteSpace(coordinate) &&
-                // check first character between A and J
-                (coordinate[0] >= 'A' && coordinate[0] <= 'J') &&
-                // check subsequent characters are numbers between 1 and 10
-                int.TryParse(coordinate.Substring(1), out row) && row >= 1 && row <= 10)                
+            Console.WriteLine("(end coordinate)");
+            ArrayCoordinate endCoordinate = GetCoordinate();
+
+            // check boat is not at an angle
+            if (startCoordinate.Column != endCoordinate.Column && startCoordinate.Row != endCoordinate.Row)
             {
-                // convert coordinate to array grid ready 
-                int column = -1;
-                switch (coordinate[0])
+                return isValid;
+            }
+
+            // check size of boat is correct
+            int expectedBoatLength = -1;
+            switch (boatLetter)
+            {
+                case "P":
+                    expectedBoatLength = 2;
+                    break;
+                case "S":
+                    expectedBoatLength = 3;
+                    break;
+                case "D":
+                    expectedBoatLength = 3;
+                    break;
+                case "B":
+                    expectedBoatLength = 4;
+                    break;
+                case "C":
+                    expectedBoatLength = 5;
+                    break;
+                default:
+                    return isValid;
+                    break;
+            }
+
+            // TODO: check that same boat is not used twice
+
+
+            // TODO: check if there is boat in that position
+
+
+            // initialise variables needed for placing the boat
+            ArrayCoordinate coordinateCounter;
+            int providedBoatLength;
+
+            // if the boat is horizontal                       
+            if (startCoordinate.Column == endCoordinate.Column)
+            {
+                // check and set start coordinate as the "smaller" value
+                if (startCoordinate.Row > endCoordinate.Row)
                 {
-                    case 'A':
-                        column = 0;
-                        break;
-                    case 'B':
-                        column = 1;
-                        break;
-                    case 'C':
-                        column = 2;
-                        break;
-                    case 'D':
-                        column = 3;
-                        break;
-                    case 'E':
-                        column = 4;
-                        break;
-                    case 'F':
-                        column = 5;
-                        break;
-                    case 'G':
-                        column = 6;
-                        break;
-                    case 'H':
-                        column = 7;
-                        break;
-                    case 'I':
-                        column = 8;
-                        break;
-                    case 'J':
-                        column = 9;
-                        break;
-                    default:
-                        break;
+                    ArrayCoordinate tempCoordinate = startCoordinate;
+                    startCoordinate = endCoordinate;
+                    endCoordinate = tempCoordinate;
                 }
-                row--;
 
-                ArrayCoordinate result = new ArrayCoordinate();
-                result.Column = column;
-                result.Row = row;
+                // check boat length is valid
+                providedBoatLength = (endCoordinate.Row - startCoordinate.Row) + 1;
+                if (providedBoatLength != expectedBoatLength)
+                {
+                    return isValid;
+                }
 
-                return result;
+                // set coordinate counter as start coordinate 
+                coordinateCounter = startCoordinate;
 
+                isValid = true;
+
+                // setting the boat letter for the start to end coordinates
+                while (coordinateCounter.Row <= endCoordinate.Row)
+                {
+                    outputGrid[coordinateCounter.Column, coordinateCounter.Row] = boatLetter;
+                    coordinateCounter.Row++;
+                }
             }
-            else // display error and recall this method
+            // if the boat is vertical
+            else
             {
-                Console.WriteLine("The coordinate you entered is invalid");
-                Console.WriteLine("Please enter a column (A-J) and row (1-10) with no spaces");
-                Console.WriteLine("For example, A1");
-                Console.WriteLine();
-                return GetCoordinate();
+                // check and set start coordinate as the "smaller" value
+                if (startCoordinate.Column > endCoordinate.Column)
+                {
+                    ArrayCoordinate tempCoordinate = startCoordinate;
+                    startCoordinate = endCoordinate;
+                    endCoordinate = tempCoordinate;
+                }
+
+                // check boat length is valid
+                providedBoatLength = (endCoordinate.Column - startCoordinate.Column) + 1;
+                if (providedBoatLength != expectedBoatLength)
+                {
+                    return isValid;
+                }
+
+                // set coordinate counter as start coordinate 
+                coordinateCounter = startCoordinate;
+
+                isValid = true;
+
+                // setting the boat letter for the start to end coordinates
+                while (coordinateCounter.Column <= endCoordinate.Column)
+                {
+                    outputGrid[coordinateCounter.Column, coordinateCounter.Row] = boatLetter;
+                    coordinateCounter.Column++;
+                }
             }
 
+            return isValid;
+        }
 
-            throw new Exception("Error occurred trying to get coordinate");
+        /// <summary>
+        /// simulates firing in a game of battleships
+        /// </summary>
+        /// <param name="gridPreShot">grid before the shot</param>
+        /// <param name="gridPostShot">grid after the shot</param>
+        /// <returns>true/false if all boats have been sunk</returns>
+        public static bool Fire(string[,] grid, out string[,] gridPostShot)
+        {
+            // initialise variables needed for fire
+            bool shotAlready = true;
+            bool allBoatsWereSunk = false;
+
+            // loop is the coordinate has already been fired against
+            while (shotAlready == true)
+            {
+                ArrayCoordinate coordinate = GetCoordinate();
+
+                // check if coordinate has NOT been fired upon already
+                if (!(grid[coordinate.Column, coordinate.Row] == "M") && !(grid[coordinate.Column, coordinate.Row] == "H"))
+                {
+                    // prevent loop by setting shot already to false
+                    shotAlready = false;
+
+                    // if not fired upon and no boat
+                    if (grid[coordinate.Column, coordinate.Row] == "O")
+                    {
+                        // set to miss
+                        grid[coordinate.Column, coordinate.Row] = "M";
+                    }
+                    // otherwise
+                    else
+                    {
+                        string boatLetter = grid[coordinate.Column, coordinate.Row];
+
+                        // set to hit
+                        grid[coordinate.Column, coordinate.Row] = "H";
+
+                        // get name of the boat that was hit
+                        string boatName = GetNameOfBattleShip(boatLetter);
+
+                        // output that a boat was hit
+                        Console.WriteLine($"YOU HIT A {boatName.ToUpper()}");
+                        Console.WriteLine();
+
+                        // check if boat sunk and set to boat letter                 
+                        if (IsShipSunk(boatLetter, grid, out allBoatsWereSunk))
+                        {
+                            // output that a boat was hit
+                            Console.WriteLine($"YOU SUNK A {boatName.ToUpper()}");
+                            Console.WriteLine();
+
+                            if (allBoatsWereSunk == true)
+                            {
+                                Console.WriteLine("YOU WIN!!");
+                                Console.WriteLine();
+
+                                gridPostShot = grid;
+                                return true;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("You stupid fuckin moron pick another");
+                    Console.WriteLine();
+                }
+            }
+
+            gridPostShot = grid;
+            return false;
+        }
+
+        /// <summary>
+        /// checks if a boat is sunk
+        /// </summary>
+        /// <param name="boatLetter">represents a type of boat</param>
+        /// <param name="grid">the battleship grid</param>
+        /// <returns>true or false value if a boat has been sunk</returns>
+        public static bool IsShipSunk(string boatLetter, string[,] grid, out bool areAllShipsSunk)
+        {
+            // initilise sunk
+            bool isShipSunk = true;
+            areAllShipsSunk = false;
+
+            // check if the boat letter is in the array
+            // this loops through x axis (a b c...)
+            for (int x = 0; x < 10; x++)
+            {
+                // changed index of y to match battleships grid
+                for (int y = 0; y < 10; y++)
+                {
+                    // check is boatletter is in the cell
+                    if (boatLetter == grid[x, y])
+                    {
+                        isShipSunk = false;
+                    }
+                }
+            }
+
+            // if the ship was sunk
+            if (isShipSunk == true)
+            {
+                areAllShipsSunk = AreAllShipsSunk(grid);
+            }
+
+            // return sunk
+            return isShipSunk;
+        }
+
+        /// <summary>
+        /// checks if all boats have been sunk
+        /// </summary>
+        /// <param name="grid">battleship grid</param>
+        /// <returns>if all the boats have been sunk</returns>
+        public static bool AreAllShipsSunk(string[,] grid)
+        {
+            // initialise the hit counter
+            int hitCounter = 0;
+
+            // check if H is in the array
+            // this loops through x axis (a b c...)
+            for (int x = 0; x < 10; x++)
+            {
+                // changed index of y to match battleships grid
+                for (int y = 0; y < 10; y++)
+                {
+                    // check if H is in the cell
+                    if ("H" == grid[x, y])
+                    {
+                        hitCounter++;
+                    }
+                }
+            }
+
+            // using 17 as that is the total boat slots
+            if (hitCounter == 17)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -209,5 +506,56 @@ namespace Battleships
 
         }
 
+    }
+
+    /// <summary>
+    /// 0 index based coordinates for arrays
+    /// </summary>
+    public class ArrayCoordinate
+    {
+        public int Column { get; set; }
+        public int Row { get; set; }
+    }
+
+    public static class Testing
+    {
+        /// <summary>
+        /// FOR TESTING PURPOSES
+        /// adds hard coded boats to a grid to simulate grid within game play
+        /// </summary>
+        /// <param name="grid">the grid to add the mock boats to</param>
+        /// <returns>the grid with the mock boats added</returns>
+        public static string[,] MockAddBoatsToGrid(string[,] grid)
+        {
+            // carrier boat added from B2 to B6
+            grid[1, 1] = "C";
+            grid[1, 2] = "C";
+            grid[1, 3] = "C";
+            grid[1, 4] = "C";
+            grid[1, 5] = "C";
+
+            // battleship boat added from E9 to H9
+            grid[5, 8] = "B";
+            grid[6, 8] = "B";
+            grid[7, 8] = "B";
+            grid[8, 8] = "B";
+
+            // destroyer boat added from D4 to D7
+            grid[4, 3] = "D";
+            grid[4, 4] = "D";
+            grid[4, 5] = "D";
+
+            // submarine boat added from H10 to J10
+            grid[7, 9] = "S";
+            grid[8, 9] = "S";
+            grid[9, 9] = "S";
+
+            // patrol boat added from A1 to A2
+            grid[0, 0] = "H";
+            grid[0, 1] = "P";
+
+            // return the updated grid
+            return grid;
+        }
     }
 }
