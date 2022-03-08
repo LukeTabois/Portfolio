@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace CodingChallenges
 {
-    // Level 1 Methods
     public static class CodeChallengeMethod
     {
-        // METHODS HERE...
+        //===========================
+        //         LEVEL 1         
+        //===========================
+
         /// <summary>
         /// takes a person full name and puts it last name, first name
         /// </summary>
@@ -185,7 +187,9 @@ namespace CodingChallenges
             return index;
         }
 
-        // LEVEL 2 Methods
+        //===========================
+        //         LEVEL 2         
+        //===========================
 
         public static string HackerSpeak(string example)
         {
