@@ -441,14 +441,8 @@
                                 Console.WriteLine("YOU WIN!!");
                                 Console.WriteLine();                                                                
                             }
-                        }
+                        }                       
                         
-                        if (allBoatsWereSunk == false)
-                        {
-                            Console.WriteLine("TAKE ANOTHER TURN");
-                            Console.WriteLine();
-                        }
-
                         gridPostShot = grid;
                         return true;
                     }

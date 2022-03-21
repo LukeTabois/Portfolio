@@ -271,13 +271,21 @@ while (quit == false)
                     // l2 q6
                     case "6":
                         {
-
+                            int isNumberPrime = Convert.ToInt32(Console.ReadLine());
+                            Console.WriteLine(CodeChallengeMethod.IsPrime(isNumberPrime));
                         }
                         break;
                     // l2 q7
                     case "7":
                         {
+                            Console.WriteLine("How many imposters?");
+                            int imposters = Convert.ToInt32(Console.ReadLine());
 
+                            Console.WriteLine("How many players?");
+                            int players = Convert.ToInt32(Console.ReadLine());
+
+                            Console.WriteLine("The chance of being an imposter is..");
+                            Console.WriteLine($"{CodeChallengeMethod.ImposterFormula(imposters, players)}%");
                         }
                         break;
                     // l2 q8

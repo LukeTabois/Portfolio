@@ -48,6 +48,7 @@ Grids are going to be arrays
 need to convert player input (A4) to zero based input (03)
 set of boat variables for each player
 we rewriting the array with H when a ship is hit
+player goes first
 
 =============================
 possible ideas
@@ -55,6 +56,7 @@ possible ideas
 scoreboard
 	how many games has the player won against the AI
 multiplayer - not sure what kind but just a cool idea
+randomly chose player to start
 
 
 	

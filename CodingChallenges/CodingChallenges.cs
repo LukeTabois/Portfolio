@@ -281,12 +281,43 @@ namespace CodingChallenges
             return mean;
         }
 
-        public static int IsPrime(int checkPrime)
+        public static bool IsPrime(int checkPrime)
             // check number against number -minus if there is no remainder then the number is not prime
         {
+            //TODO: create a loop that checks against the other numbers eg 7 (is prime) need to check 6 5 4 3 2 do not divide
+            bool isPrime = false;
+
+            if (checkPrime == 1)
+            {
+                isPrime = false;                
+            }
+            else if (checkPrime % checkPrime == 0)
+            {
+                isPrime = false;                
+            }
+            else
+            {
+                isPrime = true;                
+            }
+
+            return isPrime;
+
+        }
+        public static decimal ImposterFormula(decimal imposters, decimal players)
+        {
+            //TODO: make return to 2 decimal places 
+            decimal chanceOfImposter = -1;
+            if(imposters > 3 || players > 10)
+            {
+                Console.WriteLine("games can only have 10 players and 3 imposters, please select again");
+            }
+            else
+            {
+                chanceOfImposter = 100 * (imposters / players);                
+            }
             
+            return chanceOfImposter;
             
-            return 0;
         }
     }
 
