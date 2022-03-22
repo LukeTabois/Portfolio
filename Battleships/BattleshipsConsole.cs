@@ -12,40 +12,59 @@
             // TODO: replace with intellegence for AI place boats
             
             // carrier boat added from B2 to B6
-            grid[1, 1] = "H";
-            grid[1, 2] = "H";
-            grid[1, 3] = "H";
-            grid[1, 4] = "H";
+            grid[1, 1] = "C";
+            grid[1, 2] = "C";
+            grid[1, 3] = "C";
+            grid[1, 4] = "C";
             grid[1, 5] = "C";
 
             // battleship boat added from E9 to H9
-            grid[5, 8] = "H";
-            grid[6, 8] = "H";
-            grid[7, 8] = "H";
-            grid[8, 8] = "H";
+            grid[5, 8] = "B";
+            grid[6, 8] = "B";
+            grid[7, 8] = "B";
+            grid[8, 8] = "B";
 
             // destroyer boat added from D4 to D7
-            grid[4, 3] = "H";
-            grid[4, 4] = "H";
-            grid[4, 5] = "H";
+            grid[4, 3] = "D";
+            grid[4, 4] = "D";
+            grid[4, 5] = "D";
 
             // submarine boat added from H10 to J10
-            grid[7, 9] = "H";
-            grid[8, 9] = "H";
-            grid[9, 9] = "H";
+            grid[7, 9] = "S";
+            grid[8, 9] = "S";
+            grid[9, 9] = "S";
 
             // patrol boat added from A1 to A2
-            grid[0, 0] = "H";
+            grid[0, 0] = "P";
             grid[0, 1] = "P";
 
             // return the updated grid
             return grid;
         }
+        /// <summary>
+        /// generates coordinates for the AI
+        /// </summary>
+        /// <returns>array coordinates for AI to fire with</returns>
+        public static ArrayCoordinate GetCoordinateFromAi()
+        {
+            //TODO: make AI shooting more intellegent
+
+            // generate 2 random numbers for column and row
+            Random rnd = new Random();
+            int column = rnd.Next(0, 10);                     
+            int row = rnd.Next(0, 10);
+
+            // set array coordinate to the randomly generated numbers (column row)
+            ArrayCoordinate result = new ArrayCoordinate();
+            result.Column = column;
+            result.Row = row;
+            return result;
+        }
 
         /// <summary>
         /// gets a coordinate from a user
         /// </summary>
-        public static ArrayCoordinate GetCoordinate(string displayMessage)
+        public static ArrayCoordinate GetCoordinateFromPlayer(string displayMessage)
         {
             // get input from user
             Console.WriteLine(displayMessage);
@@ -114,7 +133,7 @@
                 Console.WriteLine("Please enter a column (A-J) and row (1-10) with no spaces");
                 Console.WriteLine("For example, A1");
                 Console.WriteLine();
-                return GetCoordinate(displayMessage);
+                return GetCoordinateFromPlayer(displayMessage);
             }
 
 
@@ -145,6 +164,55 @@
         }
 
         /// <summary>
+        /// convert 0 based index for a column back to it's letter
+        /// </summary>
+        /// <param name="columnIndex">array 0 based index for the column</param>
+        /// <returns>column letter</returns>
+        public static string ConvertIndexToColumnLetter(int columnIndex)
+        {
+            // convert coordinate to array grid ready 
+            string column = null;
+            switch (columnIndex)
+            {
+                case 0:
+                    column = "A";
+                    break;
+                case 1:
+                    column = "B";
+                    break;
+                case 2:
+                    column = "C";
+                    break;
+                case 3:
+                    column = "D";
+                    break;
+                case 4:
+                    column = "E";
+                    break;
+                case 5:
+                    column = "F";
+                    break;
+                case 6:
+                    column = "G";
+                    break;
+                case 7:
+                    column = "H";
+                    break;
+                case 8:
+                    column = "I";
+                    break;
+                case 9:
+                    column = "J";
+                    break;
+                default:
+                    break;
+            }
+
+            return column;
+        }
+
+
+        /// <summary>
         /// displays a battleship grid on the console
         /// </summary>
         /// <param name="grid">grid to display</param>
@@ -166,42 +234,8 @@
                 for (int y = 0; y < grid.GetLength(1); y++)
                 {
                     // convert coordinate to array grid ready 
-                    string column = null;
-                    switch (x)
-                    {
-                        case 0:
-                            column = "A";
-                            break;
-                        case 1:
-                            column = "B";
-                            break;
-                        case 2:
-                            column = "C";
-                            break;
-                        case 3:
-                            column = "D";
-                            break;
-                        case 4:
-                            column = "E";
-                            break;
-                        case 5:
-                            column = "F";
-                            break;
-                        case 6:
-                            column = "G";
-                            break;
-                        case 7:
-                            column = "H";
-                            break;
-                        case 8:
-                            column = "I";
-                            break;
-                        case 9:
-                            column = "J";
-                            break;
-                        default:
-                            break;
-                    }
+                    string column = ConvertIndexToColumnLetter(x);
+
                     // if its the first time through the rows, add a row header
                     if (y == 0)
                     {
@@ -247,9 +281,9 @@
             string[,] copyOfGrid = grid;
             
             // get basic inputs for place ship                        
-            ArrayCoordinate startCoordinate = GetCoordinate("PLEASE ENTER YOUR THE BOATS FIRST COORDINATE");
+            ArrayCoordinate startCoordinate = GetCoordinateFromPlayer("PLEASE ENTER YOUR THE BOATS FIRST COORDINATE");
                         
-            ArrayCoordinate endCoordinate = GetCoordinate("PLEASE ENTER YOUR THE BOATS LAST COORDINATE");
+            ArrayCoordinate endCoordinate = GetCoordinateFromPlayer("PLEASE ENTER YOUR THE BOATS LAST COORDINATE");
 
             // check boat is not at an angle
             if (startCoordinate.Column != endCoordinate.Column && startCoordinate.Row != endCoordinate.Row)
@@ -399,20 +433,22 @@
             bool shotAlready = true;
             allBoatsWereSunk = false;
             string playerOrAi = null;
+            ArrayCoordinate coordinate = null;
 
-            if(isPlayerTurn == true)
-            {
-                playerOrAi = "PLAYER";
-            }
-            else
-            {
-                playerOrAi = "COMPUTER";
-            }
 
             // loop is the coordinate has already been fired against
             while (shotAlready == true)
             {
-                ArrayCoordinate coordinate = GetCoordinate("PLEASE ENTER A COORDINATE TO FIRE AT");
+                if (isPlayerTurn == true)
+                {
+                    playerOrAi = "PLAYER";
+                    coordinate = GetCoordinateFromPlayer("PLEASE ENTER A COORDINATE TO FIRE AT");
+                }
+                else
+                {
+                    playerOrAi = "COMPUTER";
+                    coordinate = GetCoordinateFromAi();
+                }                
 
                 // check if coordinate has NOT been fired upon already
                 if (!(grid[coordinate.Column, coordinate.Row] == "M") && !(grid[coordinate.Column, coordinate.Row] == "H"))
@@ -420,11 +456,16 @@
                     // prevent loop by setting shot already to false
                     shotAlready = false;
 
+                    // output coordinate fired at
+                    string column = ConvertIndexToColumnLetter(coordinate.Column);
+                    Console.WriteLine($"THE {playerOrAi} FIRED AT {column}{coordinate.Row + 1}");
+
                     // if not fired upon and no boat
                     if (grid[coordinate.Column, coordinate.Row] == "O")
                     {
                         // set to miss
                         grid[coordinate.Column, coordinate.Row] = "M";
+                        Console.WriteLine($"THE {playerOrAi} MISSED");
                     }
                     // otherwise
                     else
@@ -459,7 +500,7 @@
                         return true;
                     }
                 }
-                else
+                else if(isPlayerTurn == true)
                 {
                     Console.WriteLine("You stupid fuckin moron pick another");
                     Console.WriteLine();

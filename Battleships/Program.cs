@@ -4,7 +4,7 @@
 string[,] playerOneGrid = BattleshipsConsole.CreateNewGrid();
 string[,] aiGrid = BattleshipsConsole.CreateNewGrid();
 BattleshipsConsole.AddBoatsToAiGrid(aiGrid);
-/*
+
 Console.WriteLine("==============================================================");
 Console.WriteLine("                    WELCOME TO BATTLESHIPS                    ");
 Console.WriteLine("==============================================================");
@@ -49,7 +49,7 @@ BattleshipsConsole.PlaceShip(playerOneGrid, "C");
 BattleshipsConsole.PrintGrid(playerOneGrid, true);
 Console.WriteLine();
 Console.WriteLine();
-*/
+
 Console.WriteLine("--------------------------------------------------------------");
 Console.WriteLine("                    LET THE BATTLE COMMENCE                   ");
 Console.WriteLine("--------------------------------------------------------------");
@@ -74,6 +74,12 @@ while (allBoatsWereSunk == false)
         Console.WriteLine();
     }    
 
+    if(isPlayerTurn == true)
+    {
+        Console.WriteLine("Press any key to continue...");
+        Console.ReadLine();
+    }
+
     // changes turn (the grid) based on boat being hit or not
     if (boatWasHit == false)
     {       
@@ -83,7 +89,7 @@ while (allBoatsWereSunk == false)
             isPlayerTurn = true;
             playerOneGrid = gridToShootAt;
             gridToShootAt = aiGrid;
-            Console.WriteLine("IT IS PLAYER ONES TURN");
+            Console.WriteLine("IT IS PLAYER ONES TURN...");
         }
         // this will handle the player missing
         else
@@ -91,15 +97,14 @@ while (allBoatsWereSunk == false)
             isPlayerTurn = false;
             aiGrid = gridToShootAt;
             gridToShootAt = playerOneGrid;
-            Console.WriteLine("IT IS THE AI'S TURN");
+            Console.WriteLine("IT IS THE AI'S TURN...");
         }
     }
     else if(allBoatsWereSunk == false)
     {
-        Console.WriteLine("TAKE ANOTHER TURN");
+        Console.WriteLine("TAKE ANOTHER TURN...");
     }
 } 
 
 
 
-//TODO: finish turn based logic
