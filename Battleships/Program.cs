@@ -57,7 +57,7 @@ Console.WriteLine();
 
 bool allBoatsWereSunk = false;
 bool boatWasHit = false;
-bool isPlayersTurn = true;
+bool isPlayerTurn = true;
 
 // initilise to AI grid as player one goes first
 string[,] gridToShootAt = aiGrid;
@@ -66,17 +66,21 @@ string[,] gridToShootAt = aiGrid;
 while (allBoatsWereSunk == false)
 {
     // fires at the grid 
-    boatWasHit = BattleshipsConsole.Fire(gridToShootAt, out gridToShootAt, out allBoatsWereSunk);
-    BattleshipsConsole.PrintGrid(gridToShootAt);
-    Console.WriteLine();
+    boatWasHit = BattleshipsConsole.Fire(gridToShootAt, isPlayerTurn, out gridToShootAt, out allBoatsWereSunk);
+    
+    if(allBoatsWereSunk == false)
+    {
+        BattleshipsConsole.PrintGrid(gridToShootAt);
+        Console.WriteLine();
+    }    
 
     // changes turn (the grid) based on boat being hit or not
     if (boatWasHit == false)
     {       
         // this will handle the AI missing
-        if(isPlayersTurn == false)
+        if(isPlayerTurn == false)
         {
-            isPlayersTurn = true;
+            isPlayerTurn = true;
             playerOneGrid = gridToShootAt;
             gridToShootAt = aiGrid;
             Console.WriteLine("IT IS PLAYER ONES TURN");
@@ -84,13 +88,13 @@ while (allBoatsWereSunk == false)
         // this will handle the player missing
         else
         {
-            isPlayersTurn = false;
+            isPlayerTurn = false;
             aiGrid = gridToShootAt;
             gridToShootAt = playerOneGrid;
             Console.WriteLine("IT IS THE AI'S TURN");
         }
     }
-    else
+    else if(allBoatsWereSunk == false)
     {
         Console.WriteLine("TAKE ANOTHER TURN");
     }

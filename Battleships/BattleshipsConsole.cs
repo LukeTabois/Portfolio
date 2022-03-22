@@ -12,30 +12,30 @@
             // TODO: replace with intellegence for AI place boats
             
             // carrier boat added from B2 to B6
-            grid[1, 1] = "C";
-            grid[1, 2] = "C";
-            grid[1, 3] = "C";
-            grid[1, 4] = "C";
+            grid[1, 1] = "H";
+            grid[1, 2] = "H";
+            grid[1, 3] = "H";
+            grid[1, 4] = "H";
             grid[1, 5] = "C";
 
             // battleship boat added from E9 to H9
-            grid[5, 8] = "B";
-            grid[6, 8] = "B";
-            grid[7, 8] = "B";
-            grid[8, 8] = "B";
+            grid[5, 8] = "H";
+            grid[6, 8] = "H";
+            grid[7, 8] = "H";
+            grid[8, 8] = "H";
 
             // destroyer boat added from D4 to D7
-            grid[4, 3] = "D";
-            grid[4, 4] = "D";
-            grid[4, 5] = "D";
+            grid[4, 3] = "H";
+            grid[4, 4] = "H";
+            grid[4, 5] = "H";
 
             // submarine boat added from H10 to J10
-            grid[7, 9] = "S";
-            grid[8, 9] = "S";
-            grid[9, 9] = "S";
+            grid[7, 9] = "H";
+            grid[8, 9] = "H";
+            grid[9, 9] = "H";
 
             // patrol boat added from A1 to A2
-            grid[0, 0] = "P";
+            grid[0, 0] = "H";
             grid[0, 1] = "P";
 
             // return the updated grid
@@ -393,11 +393,21 @@
         /// <param name="gridPostShot">grid after the shot</param>
         /// <param name="allBoatsWereSunk">true/false if all boats have been sunk</param>
         /// <returns>true/false if boat was hit</returns>
-        public static bool Fire(string[,] grid, out string[,] gridPostShot, out bool allBoatsWereSunk)
+        public static bool Fire(string[,] grid, bool isPlayerTurn, out string[,] gridPostShot, out bool allBoatsWereSunk)
         {
             // initialise variables needed for fire
             bool shotAlready = true;
             allBoatsWereSunk = false;
+            string playerOrAi = null;
+
+            if(isPlayerTurn == true)
+            {
+                playerOrAi = "PLAYER";
+            }
+            else
+            {
+                playerOrAi = "COMPUTER";
+            }
 
             // loop is the coordinate has already been fired against
             while (shotAlready == true)
@@ -428,17 +438,19 @@
                         string boatName = GetNameOfBattleShip(boatLetter);
 
                         // output that a boat was hit
-                        Console.WriteLine($"YOU HIT A {boatName.ToUpper()}");                        
+                        Console.WriteLine($"THE {playerOrAi} HIT A {boatName.ToUpper()}");                        
 
                         // check if boat sunk and set to boat letter                 
                         if (IsShipSunk(boatLetter, grid, out allBoatsWereSunk))
                         {
                             // output that a boat was hit
-                            Console.WriteLine($"YOU SUNK A {boatName.ToUpper()}");                            
+                            Console.WriteLine($"THE {playerOrAi} SUNK A {boatName.ToUpper()}");                            
 
                             if (allBoatsWereSunk == true)
                             {
-                                Console.WriteLine("YOU WIN!!");
+                                Console.WriteLine("--------------------------------------------------------------");
+                                Console.WriteLine($"                   {playerOrAi} WINS!!                       ");
+                                Console.WriteLine("--------------------------------------------------------------");
                                 Console.WriteLine();                                                                
                             }
                         }                       
