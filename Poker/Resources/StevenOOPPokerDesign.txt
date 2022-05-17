@@ -1,0 +1,50 @@
+﻿Poker OOP Design
+=================
+
+- Value (enum)
+
+- Suit (enum)
+
+- Card
+    + value
+    + suit
+    + image
+    + toString (override)
+
+- Deck
+    + list<Card>
+    + reset()
+    + draw()
+    + shuffle()
+    + count()
+    + includeJokers
+    + aceHigh
+    + aceLow
+
+- Player
+    + name
+    + hasFolded
+    + balance
+    + hand (list<Card>)
+    + handValue()
+    + raise()
+    + call()
+    + fold()
+
+- Table / Game
+    + numberOfHandsPlayed
+    + list<Players>
+    + activePlayer (list<Players>)
+    + deck
+    + initialMinimumBet
+    + currentMinimumBet
+    + pot
+    + communityCards (list<Card>)
+    + deal()
+    + takeMinimumBets()
+    + flop(), first 3
+    + turn(), 4th
+    + river(), 5th
+    + playerWithBestHand()
+    + resetHand()
+    + resetGame()
