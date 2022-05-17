@@ -1,0 +1,25 @@
+﻿In this challenge we will create a one-player game of poker based on the rules of Texas Hold’em Poker.
+
+In a game of Texas Hold’em Poker, for each round, five “community cards” are dealt face-up on the “board”. 
+Each player is then dealt two private cards. All players in the game can use the “community” cards alongside their own private cards to make their best possible five-card poker hand.
+
+At the start of each round, the 5 community cards are presented face-up. 
+Players can only see their two private cards and can start betting. 
+Then the first 3 cards of the board are revealed (The “flop”). 
+Another round of betting can then take place. 
+Then the 4th card is revealed (the “turn”), followed by another round of betting. 
+The fifth card is then revealed (the “river”) and a final round of betting ensues. 
+Finally the players who have not folded yet will reveal their cards and the player with the strongest hand wins the round.
+
+The hands’ values are defined as follows: (From weakest to strongest)
+
+High card: Simple value of the card. Lowest: 2 – Highest: Ace
+Pair: Two cards with the same value
+Two pairs: Two sets of two cards with the same value
+Three of a kind: Three cards with the same value
+Straight: Sequence of 5 cards in increasing value (Ace can precede 2 and follow up King)
+Flush: 5 cards of the same suit
+Full house: Combination of three of a kind and a pair
+Four of a kind: Four cards of the same value
+Straight flush: Straight of the same suit
+Royal flush Straight: flush from Ten to Ace
