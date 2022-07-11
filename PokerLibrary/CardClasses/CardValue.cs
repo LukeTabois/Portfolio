@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PokerLibrary.CardClasses
 {
+    /// <summary>
+    /// Represents the different values in a standard deck of cards
+    /// </summary>
     public enum CardValue
     {
         Ace = 1,

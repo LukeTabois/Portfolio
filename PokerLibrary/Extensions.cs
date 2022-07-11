@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PokerLibrary
-{
-    //TODO: come back and understand it Fisher Yates Shuffle 
+{    
     public static class Extensions
     {
         private static Random randomGenerator = new Random();
 
-        public static void Shuffle<T>(this IList<T> list)
+        public static List<T> Shuffle<T>(List<T> list)
         {
             for (int i = list.Count - 1; i > 0; i--)
             {
@@ -20,6 +19,8 @@ namespace PokerLibrary
                 list[k] = list[i];
                 list[i] = item;
             }
+            return list;
+           
         }
     }
 }

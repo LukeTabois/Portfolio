@@ -18,7 +18,7 @@ namespace OopChallenges.ExampleTwo
         public Student GetStudent(string nameOfStudent)
         {
             Student student1 = null;         
-            //TODO: foreach
+            
             foreach (Student student in Students)
             {                
                 if(student.Name == nameOfStudent)

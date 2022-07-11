@@ -14,11 +14,20 @@ internal class Program
 
         Deck pokerDeck = new Deck();
 
-        foreach (Card card in pokerDeck.Cards)
+        //foreach (Card card in pokerDeck.Cards)
+        //{
+        //    Console.WriteLine(card.ToString());
+        //}
+        //Console.WriteLine();
+        Console.WriteLine(pokerDeck.Cards.Count);
+
+        List<Card> hand = pokerDeck.Draw(2);
+
+        foreach (Card card in hand)
         {
             Console.WriteLine(card.ToString());
-        }
-        Console.WriteLine();
+        }            
+
         Console.WriteLine(pokerDeck.Cards.Count);
 
 

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PokerLibrary.CardClasses
 {
+    /// <summary>
+    /// Represents the different suits in a standard deck of cards
+    /// </summary>
     public enum CardSuit
     {
         Hearts, // 0

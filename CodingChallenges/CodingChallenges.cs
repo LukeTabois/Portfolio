@@ -284,7 +284,6 @@ namespace CodingChallenges
         public static bool IsPrime(int checkPrime)
             // check number against number -minus if there is no remainder then the number is not prime
         {
-            //TODO: create a loop that checks against the other numbers eg 7 (is prime) need to check 6 5 4 3 2 do not divide
             bool isPrime = false;
 
             if (checkPrime == 1)
@@ -305,7 +304,7 @@ namespace CodingChallenges
         }
         public static decimal ImposterFormula(decimal imposters, decimal players)
         {
-            //TODO: make return to 2 decimal places 
+             
             decimal chanceOfImposter = -1;
             if(imposters > 3 || players > 10)
             {
