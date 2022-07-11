@@ -21,10 +21,26 @@ namespace PokerLibrary.CardClasses
         /// </summary>
         public CardValue Value { get; private set; }
 
-        //TODO: add property for card image
+        /// <summary>
+        /// Full file path to image for this card
+        /// </summary>
+        public string Image { get; private set; }
 
         /// <summary>
         /// Creates a standard playing card
+        /// </summary>
+        /// <param name="cardSuit">The suit of the card</param>
+        /// <param name="cardValue">The value of the card</param>
+        /// <param name="image">Full file path to image for this card</param>
+        public Card(CardSuit cardSuit, CardValue cardValue, string image)
+        {
+            Suit = cardSuit;
+            Value = cardValue;
+            Image = image;
+        }
+
+        /// <summary>
+        /// Creates a standard playing card using default image location (value_of_suit.png)
         /// </summary>
         /// <param name="cardSuit">The suit of the card</param>
         /// <param name="cardValue">The value of the card</param>
@@ -32,8 +48,20 @@ namespace PokerLibrary.CardClasses
         {
             Suit = cardSuit;
             Value = cardValue;
-        }
 
+            int cardNumericValue = (int)Value;
+
+            if (cardNumericValue > 1 && cardNumericValue < 11)
+            {
+                Image = $"{cardNumericValue}_of_{Suit.ToString().ToLower()}.png";
+            }
+            else
+            {
+                Image =  $"{Value.ToString().ToLower()}_of_{Suit.ToString().ToLower()}.png";
+            }
+            
+        }
+               
         /// <summary>
         /// Gets the value and suit of this card as a string
         /// </summary>        

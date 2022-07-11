@@ -12,24 +12,26 @@ internal class Program
 
         //Console.WriteLine(aceOfSpades.Equals(twoOfClubs));
 
-        Deck pokerDeck = new Deck();
+        // example of setting a custom format at construction of deck
+        Deck pokerDeck = new Deck("PPPPPPPPPPPAAAATRHHHHHH\\",$"rtyhl{Deck.CardValuePlaceholder}kdfghgh{Deck.CardSuitPlaceholder}.jpg", false);
+        //Deck pokerDeck = new Deck();
 
-        //foreach (Card card in pokerDeck.Cards)
-        //{
-        //    Console.WriteLine(card.ToString());
-        //}
-        //Console.WriteLine();
-        Console.WriteLine(pokerDeck.Cards.Count);
-
-        List<Card> hand = pokerDeck.Draw(2);
-
-        foreach (Card card in hand)
+        foreach (Card card in pokerDeck.Cards)
         {
-            Console.WriteLine(card.ToString());
-        }            
-
+            Console.WriteLine(card.Image);
+        }
+        Console.WriteLine();
         Console.WriteLine(pokerDeck.Cards.Count);
 
+        //List<Card> hand = pokerDeck.Draw(2);
+
+        //foreach (Card card in hand)
+        //{
+        //    Console.WriteLine(card.Image);
+        //}            
+
+        //Console.WriteLine(pokerDeck.Cards.Count);
+               
 
         //Card aceOfSpades = new Card(CardSuit.Spades, CardValue.Ace);
         //pokerDeck.Cards.Add(aceOfSpades);

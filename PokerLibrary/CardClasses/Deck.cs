@@ -10,7 +10,19 @@ namespace PokerLibrary.CardClasses
     /// Represents a standard deck of 52 playing cards
     /// </summary>
     public class Deck
-    {        
+    {
+        // initialise placeholders (DRY)
+        // note: const = constant, THESE ARE STATIC, cannot ever be changed
+        public const string CardValuePlaceholder = "<CARDVALUE>";
+        public const string CardSuitPlaceholder = "<CARDSUIT>";
+
+        // note: readonly can only be set in the constructor but can be different between objects
+        // TODO: need to set default image path
+        private readonly string _imagePath = "";
+        private readonly string _imageFileNameFormat = $"{CardValuePlaceholder}_of_{CardSuitPlaceholder}.png";
+        private readonly bool _isValueNumericForFormat = true;
+        
+
         private List<Card> cards;
 
         /// <summary>
@@ -25,14 +37,33 @@ namespace PokerLibrary.CardClasses
         }
 
         /// <summary>
-        /// Creates a standard deck of 52 playing cards
+        /// Creates a standard deck of 52 playing cards using default location for images
         /// Note: the deck is shuffled
         /// </summary>
         public Deck()
-        {
+        {            
             Reset();
         }
-               
+
+        /// <summary>
+        /// Creates a standard deck of 52 playing cards using custom image location
+        /// Note: the deck is shuffled
+        /// </summary>
+        /// <param name="imagePath">Determines the value for the file path</param>
+        /// <param name="imageFileNameFormat">The format of card image file names to use, MUST CONTAIN <CARDVALUE> and <CARDSUIT></param>
+        /// <param name="isValueNumericForFormat">Determines if the value for the file format should be text or number</param>
+        public Deck(string imagePath, string imageFileNameFormat, bool isValueNumericForFormat)
+        {
+            if (!imageFileNameFormat.Contains(CardValuePlaceholder) || !imageFileNameFormat.Contains(CardSuitPlaceholder))
+            {
+                throw new FormatException($"image file name format does not contain both placeholders {CardValuePlaceholder} {CardSuitPlaceholder}");
+            }
+            _imagePath = imagePath; 
+            _imageFileNameFormat = imageFileNameFormat;
+            _isValueNumericForFormat = isValueNumericForFormat;
+            Reset();
+        }
+
         /// <summary>
         /// Draws a number of cards from the deck 
         /// </summary>
@@ -52,6 +83,8 @@ namespace PokerLibrary.CardClasses
             {
                 throw new ArgumentOutOfRangeException("Number of cards cannot be less than the size of the deck");
             }
+            
+            
 
             List<Card> drawnCards = new List<Card>();
 
@@ -96,8 +129,35 @@ namespace PokerLibrary.CardClasses
                 // added 1 to lenght to account for non zero based index
                 for (int b = 1; b < Enum.GetNames(typeof(CardValue)).Length + 1; b++)
                 {
+                    // get suit and value
+                    CardSuit suit = (CardSuit)a;
+                    CardValue value = (CardValue)b;
+                    
+                    // generate image file name from format and placeholders
+                    string imageFileName;
+                    if (_isValueNumericForFormat == true)
+                    {
+                        int cardNumericValue = (int)value;
+
+                        if (cardNumericValue > 1 && cardNumericValue < 11)
+                        {
+                            imageFileName = $@"{_imagePath}{_imageFileNameFormat.Replace(CardValuePlaceholder, cardNumericValue.ToString())
+                            .Replace(CardSuitPlaceholder, suit.ToString().ToLower())}";
+                        }
+                        else
+                        {
+                            imageFileName = $@"{_imagePath}{_imageFileNameFormat.Replace(CardValuePlaceholder, value.ToString().ToLower())
+                            .Replace(CardSuitPlaceholder, suit.ToString().ToLower())}";
+                        }
+                    }
+                    else
+                    {
+                        imageFileName = $@"{_imagePath}{_imageFileNameFormat.Replace(CardValuePlaceholder, value.ToString().ToLower())
+                            .Replace(CardSuitPlaceholder, suit.ToString().ToLower())}";
+                    }                                       
+
                     // adds 52 cards to list
-                    Card cardToAdd = new Card((CardSuit)a, (CardValue)b);
+                    Card cardToAdd = new Card(suit, value, imageFileName);
                     cards.Add(cardToAdd);
                 }
             }
