@@ -12,8 +12,8 @@
 - Card
     + ** value
     + ** suit
+    + intValue
     + image
-
     + toString (override)
 
 - Deck
@@ -51,7 +51,7 @@
     = ctor selected difficulty 
     = ctor random difficulty
 
-    + chanceToBluff / confidence / abilityLevel
+    + chanceToBluff / confidence / abilityLevel / difficulty
 
     + takeTurn() (override)
 
