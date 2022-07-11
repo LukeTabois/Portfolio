@@ -13,4 +13,8 @@
     <Content Include="Images\Poker.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PokerLibrary\PokerLibrary.csproj" />
+  </ItemGroup>
+
 </Project>

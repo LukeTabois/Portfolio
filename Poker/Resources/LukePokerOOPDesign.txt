@@ -1,1 +1,47 @@
-﻿
+﻿Poker
+	Pot{}(some kind of property increased by blinds, call, raise)
+	winning hands
+	Turn()
+	Highest bid{}
+	Dealer(true false) //who is left of the dealer must put in small blind and to the left of that player the big blind
+	blind()
+	flop{}
+	turn{}
+	river{}
+	shuffle()
+
+Deck() //	52 "card" in total values are ace 2 3 4 5 6 7 8 9 10 jack queen king
+	card (suits (heart, spade, diamond, clubs)
+	Deal(removes dealt cards from the potential 52 that the dealer deals out)
+	HoleCards()
+	Flop()
+	Turn()
+	River()
+	// switch statement to specify value if it is ace, jack, queen, king
+	// for loop to assign suit to the value then count out new 13 for the following suit and so on
+
+Player()
+	position{} //in relation to dealer
+	stack{} 	
+	hand{}
+	call(match highest bet whether big blind or raised pot)
+	check()
+	raise()
+	fold()
+	allIn()
+
+AiPlayer : Player
+	intelligence()
+
+
+
+
+	
+
+
+
+	
+	
+
+
+
