@@ -13,27 +13,27 @@ namespace PokerLibrary.PlayerClasses
 
         public int PositionToDealer { get; set; }
 
-        private List<Card> holeCards;
+        private List<Card> _holeCards;
 
         public IReadOnlyCollection<Card> HoleCards
         {
             get
             {
-                return holeCards.AsReadOnly();
+                return _holeCards.AsReadOnly();
             }
         }
 
         public PokerPlayer(string name)
         {
             Name = name;
-            holeCards = new List<Card>();
+            _holeCards = new List<Card>();
             // set default to -1 rather than 0 as the dealer will be 0
             PositionToDealer = -1;
         }
 
         public Deck SetHoleCards(Deck deck)
         {                 
-            holeCards.AddRange(deck.Draw(2));
+            _holeCards.AddRange(deck.Draw(2));
             return deck;
         }
 

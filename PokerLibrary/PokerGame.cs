@@ -12,6 +12,16 @@ namespace PokerLibrary
     {
         private Deck _deck;
 
+        private List<Card> _communityCards;
+
+        public IReadOnlyCollection<Card> CommunityCards
+        {
+            get
+            {
+                return _communityCards.AsReadOnly();
+            }
+        }
+
         public int NumberOfCardsInDeck 
         { 
             get
@@ -25,12 +35,21 @@ namespace PokerLibrary
         //TODO: limit player amount
         //TODO: VALIDATION RULES NEED REVIEW
         //TODO: maybe readonly collection with private field?
-        public List<PokerPlayer> Players { get; private set; }
+        private List<PokerPlayer> _players;
+
+        public IReadOnlyCollection<PokerPlayer> Players
+        {
+            get
+            {
+                return _players.AsReadOnly();
+            }
+        }
 
         public PokerGame()
         {
             _deck = new Deck();
-            Players = new List<PokerPlayer>();
+            _players = new List<PokerPlayer>();
+            _communityCards = new List<Card>();
         }
         //TODO: optional constructor that will take a list of players
 
@@ -43,6 +62,21 @@ namespace PokerLibrary
             }
             
         }
+        // TODO: may need to be adjusted when betting is added
+        public void Flop()
+        {
+            _communityCards.AddRange(_deck.Draw(3));
+        }
+        public void Turn()
+        {
+            _communityCards.AddRange(_deck.Draw(1));
+        }
+        public void River()
+        {
+            _communityCards.AddRange(_deck.Draw(1));
+        }
+
+
 
         //TODO: method may need to be private as will be set internally at start of game
         //TODO: needs to handle changing of position throughout the game
@@ -52,12 +86,27 @@ namespace PokerLibrary
         public void SetPlayersPositionsToDealer()
         {
             //TODO: this code will work for start of game
-            for (int i = 0; i < Players.Count; i++)
+            for (int i = 0; i < _players.Count; i++)
             {
-                Players[i].PositionToDealer = i;
+                _players[i].PositionToDealer = i;
             }
         }
         
+        //TODO: can the player meet the minimum bet of the table
+        //TODO: ensure player position is -1
+        //TODO: check player is not duplicate of player at table
+        //TODO: check if there is space at table for player to join
+        public void Join(PokerPlayer playerToJoin)
+        {
+            _players.Add(playerToJoin);
+        }
+
+        // TODO: finish leave
+        public void Leave(PokerPlayer playerToLeave)
+        {
+            _players.Remove(playerToLeave);
+        }
+
     }
 
 }

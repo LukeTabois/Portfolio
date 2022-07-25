@@ -16,8 +16,7 @@ namespace PokerLibrary.CardClasses
         public const string CardValuePlaceholder = "<CARDVALUE>";
         public const string CardSuitPlaceholder = "<CARDSUIT>";
 
-        // note: readonly can only be set in the constructor but can be different between objects
-        // TODO: need to set default image path
+        // note: readonly can only be set in the constructor but can be different between objects        
         private readonly string _imagePath = "";
         private readonly string _imageFileNameFormat = $"{CardValuePlaceholder}_of_{CardSuitPlaceholder}.png";
         private readonly bool _isValueNumericForFormat = true;
