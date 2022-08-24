@@ -14,6 +14,7 @@ namespace PokerLibrary.PlayerClasses
         //TODO: do we need to lock this down more ???
         public int PositionToDealer { get; set; }
 
+
         private List<Card> _holeCards;
 
         public IReadOnlyCollection<Card> HoleCards

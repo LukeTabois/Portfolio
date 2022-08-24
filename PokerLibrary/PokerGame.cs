@@ -38,7 +38,23 @@ namespace PokerLibrary
         {
             get
             {
-                return _players.AsReadOnly();
+                return _players.OrderBy(p => p.PositionToDealer).ToList().AsReadOnly();
+            }
+        }
+
+        public IReadOnlyCollection<PokerPlayer> ActivePlayers
+        {
+            get
+            {
+                return _players.Where(p => p.PositionToDealer != -1).OrderBy(p => p.PositionToDealer).ToList().AsReadOnly();
+            }
+        }
+
+        public IReadOnlyCollection<PokerPlayer> InactivePlayers
+        {
+            get
+            {
+                return _players.Where(p => p.PositionToDealer == -1).OrderBy(p => p.PositionToDealer).ToList().AsReadOnly();
             }
         }
 
@@ -115,15 +131,16 @@ namespace PokerLibrary
                 {
                     _players[i].PositionToDealer = i;
                 }
-            }
+            }            
             // bump position up by 1
             else
             {                
-                // add 1 to player position
-                foreach (PokerPlayer player in _players)
+                // add 1 to position existing players at table
+                foreach (PokerPlayer player in ActivePlayers)
                 {
-                    if (player.PositionToDealer == _players.Count -1)
+                    if (player.PositionToDealer == ActivePlayers.Count -1)
                     {
+                        // bump last player back up to 0
                         player.PositionToDealer = 0;
                     }
                     else
@@ -132,7 +149,11 @@ namespace PokerLibrary
                     }                    
                 }
 
-                // bump last player back up to 0
+                // new players joining table
+                foreach (PokerPlayer player in InactivePlayers)
+                {
+                    player.PositionToDealer = ActivePlayers.Count;
+                }
 
             }
         }
@@ -147,10 +168,6 @@ namespace PokerLibrary
             {
                 throw new Exception("Player cannot join mid round");
             }
-            //if (playerToJoin.PositionToDealer == -1)
-            //{
-            //    playerToJoin.PositionToDealer = _players.Count - 1;
-            //}
             else
             {
                 _players.Add(playerToJoin);
@@ -161,8 +178,37 @@ namespace PokerLibrary
         // TODO: finish leave
         public void Leave(PokerPlayer playerToLeave)
         {
-            _players.Remove(playerToLeave);
+            if (isRoundInPlay == true)
+            {
+                throw new Exception("Player cannot leave mid round");
+            }
+            else
+            {
+                // if the player trying to leave is active
+                if (playerToLeave.PositionToDealer != -1)
+                {
+                    // for everyone after the player leaving 
+                    foreach (PokerPlayer player in ActivePlayers)
+                    {
+                        if (player.PositionToDealer > playerToLeave.PositionToDealer)
+                        {
+                            player.PositionToDealer--;
+                        }
+                    }
+                }
+
+                _players.Remove(playerToLeave);
+            }
         }
+
+
+        //TODO: NEXT SESSION
+        // take big blind and small blind
+        // we need players to have chips
+        // we need a pot 
+
+
+
 
     }
 

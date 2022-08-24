@@ -126,6 +126,7 @@ internal class Program
         PokerPlayer playerThree = new PokerPlayer("Eric");
         PokerPlayer playerFour = new PokerPlayer("Bill");
         PokerPlayer playerFive = new PokerPlayer("Steven");
+        PokerPlayer playerSix = new PokerPlayer("Robert");
 
         // create game and add players
         PokerGame poker = new PokerGame();
@@ -145,10 +146,22 @@ internal class Program
         ShowPlayerPosition(poker);
 
 
-        //TODO: FOR NEXT SESSION make joining player "Steven" be the last position not the first
+        
         poker.EndRound();
         poker.Join(playerFive);
+        poker.Join(playerSix);
         poker.StartRound();
+        // position should be 2 3 0 1 4 5
+        // added 2 players
+        ShowPlayerPosition(poker);
+
+
+
+        poker.EndRound();
+        poker.Leave(playerOne);       
+        poker.StartRound();
+        // position should be 3 1 2 4 0   
+        // 1 player left
         ShowPlayerPosition(poker);
 
 
