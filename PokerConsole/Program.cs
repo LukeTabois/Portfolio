@@ -5,6 +5,15 @@ using PokerLibrary.PlayerClasses;
 
 internal class Program
 {
+    public static void ShowPlayerPosition(PokerGame poker)
+    {
+        foreach (PokerPlayer player in poker.Players)
+        {
+            Console.WriteLine($"{player.Name} is in position {player.PositionToDealer}");
+        }
+        Console.WriteLine();
+    }
+
 
     public static void ShowCommunityCards(PokerGame poker)
     {
@@ -71,50 +80,76 @@ internal class Program
         //Console.WriteLine(pokerDeck.Cards.Count);
         //pokerDeck.Cards = new List<Card> { aceOfSpades };
 
+        //// create players                
+        //PokerPlayer playerOne = new PokerPlayer("Luke");     
+        //PokerPlayer playerTwo = new PokerPlayer("Diane");
+        //PokerPlayer playerThree = new PokerPlayer("Eric");
+        //PokerPlayer playerFour = new PokerPlayer("Bill");
+
+        //// create game and add players
+        //PokerGame poker = new PokerGame();        
+        //poker.Join(playerOne);
+        //poker.Join(playerTwo);
+        //poker.Join(playerThree);
+        //poker.Join(playerFour);
+
+        //// deal
+        //poker.Deal();
+        //foreach (PokerPlayer player in poker.Players)
+        //{            
+        //    foreach (Card card in player.HoleCards)
+        //    {                
+        //        Console.WriteLine($"{player.Name} has been dealt {card}");
+        //    }
+        //    Console.WriteLine();
+        //}
+        //Console.WriteLine($"The number of cards left after dealing is {poker.NumberOfCardsInDeck}");
+        //Console.WriteLine();
+
+        //poker.Flop();
+        //ShowCommunityCards(poker);
+
+        //poker.Turn();
+        //ShowCommunityCards(poker);
+
+        //poker.River();
+        //ShowCommunityCards(poker);
+
+
+
+
+
+
         // create players                
-        PokerPlayer playerOne = new PokerPlayer("Luke");     
+        PokerPlayer playerOne = new PokerPlayer("Luke");
         PokerPlayer playerTwo = new PokerPlayer("Diane");
         PokerPlayer playerThree = new PokerPlayer("Eric");
         PokerPlayer playerFour = new PokerPlayer("Bill");
+        PokerPlayer playerFive = new PokerPlayer("Steven");
 
         // create game and add players
         PokerGame poker = new PokerGame();
-        // TODO: commented out as Player is readonly need to create own "add player" method
-        //poker.Players.Add(playerOne);
-        //poker.Players.Add(playerTwo);
-        //poker.Players.Add(playerThree);
-        //poker.Players.Add(playerFour);
+        poker.Join(playerOne);
+        poker.Join(playerTwo);
+        poker.Join(playerThree);
+        poker.Join(playerFour);
 
-        // deal
-        poker.Deal();
-        foreach (PokerPlayer player in poker.Players)
-        {            
-            foreach (Card card in player.HoleCards)
-            {                
-                Console.WriteLine($"{player.Name} has been dealt {card}");
-            }
-            Console.WriteLine();
-        }
-        Console.WriteLine($"The number of cards left after dealing is {poker.NumberOfCardsInDeck}");
-        Console.WriteLine();
-
-        poker.Flop();
-        ShowCommunityCards(poker);
-
-        poker.Turn();
-        ShowCommunityCards(poker);
-
-        poker.River();
-        ShowCommunityCards(poker);
+        // position should be -1
+        ShowPlayerPosition(poker);
+        poker.StartRound();
+        // position should be 0 1 2 3
+        ShowPlayerPosition(poker);
+        poker.EndRound();
+        poker.StartRound();
+        // position should be 1 2 3 0
+        ShowPlayerPosition(poker);
 
 
-
-
-
-
-
-
-
+        //TODO: FOR NEXT SESSION make joining player "Steven" be the last position not the first
+        poker.EndRound();
+        poker.Join(playerFive);
+        poker.StartRound();
+        ShowPlayerPosition(poker);
 
 
     }

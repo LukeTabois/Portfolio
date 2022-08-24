@@ -11,6 +11,7 @@ namespace PokerLibrary.PlayerClasses
     {
         public string Name { get; set; }
 
+        //TODO: do we need to lock this down more ???
         public int PositionToDealer { get; set; }
 
         private List<Card> _holeCards;

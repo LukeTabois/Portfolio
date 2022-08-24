@@ -12,8 +12,7 @@ namespace PokerLibrary
     {
         private Deck _deck;
 
-        private List<Card> _communityCards;
-
+        private List<Card> _communityCards;            
         public IReadOnlyCollection<Card> CommunityCards
         {
             get
@@ -34,9 +33,7 @@ namespace PokerLibrary
         //TODO: validate that there are at least 2 players per game?
         //TODO: limit player amount
         //TODO: VALIDATION RULES NEED REVIEW
-        //TODO: maybe readonly collection with private field?
         private List<PokerPlayer> _players;
-
         public IReadOnlyCollection<PokerPlayer> Players
         {
             get
@@ -45,13 +42,28 @@ namespace PokerLibrary
             }
         }
 
+        public bool isRoundInPlay { get; private set; }
+
         public PokerGame()
         {
             _deck = new Deck();
             _players = new List<PokerPlayer>();
             _communityCards = new List<Card>();
+            isRoundInPlay = false;
         }
         //TODO: optional constructor that will take a list of players
+
+        public void StartRound()
+        {
+            isRoundInPlay = true;
+            SetPlayersPositionsToDealer();
+
+        }
+
+        public void EndRound()
+        {
+            isRoundInPlay = false;
+        }
 
         //TODO: needs to validate that it cannot be called mid round
         public void Deal()
@@ -85,10 +97,43 @@ namespace PokerLibrary
         //TODO: needs to validate that it cannot be called mid round
         public void SetPlayersPositionsToDealer()
         {
-            //TODO: this code will work for start of game
-            for (int i = 0; i < _players.Count; i++)
+            // check if all player need a position
+            bool areAllPlayerNew = true;
+            foreach (PokerPlayer player in _players)
             {
-                _players[i].PositionToDealer = i;
+                if(player.PositionToDealer != -1)
+                {
+                    areAllPlayerNew = false;
+                }
+            }
+
+            // this code will work for start of game
+            // assign all players a position
+            if (areAllPlayerNew == true)
+            {
+                for (int i = 0; i < _players.Count; i++)
+                {
+                    _players[i].PositionToDealer = i;
+                }
+            }
+            // bump position up by 1
+            else
+            {                
+                // add 1 to player position
+                foreach (PokerPlayer player in _players)
+                {
+                    if (player.PositionToDealer == _players.Count -1)
+                    {
+                        player.PositionToDealer = 0;
+                    }
+                    else
+                    {
+                        player.PositionToDealer++;
+                    }                    
+                }
+
+                // bump last player back up to 0
+
             }
         }
         
@@ -98,7 +143,19 @@ namespace PokerLibrary
         //TODO: check if there is space at table for player to join
         public void Join(PokerPlayer playerToJoin)
         {
-            _players.Add(playerToJoin);
+            if (isRoundInPlay == true)
+            {
+                throw new Exception("Player cannot join mid round");
+            }
+            //if (playerToJoin.PositionToDealer == -1)
+            //{
+            //    playerToJoin.PositionToDealer = _players.Count - 1;
+            //}
+            else
+            {
+                _players.Add(playerToJoin);
+            }
+            
         }
 
         // TODO: finish leave
