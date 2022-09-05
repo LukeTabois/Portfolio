@@ -1,15 +1,14 @@
-﻿using PokerLibrary;
-using PokerLibrary.CardClasses;
+﻿using PokerLibrary.CardClasses;
 using PokerLibrary.PlayerClasses;
-
+using PokerLibrary.PokerClasses;
 
 internal class Program
 {
-    public static void ShowPlayerPosition(PokerGame poker)
+    public static void ShowPlayerDetails(PokerGame poker)
     {
         foreach (PokerPlayer player in poker.Players)
         {
-            Console.WriteLine($"{player.Name} is in position {player.PositionToDealer}");
+            Console.WriteLine($"{player.Name} is in position {player.PositionToDealer} and has {player.Stack} chips");
         }
         Console.WriteLine();
     }
@@ -121,29 +120,31 @@ internal class Program
 
 
         // create players                
-        PokerPlayer playerOne = new PokerPlayer("Luke");
-        PokerPlayer playerTwo = new PokerPlayer("Diane");
-        PokerPlayer playerThree = new PokerPlayer("Eric");
-        PokerPlayer playerFour = new PokerPlayer("Bill");
-        PokerPlayer playerFive = new PokerPlayer("Steven");
-        PokerPlayer playerSix = new PokerPlayer("Robert");
+        PokerPlayer playerOne = new PokerPlayer("Luke", 100);
+        PokerPlayer playerTwo = new PokerPlayer("Diane", 100);
+        PokerPlayer playerThree = new PokerPlayer("Eric", 30);
+        PokerPlayer playerFour = new PokerPlayer("Bill", 100);
+        PokerPlayer playerFive = new PokerPlayer("Steven", 100);
+        PokerPlayer playerSix = new PokerPlayer("Robert", 100);
 
         // create game and add players
-        PokerGame poker = new PokerGame();
+        PokerGame poker = new PokerGame(10);
         poker.Join(playerOne);
         poker.Join(playerTwo);
         poker.Join(playerThree);
         poker.Join(playerFour);
 
         // position should be -1
-        ShowPlayerPosition(poker);
+        ShowPlayerDetails(poker);
         poker.StartRound();
         // position should be 0 1 2 3
-        ShowPlayerPosition(poker);
+        // Eric should be big blind 30 - 20 = 10
+        ShowPlayerDetails(poker);
         poker.EndRound();
         poker.StartRound();
         // position should be 1 2 3 0
-        ShowPlayerPosition(poker);
+        // Eric removed as cannot meet big blind
+        ShowPlayerDetails(poker);
 
 
         
@@ -153,7 +154,7 @@ internal class Program
         poker.StartRound();
         // position should be 2 3 0 1 4 5
         // added 2 players
-        ShowPlayerPosition(poker);
+        ShowPlayerDetails(poker);
 
 
 
@@ -162,8 +163,7 @@ internal class Program
         poker.StartRound();
         // position should be 3 1 2 4 0   
         // 1 player left
-        ShowPlayerPosition(poker);
-
-
+        ShowPlayerDetails(poker);
+        
     }
 }

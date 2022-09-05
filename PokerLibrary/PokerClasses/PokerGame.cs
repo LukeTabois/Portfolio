@@ -6,13 +6,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PokerLibrary
+namespace PokerLibrary.PokerClasses
 {
     public class PokerGame
     {
         private Deck _deck;
 
-        private List<Card> _communityCards;            
+        private List<Card> _communityCards;
+
+        public int Pot { get; private set; }
+
+        public int SmallBlind { get; private set; }
+
+        public int BigBlind
+        {
+            get
+            {
+                return SmallBlind * 2;
+            }
+        }
+
+
         public IReadOnlyCollection<Card> CommunityCards
         {
             get
@@ -21,8 +35,8 @@ namespace PokerLibrary
             }
         }
 
-        public int NumberOfCardsInDeck 
-        { 
+        public int NumberOfCardsInDeck
+        {
             get
             {
                 return _deck.Cards.Count;
@@ -60,19 +74,23 @@ namespace PokerLibrary
 
         public bool isRoundInPlay { get; private set; }
 
-        public PokerGame()
+        public PokerGame(int smallBlind)
         {
             _deck = new Deck();
             _players = new List<PokerPlayer>();
             _communityCards = new List<Card>();
             isRoundInPlay = false;
+            Pot = 0;
+            SmallBlind = smallBlind;
         }
         //TODO: optional constructor that will take a list of players
 
         public void StartRound()
         {
+            CheckPlayersCanMeetBigBlind();
             isRoundInPlay = true;
             SetPlayersPositionsToDealer();
+            TakeBlinds();
 
         }
 
@@ -88,7 +106,7 @@ namespace PokerLibrary
             {
                 _deck = player.SetHoleCards(_deck);
             }
-            
+
         }
         // TODO: may need to be adjusted when betting is added
         public void Flop()
@@ -117,7 +135,7 @@ namespace PokerLibrary
             bool areAllPlayerNew = true;
             foreach (PokerPlayer player in _players)
             {
-                if(player.PositionToDealer != -1)
+                if (player.PositionToDealer != -1)
                 {
                     areAllPlayerNew = false;
                 }
@@ -131,14 +149,14 @@ namespace PokerLibrary
                 {
                     _players[i].PositionToDealer = i;
                 }
-            }            
+            }
             // bump position up by 1
             else
-            {                
+            {
                 // add 1 to position existing players at table
                 foreach (PokerPlayer player in ActivePlayers)
                 {
-                    if (player.PositionToDealer == ActivePlayers.Count -1)
+                    if (player.PositionToDealer == ActivePlayers.Count - 1)
                     {
                         // bump last player back up to 0
                         player.PositionToDealer = 0;
@@ -146,7 +164,7 @@ namespace PokerLibrary
                     else
                     {
                         player.PositionToDealer++;
-                    }                    
+                    }
                 }
 
                 // new players joining table
@@ -157,7 +175,7 @@ namespace PokerLibrary
 
             }
         }
-        
+
         //TODO: can the player meet the minimum bet of the table
         //TODO: ensure player position is -1
         //TODO: check player is not duplicate of player at table
@@ -172,7 +190,7 @@ namespace PokerLibrary
             {
                 _players.Add(playerToJoin);
             }
-            
+
         }
 
         // TODO: finish leave
@@ -200,12 +218,39 @@ namespace PokerLibrary
                 _players.Remove(playerToLeave);
             }
         }
+        //TODO: move small blind and big blind into start round as that is the first thing to happen??
+        private void TakeBlinds()
+        {
+            foreach (PokerPlayer player in ActivePlayers)
+            {
+                if (player.PositionToDealer == 1)
+                {
+                    player.Stack = player.Stack - SmallBlind;
+                    Pot = Pot + SmallBlind;
+                }
+                if (player.PositionToDealer == 2)
+                {
+                    player.Stack = player.Stack - BigBlind;
+                    Pot = Pot + BigBlind;
+                }
+            }
+        }
 
+        private void CheckPlayersCanMeetBigBlind()
+        {
+            foreach (PokerPlayer player in _players.ToList())
+            {
+                if (player.Stack < BigBlind)
+                {
+                    Leave(player);
+                }
+            }
+        }
 
         //TODO: NEXT SESSION
-        // take big blind and small blind
-        // we need players to have chips
-        // we need a pot 
+        // calculate hand value
+        // showdown method
+        // give/split pot to players
 
 
 
