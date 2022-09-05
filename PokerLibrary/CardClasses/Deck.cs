@@ -126,7 +126,8 @@ namespace PokerLibrary.CardClasses
                 // loops through value 
                 // starts at 1 because no zero value on enum
                 // added 1 to lenght to account for non zero based index
-                for (int b = 1; b < Enum.GetNames(typeof(CardValue)).Length + 1; b++)
+                //TODO: check deck generates proper after changing value of ace in enum
+                for (int b = 2; b < Enum.GetNames(typeof(CardValue)).Length + 2; b++)
                 {
                     // get suit and value
                     CardSuit suit = (CardSuit)a;

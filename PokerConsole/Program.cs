@@ -119,51 +119,85 @@ internal class Program
 
 
 
-        // create players                
+        //// create players                
+        //PokerPlayer playerOne = new PokerPlayer("Luke", 100);
+        //PokerPlayer playerTwo = new PokerPlayer("Diane", 100);
+        //PokerPlayer playerThree = new PokerPlayer("Eric", 30);
+        //PokerPlayer playerFour = new PokerPlayer("Bill", 100);
+        //PokerPlayer playerFive = new PokerPlayer("Steven", 100);
+        //PokerPlayer playerSix = new PokerPlayer("Robert", 100);
+
+        //// create game and add players
+        //PokerGame poker = new PokerGame(10);
+        //poker.Join(playerOne);
+        //poker.Join(playerTwo);
+        //poker.Join(playerThree);
+        //poker.Join(playerFour);
+
+        //// position should be -1
+        //ShowPlayerDetails(poker);
+        //poker.StartRound();
+        //// position should be 0 1 2 3
+        //// Eric should be big blind 30 - 20 = 10
+        //ShowPlayerDetails(poker);
+        //poker.EndRound();
+        //poker.StartRound();
+        //// position should be 1 2 3 0
+        //// Eric removed as cannot meet big blind
+        //ShowPlayerDetails(poker);
+
+
+
+        //poker.EndRound();
+        //poker.Join(playerFive);
+        //poker.Join(playerSix);
+        //poker.StartRound();
+        //// position should be 2 3 0 1 4 5
+        //// added 2 players
+        //ShowPlayerDetails(poker);
+
+
+
+        //poker.EndRound();
+        //poker.Leave(playerOne);       
+        //poker.StartRound();
+        //// position should be 3 1 2 4 0   
+        //// 1 player left
+        //ShowPlayerDetails(poker);
+
+
+
+
+
+
+
+
+
+
+
+        List<Card> cards = new List<Card>(); 
+
         PokerPlayer playerOne = new PokerPlayer("Luke", 100);
-        PokerPlayer playerTwo = new PokerPlayer("Diane", 100);
-        PokerPlayer playerThree = new PokerPlayer("Eric", 30);
-        PokerPlayer playerFour = new PokerPlayer("Bill", 100);
-        PokerPlayer playerFive = new PokerPlayer("Steven", 100);
-        PokerPlayer playerSix = new PokerPlayer("Robert", 100);
-
-        // create game and add players
-        PokerGame poker = new PokerGame(10);
-        poker.Join(playerOne);
-        poker.Join(playerTwo);
-        poker.Join(playerThree);
-        poker.Join(playerFour);
-
-        // position should be -1
-        ShowPlayerDetails(poker);
-        poker.StartRound();
-        // position should be 0 1 2 3
-        // Eric should be big blind 30 - 20 = 10
-        ShowPlayerDetails(poker);
-        poker.EndRound();
-        poker.StartRound();
-        // position should be 1 2 3 0
-        // Eric removed as cannot meet big blind
-        ShowPlayerDetails(poker);
-
-
         
-        poker.EndRound();
-        poker.Join(playerFive);
-        poker.Join(playerSix);
-        poker.StartRound();
-        // position should be 2 3 0 1 4 5
-        // added 2 players
-        ShowPlayerDetails(poker);
-
-
-
-        poker.EndRound();
-        poker.Leave(playerOne);       
-        poker.StartRound();
-        // position should be 3 1 2 4 0   
-        // 1 player left
-        ShowPlayerDetails(poker);
+        // hole
+        cards.Add(new Card(CardSuit.Hearts, CardValue.Two));
+        cards.Add(new Card(CardSuit.Clubs, CardValue.Ace));
+        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be high card");
         
+        // flop
+        cards.Add(new Card(CardSuit.Spades, CardValue.Ace));
+        cards.Add(new Card(CardSuit.Hearts, CardValue.Nine));
+        cards.Add(new Card(CardSuit.Diamonds, CardValue.King));
+        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be pair");
+
+        // turn
+        cards.Add(new Card(CardSuit.Diamonds, CardValue.Ace));
+        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be three of a kind");
+
+        // river
+        cards.Add(new Card(CardSuit.Hearts, CardValue.Ace));
+        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be four of a kind");
+
+
     }
 }

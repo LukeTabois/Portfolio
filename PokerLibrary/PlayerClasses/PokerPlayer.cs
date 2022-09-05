@@ -57,7 +57,36 @@ namespace PokerLibrary.PlayerClasses
                 throw new ArgumentOutOfRangeException(nameof(cards), "Cannot get hand value for more than seven cards");
             }
 
+            // put cards in order of value
+            cards = cards.OrderBy(c => c.Value).ToList();
+
             //TODO: GET HANDS VALUES!!!
+            //TODO: when checking straights, cards are in order so make use of enum value
+            //TODO: when checking flushes look for cards that don't match the flush (take the suit of the first card and should be the same as every other cards)
+
+            // check for royal flush down to high card (biggest value to smallest)
+
+            // do each check indivdually and worry about optimizing
+
+            // royal flush (check for a flush, straight, check straight starts with ace)
+
+            // straight flush
+
+            // four of a kind
+
+            // full house
+
+            // flush
+
+            // straight
+
+            // three of kind
+
+            // two pair
+
+            // pair
+
+            // high card
 
             return PokerHandValue.HighCard;
 
