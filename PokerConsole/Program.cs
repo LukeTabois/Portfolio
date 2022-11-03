@@ -4,6 +4,17 @@ using PokerLibrary.PokerClasses;
 
 internal class Program
 {
+    public static void ShowHoleCards(PokerPlayer player)
+    {
+        foreach (Card holeCard in player.HoleCards)
+        {
+            Console.WriteLine($"{holeCard.Value} {holeCard.Suit}");
+        }
+        Console.WriteLine();
+    }
+
+
+
     public static void ShowPlayerDetails(PokerGame poker)
     {
         foreach (PokerPlayer player in poker.Players)
@@ -178,26 +189,38 @@ internal class Program
         List<Card> cards = new List<Card>(); 
 
         PokerPlayer playerOne = new PokerPlayer("Luke", 100);
-        
+
         // hole
-        cards.Add(new Card(CardSuit.Hearts, CardValue.Two));
-        cards.Add(new Card(CardSuit.Clubs, CardValue.Ace));
-        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be high card");
-        
+        Deck pokerDeck = new Deck();
+        playerOne.SetHoleCards(pokerDeck);
+        ShowHoleCards(playerOne);
+        PokerHand hole = playerOne.GetHandValue(cards);
+        Console.WriteLine("hole");
+        Console.WriteLine($"Hand: {hole.Hand}. Value: {hole.Value}. High Card: {hole.HighCard}");
+        Console.WriteLine();
+
         // flop
-        cards.Add(new Card(CardSuit.Spades, CardValue.Ace));
-        cards.Add(new Card(CardSuit.Hearts, CardValue.Nine));
-        cards.Add(new Card(CardSuit.Diamonds, CardValue.King));
-        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be pair");
+        cards.Add(new Card(CardSuit.Spades, CardValue.Two));
+        cards.Add(new Card(CardSuit.Spades, CardValue.Nine));
+        cards.Add(new Card(CardSuit.Spades, CardValue.King));
+        PokerHand flop = playerOne.GetHandValue(cards);
+        Console.WriteLine("flop");
+        Console.WriteLine($"Hand: {flop.Hand}. Value: {flop.Value}. High Card: {flop.HighCard}");
+        Console.WriteLine();
 
         // turn
-        cards.Add(new Card(CardSuit.Diamonds, CardValue.Ace));
-        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be three of a kind");
+        cards.Add(new Card(CardSuit.Diamonds, CardValue.Two));
+        PokerHand turn = playerOne.GetHandValue(cards);
+        Console.WriteLine("turn");
+        Console.WriteLine($"Hand: {turn.Hand}. Value: {turn.Value}. High Card: {turn.HighCard}");
+        Console.WriteLine();
 
         // river
-        cards.Add(new Card(CardSuit.Hearts, CardValue.Ace));
-        Console.WriteLine($"{playerOne.GetHandValue(cards)} should be four of a kind");
-
+        cards.Add(new Card(CardSuit.Hearts, CardValue.Two));
+        PokerHand river = playerOne.GetHandValue(cards);
+        Console.WriteLine("river");
+        Console.WriteLine($"Hand: {river.Hand}. Value: {river.Value}. High Card: {river.HighCard}");
+        Console.WriteLine();
 
     }
 }
