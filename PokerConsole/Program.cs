@@ -19,9 +19,25 @@ internal class Program
     {
         foreach (PokerPlayer player in poker.Players)
         {
-            Console.WriteLine($"{player.Name} is in position {player.PositionToDealer} and has {player.Stack} chips");
-        }
-        Console.WriteLine();
+            PokerHand playerHand = player.GetHandValue(poker.CommunityCards.ToList());
+            
+            Console.WriteLine($"Name: {player.Name}");
+            Console.WriteLine($"Position: {player.PositionToDealer}");
+            Console.WriteLine($"Stack: {player.Stack}");
+            Console.WriteLine($"Hole Cards: {player.HoleCards.First().ToString()} & {player.HoleCards.Last().ToString()}");
+            Console.Write($"Hand Value: {Enum.GetName(typeof(PokerHandValue), playerHand.Hand)}");
+            if (playerHand.Value != null)
+            {
+                Console.Write($", Value: {Enum.GetName(typeof(CardValue), playerHand.Value)}");
+            }
+            if (playerHand.SecondValue != null)
+            {
+                Console.Write($", Second Value: {Enum.GetName(typeof(CardValue), playerHand.SecondValue)}");
+            }
+            Console.WriteLine($", High Card: {Enum.GetName(typeof(CardValue), playerHand.HighCard)}");
+
+            Console.WriteLine();
+        }        
     }
 
 
@@ -170,7 +186,7 @@ internal class Program
 
 
         //poker.EndRound();
-        //poker.Leave(playerOne);       
+        //poker.Leave(playerOne);
         //poker.StartRound();
         //// position should be 3 1 2 4 0   
         //// 1 player left
@@ -186,41 +202,73 @@ internal class Program
 
 
 
-        List<Card> cards = new List<Card>(); 
+        //List<Card> cards = new List<Card>(); 
 
+        //PokerPlayer playerOne = new PokerPlayer("Luke", 100);
+
+        //// hole
+        //Deck pokerDeck = new Deck();
+        //playerOne.SetHoleCards(pokerDeck);
+        //ShowHoleCards(playerOne);
+        //PokerHand hole = playerOne.GetHandValue(cards);
+        //Console.WriteLine("hole");
+        //Console.WriteLine($"Hand: {hole.Hand}. Value: {hole.Value}. High Card: {hole.HighCard}");
+        //Console.WriteLine();
+
+        //// flop
+        //cards.Add(new Card(CardSuit.Spades, CardValue.Two));
+        //cards.Add(new Card(CardSuit.Spades, CardValue.Nine));
+        //cards.Add(new Card(CardSuit.Spades, CardValue.King));
+        //PokerHand flop = playerOne.GetHandValue(cards);
+        //Console.WriteLine("flop");
+        //Console.WriteLine($"Hand: {flop.Hand}. Value: {flop.Value}. High Card: {flop.HighCard}");
+        //Console.WriteLine();
+
+        //// turn
+        //cards.Add(new Card(CardSuit.Diamonds, CardValue.Two));
+        //PokerHand turn = playerOne.GetHandValue(cards);
+        //Console.WriteLine("turn");
+        //Console.WriteLine($"Hand: {turn.Hand}. Value: {turn.Value}. High Card: {turn.HighCard}");
+        //Console.WriteLine();
+
+        //// river
+        //cards.Add(new Card(CardSuit.Hearts, CardValue.Two));
+        //PokerHand river = playerOne.GetHandValue(cards);
+        //Console.WriteLine("river");
+        //Console.WriteLine($"Hand: {river.Hand}. Value: {river.Value}. High Card: {river.HighCard}");
+        //Console.WriteLine();
+
+
+
+
+
+
+
+
+
+        // create players                
         PokerPlayer playerOne = new PokerPlayer("Luke", 100);
+        PokerPlayer playerTwo = new PokerPlayer("Diane", 100);
+        PokerPlayer playerThree = new PokerPlayer("Eric", 30);
+        PokerPlayer playerFour = new PokerPlayer("Bill", 100);        
 
-        // hole
-        Deck pokerDeck = new Deck();
-        playerOne.SetHoleCards(pokerDeck);
-        ShowHoleCards(playerOne);
-        PokerHand hole = playerOne.GetHandValue(cards);
-        Console.WriteLine("hole");
-        Console.WriteLine($"Hand: {hole.Hand}. Value: {hole.Value}. High Card: {hole.HighCard}");
-        Console.WriteLine();
+        // create game and add players
+        PokerGame poker = new PokerGame(10);
+        poker.Join(playerOne);
+        poker.Join(playerTwo);
+        poker.Join(playerThree);
+        poker.Join(playerFour);
 
-        // flop
-        cards.Add(new Card(CardSuit.Spades, CardValue.Two));
-        cards.Add(new Card(CardSuit.Spades, CardValue.Nine));
-        cards.Add(new Card(CardSuit.Spades, CardValue.King));
-        PokerHand flop = playerOne.GetHandValue(cards);
-        Console.WriteLine("flop");
-        Console.WriteLine($"Hand: {flop.Hand}. Value: {flop.Value}. High Card: {flop.HighCard}");
-        Console.WriteLine();
+        poker.StartRound();
+        poker.Deal();
+        poker.Flop();
+        poker.Turn();
+        poker.River();
+        PokerPlayer winningPlayer = poker.Showdown();
 
-        // turn
-        cards.Add(new Card(CardSuit.Diamonds, CardValue.Two));
-        PokerHand turn = playerOne.GetHandValue(cards);
-        Console.WriteLine("turn");
-        Console.WriteLine($"Hand: {turn.Hand}. Value: {turn.Value}. High Card: {turn.HighCard}");
-        Console.WriteLine();
-
-        // river
-        cards.Add(new Card(CardSuit.Hearts, CardValue.Two));
-        PokerHand river = playerOne.GetHandValue(cards);
-        Console.WriteLine("river");
-        Console.WriteLine($"Hand: {river.Hand}. Value: {river.Value}. High Card: {river.HighCard}");
-        Console.WriteLine();
-
+        ShowCommunityCards(poker);
+        ShowPlayerDetails(poker);
+        Console.WriteLine($"The Winning Player is {winningPlayer.Name}");
+        
     }
 }

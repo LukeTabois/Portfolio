@@ -196,11 +196,6 @@ namespace PokerLibrary.PlayerClasses
             }
 
 
-
-
-
-
-
             // do each check indivdually and worry about optimizing
 
             // royal flush (check for a flush, straight, check straight starts with ace)

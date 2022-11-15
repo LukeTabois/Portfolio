@@ -11,9 +11,9 @@ namespace PokerLibrary.PokerClasses
     {
         public PokerHandValue Hand { get; private set; }
 
-        public CardValue Value { get; private set; }
+        public CardValue? Value { get; private set; } = null;
 
-        public CardValue SecondValue { get; private set; }
+        public CardValue? SecondValue { get; private set; } = null;
 
         public CardValue HighCard { get; private set; }
 

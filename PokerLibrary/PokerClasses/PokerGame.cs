@@ -247,8 +247,58 @@ namespace PokerLibrary.PokerClasses
             }
         }
 
+        //TODO: confirm if need to be private
+
+        public PokerPlayer Showdown()
+        {
+            PokerHand currentPlayerHand;
+            PokerPlayer winningPlayer = ActivePlayers.First();
+            PokerHand winningPlayerHand = winningPlayer.GetHandValue(_communityCards);
+
+            foreach (PokerPlayer player in ActivePlayers)
+            {
+                currentPlayerHand = player.GetHandValue(_communityCards);
+                // if current hand is better than the best hand so far
+                if ((int)currentPlayerHand.Hand > (int)winningPlayerHand.Hand)
+                {
+                    winningPlayer = player;
+                    winningPlayerHand = currentPlayerHand;
+                }
+                // if the current hand is the same as the best hand so far
+                else if ((int)currentPlayerHand.Hand == (int)winningPlayerHand.Hand)
+                {                    
+                    if(currentPlayerHand.Value != null)
+                    {
+                        if ((int)currentPlayerHand.Value > (int)winningPlayerHand.Value)
+                        {
+                            winningPlayer = player;
+                            winningPlayerHand = currentPlayerHand;
+                        }
+                        else if (currentPlayerHand.SecondValue != null)
+                        {
+                            if ((int)currentPlayerHand.SecondValue > (int)winningPlayerHand.SecondValue)
+                            {
+                                winningPlayer = player;
+                                winningPlayerHand = currentPlayerHand;
+                            }
+                        }
+                    }
+                    else if ((int)currentPlayerHand.HighCard > (int)winningPlayerHand.HighCard)
+                    {
+                        winningPlayer = player;
+                        winningPlayerHand = currentPlayerHand; 
+                    }
+                    // Check Value(check it has one first, e.g.flush does not)
+                    // Check Second Value(e.g.check it has one first e.g.one pair does not)
+                    // Check High Card
+                }
+            }
+
+            return winningPlayer;
+        }
+                
         //TODO: NEXT SESSION
-        // calculate hand value
+        
         // showdown method
         // give/split pot to players
 
