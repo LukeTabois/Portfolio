@@ -2,7 +2,9 @@
 using PokerLibrary.PlayerClasses;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +28,7 @@ namespace PokerLibrary.PokerClasses
             }
         }
 
+        public int MinimumBet { get; set; }
 
         public IReadOnlyCollection<Card> CommunityCards
         {
@@ -72,7 +75,56 @@ namespace PokerLibrary.PokerClasses
             }
         }
 
+        public IReadOnlyCollection<PokerPlayer> FoldedPlayers
+        {
+            get
+            {
+                return _players.Where(p => p.PositionToDealer != -1 && p.HasFolded == true).OrderBy(p => p.PositionToDealer).ToList().AsReadOnly();
+            }
+        }
+
+        public IReadOnlyCollection<PokerPlayer> InRoundPlayers
+        {
+            get
+            {
+                return _players.Where(p => p.PositionToDealer != -1 && p.HasFolded == false).OrderBy(p => p.PositionToDealer).ToList().AsReadOnly();
+            }
+        }
+
+        public int LowestStackInPlay 
+        { 
+            get
+            {
+                int lowestStack = InRoundPlayers.First().StackOfChips;                
+
+                foreach (PokerPlayer player in InRoundPlayers)
+                {
+                    if (player.StackOfChips < lowestStack)
+                    {
+                        lowestStack = player.StackOfChips;
+                    }
+                }
+
+                return lowestStack;
+            }
+        }
+
+        public bool SkipToShowdown 
+        { 
+            get
+            {
+                return _players.Any(p => p.StackOfChips == 0);                
+            }
+        }
+
+
         public bool isRoundInPlay { get; private set; }
+
+        public int PositionOfPlayerToBet { get; set; } = -1;
+
+        public PokerStageOfGame Stage { get; set; }
+
+        public List<string> Log { get; set; }
 
         public PokerGame(int smallBlind)
         {
@@ -82,47 +134,228 @@ namespace PokerLibrary.PokerClasses
             isRoundInPlay = false;
             Pot = 0;
             SmallBlind = smallBlind;
+            MinimumBet = 0;
+            Stage = PokerStageOfGame.Ready;
+            Log = new List<string>();
         }
-        //TODO: optional constructor that will take a list of players
-
-        public void StartRound()
+        
+        //TODO: needs to validate that it cannot be called mid round
+        public void StartGame()
         {
+            Log.Clear();
+            _communityCards.Clear();
+            _deck.Reset();
+            Pot = 0;
             CheckPlayersCanMeetBigBlind();
             isRoundInPlay = true;
+            Stage = PokerStageOfGame.Deal;
+            Log.Add($"New game started{Environment.NewLine}");
             SetPlayersPositionsToDealer();
             TakeBlinds();
 
-        }
-
-        public void EndRound()
-        {
-            isRoundInPlay = false;
-        }
-
-        //TODO: needs to validate that it cannot be called mid round
-        public void Deal()
-        {
             foreach (PokerPlayer player in Players)
             {
+                player.ClearHoleCards();
                 _deck = player.SetHoleCards(_deck);
+                Log.Add($"{player.Name} was dealt hole cards");
             }
+            Log.Add($"{Environment.NewLine}");
 
+            // this will start a new round of betting rather than continuing
+            PositionOfPlayerToBet = -1;
+            Log.Add($"Start round of betting for hole cards{Environment.NewLine}");
+            RoundOfBetting();
         }
         // TODO: may need to be adjusted when betting is added
         public void Flop()
-        {
-            _communityCards.AddRange(_deck.Draw(3));
+        {            
+            Stage = PokerStageOfGame.Flop;
+            Log.Add("Flop begins");
+            List<Card> flop = _deck.Draw(3);
+            foreach (Card card in flop)
+            {
+                Log.Add($"{card.ToString()} was revealed to the table");
+            }
+            Log.Add($"{Environment.NewLine}");
+            _communityCards.AddRange(flop);
+            // this will start a new round of betting rather than continuing
+            PositionOfPlayerToBet = -1;
+            Log.Add($"Start round of betting for flop{Environment.NewLine}");
+            RoundOfBetting();
         }
         public void Turn()
         {
-            _communityCards.AddRange(_deck.Draw(1));
+            Stage = PokerStageOfGame.Turn;
+            Log.Add("Turn begins");
+            List<Card> turn = _deck.Draw(1);
+            foreach (Card card in turn)
+            {
+                Log.Add($"{card.ToString()} was revealed to the table");
+            }
+            Log.Add($"{Environment.NewLine}");
+            _communityCards.AddRange(turn);
+            // this will start a new round of betting rather than continuing
+            PositionOfPlayerToBet = -1;
+            Log.Add($"Start round of betting for turn{Environment.NewLine}");
+            RoundOfBetting();
         }
         public void River()
         {
-            _communityCards.AddRange(_deck.Draw(1));
+            Stage = PokerStageOfGame.River;
+            Log.Add("River begins");
+            List<Card> river = _deck.Draw(1);
+            foreach (Card card in river)
+            {
+                Log.Add($"{card.ToString()} was revealed to the table");
+            }
+            Log.Add($"{Environment.NewLine}");
+            _communityCards.AddRange(river);
+            // this will start a new round of betting rather than continuing
+            PositionOfPlayerToBet = -1;
+            Log.Add($"Start round of betting for river{Environment.NewLine}");
+            RoundOfBetting();
         }
 
+        public void RoundOfBetting()
+        {
+            // this code is for resetting require properties for betting
+            // should only be called at the beginning of each round of betting
+            if (PositionOfPlayerToBet == -1)
+            {
+                PositionOfPlayerToBet = 0;
+                if (Stage != PokerStageOfGame.Deal)
+                {
+                    MinimumBet = 0;
+                }
+                else
+                {
+                    MinimumBet = BigBlind;
+                }
+                
+                foreach (PokerPlayer player in ActivePlayers)
+                {
+                    if (Stage != PokerStageOfGame.Deal)
+                    {
+                        player.AmountBetInRound = 0;
+                    }
+                    
+                    player.BetPlacedInRound = false;
+                }
+            }
 
+            if (InRoundPlayers.Count == 1)
+            {
+                Log.Add("Only one player remains, move straight to showdown");
+                Showdown();
+            }
+            else
+            {
+                PokerPlayer currentPlayerToBet = ActivePlayers.Single(p => p.PositionToDealer == PositionOfPlayerToBet);
+
+                if (currentPlayerToBet.HasFolded == false)
+                {
+                    if (currentPlayerToBet.IsHuman)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        //TODO: AI logic                    
+                        currentPlayerToBet.ChooseBettingOption(this);
+
+                    }
+                }
+
+
+                // sets next person to bet
+                if (PositionOfPlayerToBet == ActivePlayers.Count - 1)
+                {
+                    PositionOfPlayerToBet = 0;
+                }
+                else
+                {
+                    PositionOfPlayerToBet++;
+                }
+
+                bool allPlayersPlacedBet = true;
+                foreach (PokerPlayer player in InRoundPlayers)
+                {
+                    if (player.BetPlacedInRound == false)
+                    {
+                        allPlayersPlacedBet = false;
+                    }
+                }
+
+                bool allPlayersBetsMatch = true;
+                int amountBetByEachPlayer = InRoundPlayers.First().AmountBetInRound;
+                foreach (PokerPlayer player in InRoundPlayers)
+                {
+                    if (amountBetByEachPlayer != player.AmountBetInRound)
+                    {
+                        allPlayersBetsMatch = false;
+                    }
+                }
+
+                if (allPlayersPlacedBet == true && SkipToShowdown == true)
+                {
+                    Log.Add("Not all players are able to meet the minimum bet so moved straight to showdown");
+                    Showdown();
+                }
+                else if (allPlayersPlacedBet == true && allPlayersBetsMatch == true && SkipToShowdown == false)
+                {
+                    // move onto next phase of the game
+                    switch (Stage)
+                    {
+                        case PokerStageOfGame.Deal:
+                            Flop();
+                            break;
+                        case PokerStageOfGame.Flop:
+                            Turn();
+                            break;
+                        case PokerStageOfGame.Turn:
+                            River();
+                            break;
+                        case PokerStageOfGame.River:
+                            Showdown();
+                            break;
+                        default:
+                            throw new Exception("Stage could not be resolved");
+                            break;
+                    }
+                }
+                else
+                {
+                    // triggers next person to bet
+                    RoundOfBetting();
+                }
+
+               
+            }
+
+
+
+            
+                        
+        }
+
+        // made internal so not acceisble out of DLL
+        internal void AddToPot(PokerPlayer player, int amountToAdd)
+        {
+            bool exists = CheckInRoundPlayerExists(player.Email);
+            if (exists == false)
+            {
+                throw new Exception($"Player with email {player.Email} does not exist in this game");
+            }
+
+            if (player.StackOfChips < amountToAdd)
+            {
+                throw new Exception("Player does not have enough chips");
+            }
+
+            Pot = Pot + amountToAdd;
+            player.StackOfChips = player.StackOfChips - amountToAdd;
+            player.AmountBetInRound = player.AmountBetInRound + amountToAdd;
+        }
 
         //TODO: method may need to be private as will be set internally at start of game
         //TODO: needs to handle changing of position throughout the game
@@ -135,6 +368,10 @@ namespace PokerLibrary.PokerClasses
             bool areAllPlayerNew = true;
             foreach (PokerPlayer player in _players)
             {
+                // resets all players that may have folded in the previous round
+                // TODO: need a way to reset player folded value
+                player.PrepareForNewRound();
+
                 if (player.PositionToDealer != -1)
                 {
                     areAllPlayerNew = false;
@@ -174,6 +411,20 @@ namespace PokerLibrary.PokerClasses
                 }
 
             }
+
+            foreach (PokerPlayer player in ActivePlayers)
+            {
+                if (player.PositionToDealer == 0)
+                {
+                    Log.Add($"{player.Name} is the dealer");
+                }
+                else
+                {
+                    Log.Add($"{player.Name} is {player.PositionToDealer} from the dealer");
+                }
+                 
+            }
+            Log.Add($"{Environment.NewLine}");
         }
 
         //TODO: can the player meet the minimum bet of the table
@@ -186,11 +437,17 @@ namespace PokerLibrary.PokerClasses
             {
                 throw new Exception("Player cannot join mid round");
             }
-            else
-            {
-                _players.Add(playerToJoin);
-            }
 
+            foreach (PokerPlayer player in _players)
+            {
+                if (playerToJoin.Email == player.Email)
+                {
+                    throw new Exception($"Player with {player.Email} already exists in this game");
+                }
+            }
+                        
+            _players.Add(playerToJoin);
+            Log.Add($"{playerToJoin.Name} joined the table{Environment.NewLine}");
         }
 
         // TODO: finish leave
@@ -216,32 +473,75 @@ namespace PokerLibrary.PokerClasses
                 }
 
                 _players.Remove(playerToLeave);
+                Log.Add($"{playerToLeave.Name} left the table{Environment.NewLine}");
             }
         }
         //TODO: move small blind and big blind into start round as that is the first thing to happen??
         private void TakeBlinds()
         {
-            foreach (PokerPlayer player in ActivePlayers)
+            if (ActivePlayers.Count() > 2)
             {
-                if (player.PositionToDealer == 1)
+                foreach (PokerPlayer player in ActivePlayers)
                 {
-                    player.Stack = player.Stack - SmallBlind;
-                    Pot = Pot + SmallBlind;
-                }
-                if (player.PositionToDealer == 2)
-                {
-                    player.Stack = player.Stack - BigBlind;
-                    Pot = Pot + BigBlind;
+                    if (player.PositionToDealer == 1)
+                    {
+                        player.StackOfChips = player.StackOfChips - SmallBlind;
+                        Pot = Pot + SmallBlind;
+                        player.AmountBetInRound = SmallBlind;
+                        Log.Add($"{player.Name} has put in the small blind of {SmallBlind}");
+                    }
+                    if (player.PositionToDealer == 2)
+                    {
+                        player.StackOfChips = player.StackOfChips - BigBlind;
+                        Pot = Pot + BigBlind;
+                        player.AmountBetInRound = BigBlind;
+                        Log.Add($"{player.Name} has put in the big blind of {BigBlind}");
+                    }
                 }
             }
+            else
+            {
+                foreach (PokerPlayer player in ActivePlayers)
+                {
+                    if (player.PositionToDealer == 0)
+                    {
+                        player.StackOfChips = player.StackOfChips - SmallBlind;
+                        Pot = Pot + SmallBlind;
+                        player.AmountBetInRound = SmallBlind;
+                        Log.Add($"{player.Name} has put in the small blind of {SmallBlind}");
+                    }
+                    if (player.PositionToDealer == 1)
+                    {
+                        player.StackOfChips = player.StackOfChips - BigBlind;
+                        Pot = Pot + BigBlind;
+                        player.AmountBetInRound = BigBlind;
+                        Log.Add($"{player.Name} has put in the big blind of {BigBlind}");
+                    }
+                }
+            }
+            Log.Add($"{Environment.NewLine}");
+            
+        }
+
+        public bool CheckInRoundPlayerExists(string email)
+        {
+            foreach (PokerPlayer player in InRoundPlayers)
+            {
+                if (player.Email == email)
+                {
+                    return true;
+                }                
+            }
+            return false;
         }
 
         private void CheckPlayersCanMeetBigBlind()
         {
             foreach (PokerPlayer player in _players.ToList())
             {
-                if (player.Stack < BigBlind)
+                if (player.StackOfChips < BigBlind)
                 {
+                    Log.Add($"{player.Name} cannot meet the big blind");
                     Leave(player);
                 }
             }
@@ -249,58 +549,105 @@ namespace PokerLibrary.PokerClasses
 
         //TODO: confirm if need to be private
 
-        public PokerPlayer Showdown()
+        public void Showdown()
         {
+            Stage = PokerStageOfGame.Showdown;
             PokerHand currentPlayerHand;
-            PokerPlayer winningPlayer = ActivePlayers.First();
-            PokerHand winningPlayerHand = winningPlayer.GetHandValue(_communityCards);
+            List<PokerPlayer> winningPlayers = new List<PokerPlayer> { InRoundPlayers.First() };
+            PokerHand winningPlayerHand = winningPlayers.First().GetHandValue(_communityCards);
 
-            foreach (PokerPlayer player in ActivePlayers)
+            foreach (PokerPlayer player in InRoundPlayers)
             {
-                currentPlayerHand = player.GetHandValue(_communityCards);
-                // if current hand is better than the best hand so far
-                if ((int)currentPlayerHand.Hand > (int)winningPlayerHand.Hand)
+                // ignore first player
+                if (player != InRoundPlayers.First())
                 {
-                    winningPlayer = player;
-                    winningPlayerHand = currentPlayerHand;
-                }
-                // if the current hand is the same as the best hand so far
-                else if ((int)currentPlayerHand.Hand == (int)winningPlayerHand.Hand)
-                {                    
-                    if(currentPlayerHand.Value != null)
+                    currentPlayerHand = player.GetHandValue(_communityCards);
+                    // if current hand is better than the best hand so far
+                    if ((int)currentPlayerHand.Hand > (int)winningPlayerHand.Hand)
                     {
-                        if ((int)currentPlayerHand.Value > (int)winningPlayerHand.Value)
+                        winningPlayers.Clear();
+                        winningPlayers.Add(player);
+                        winningPlayerHand = currentPlayerHand;
+                    }
+                    // if the current hand is the same as the best hand so far
+                    else if ((int)currentPlayerHand.Hand == (int)winningPlayerHand.Hand)
+                    {
+                        // compares primary card value
+                        if (currentPlayerHand.Value != null &&
+                            (int)currentPlayerHand.Value > (int)winningPlayerHand.Value)
                         {
-                            winningPlayer = player;
+                            winningPlayers.Clear();
+                            winningPlayers.Add(player);
                             winningPlayerHand = currentPlayerHand;
                         }
-                        else if (currentPlayerHand.SecondValue != null)
+                        // if primary card values are the same 
+                        else if (currentPlayerHand.Value != null && 
+                                (int)currentPlayerHand.Value == (int)winningPlayerHand.Value)
                         {
-                            if ((int)currentPlayerHand.SecondValue > (int)winningPlayerHand.SecondValue)
+                            // compares secondary card value if primary is the same
+                            if (currentPlayerHand.SecondValue != null &&
+                                (int)currentPlayerHand.SecondValue > (int)winningPlayerHand.SecondValue)
                             {
-                                winningPlayer = player;
+                                winningPlayers.Clear();
+                                winningPlayers.Add(player);
                                 winningPlayerHand = currentPlayerHand;
+                            }
+                            // if secondary card value is the same or does not exist
+                            else if (currentPlayerHand.SecondValue == null ||
+                                (int)currentPlayerHand.SecondValue == (int)winningPlayerHand.SecondValue)
+                            {
+                                // compares high card if primary and secondary (if present) is the same
+                                if ((int)currentPlayerHand.HighCard > (int)winningPlayerHand.HighCard)
+                                {
+                                    winningPlayers.Clear();
+                                    winningPlayers.Add(player);
+                                    winningPlayerHand = currentPlayerHand;
+                                }
+                                // if players have the exact same hand add them to winning player list
+                                else if ((int)currentPlayerHand.HighCard == (int)winningPlayerHand.HighCard)
+                                {
+                                    winningPlayers.Add(player);
+                                }
                             }
                         }
                     }
-                    else if ((int)currentPlayerHand.HighCard > (int)winningPlayerHand.HighCard)
-                    {
-                        winningPlayer = player;
-                        winningPlayerHand = currentPlayerHand; 
-                    }
-                    // Check Value(check it has one first, e.g.flush does not)
-                    // Check Second Value(e.g.check it has one first e.g.one pair does not)
-                    // Check High Card
                 }
             }
 
-            return winningPlayer;
+            // int will only return the whole number no remainder
+            int shareOfPot = Pot / winningPlayers.Count();
+            // this will return a remainder if the pot cannot be equally split
+            int tipToDealer = Pot % winningPlayers.Count();
+
+            // gives each of the winning players a share of the pot (or 1 winner the whole pot)
+            foreach (PokerPlayer player in winningPlayers)
+            {
+                player.StackOfChips = player.StackOfChips + shareOfPot;
+            }
+            
+            ShowdownResult showdownResult;
+            if (tipToDealer == 0)
+            {
+                showdownResult = new ShowdownResult(winningPlayers, shareOfPot, winningPlayerHand);
+                
+            }
+            else
+            {
+                showdownResult = new ShowdownResult(winningPlayers, shareOfPot, winningPlayerHand, tipToDealer);              
+
+            }
+
+            Log.Add(showdownResult.ToString());
+            isRoundInPlay = false;
+            Stage = PokerStageOfGame.Ready;
+            
+
         }
                 
         //TODO: NEXT SESSION
         
-        // showdown method
-        // give/split pot to players
+        // build user betting
+       
 
 
 

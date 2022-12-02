@@ -1,8 +1,10 @@
 ﻿using PokerLibrary.CardClasses;
 using PokerLibrary.PokerClasses;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,14 +12,24 @@ namespace PokerLibrary.PlayerClasses
 {
     public class PokerPlayer
     {
+        // unique ID (for now)
+        public string Email { get; set; }
+
         public string Name { get; set; }
 
         //TODO: stack will probably have to be private
-        public int Stack { get; set; }
+        public int StackOfChips { get; set; }
+
+        public int AmountBetInRound { get; set; }
+
+        public bool BetPlacedInRound { get; set; } = false;
 
         //TODO: do we need to lock this down more ???
         public int PositionToDealer { get; set; }
 
+        public bool IsHuman { get; set; }
+
+        public bool HasFolded { get; private set; } = false;
 
         private List<Card> _holeCards;
 
@@ -29,13 +41,15 @@ namespace PokerLibrary.PlayerClasses
             }
         }
 
-        public PokerPlayer(string name, int stack)
+        public PokerPlayer(string email, string name, int stack, bool isHuman)
         {
+            Email = email;
             Name = name;
             _holeCards = new List<Card>();
             // set default to -1 rather than 0 as the dealer will be 0
             PositionToDealer = -1;
-            Stack = stack;
+            StackOfChips = stack;
+            IsHuman = isHuman;
         }
 
         public Deck SetHoleCards(Deck deck)
@@ -44,6 +58,11 @@ namespace PokerLibrary.PlayerClasses
             return deck;
         }
         
+        public void ClearHoleCards()
+        {
+            _holeCards.Clear();
+        }
+
         public PokerHand GetHandValue(List<Card> communityCards)
         {
             // gets all cards to evaluate            
@@ -249,6 +268,141 @@ namespace PokerLibrary.PlayerClasses
             return new PokerHand(PokerHandValue.HighCard, highCard);
 
         }
+
+        public void PrepareForNewRound()
+        {
+            HasFolded = false;
+            AmountBetInRound = 0;
+            BetPlacedInRound = false;
+        }
         
+        //private bool CheckCanMakeBet(PokerGame pokerGame)
+        //{
+        //    if (Stack < pokerGame.MinimumBet)
+        //    {
+
+        //    }
+            
+        //    return true;
+        //}
+                
+        public void Call(PokerGame pokerGame)
+        {
+            BetPlacedInRound = true;
+
+            int amountRequiredToMeetBet = pokerGame.MinimumBet - AmountBetInRound;
+            if (StackOfChips < amountRequiredToMeetBet)
+            {
+                pokerGame.AddToPot(this, StackOfChips);
+                pokerGame.Log.Add($"{this.Name} has gone all in, {StackOfChips} was added to the pot");
+                pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+            }
+            else if (amountRequiredToMeetBet == 0)
+            {
+                pokerGame.Log.Add($"{this.Name} has checked");
+                pokerGame.Log.Add($"The value of the pot is still {pokerGame.Pot}{Environment.NewLine}");
+            }
+            else
+            {
+                pokerGame.AddToPot(this, amountRequiredToMeetBet);
+                pokerGame.Log.Add($"{this.Name} has called, {amountRequiredToMeetBet} was added to the pot");
+                pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+            }
+
+            if (IsHuman)
+            {
+                pokerGame.RoundOfBetting();
+            }
+        }
+
+        public void Fold(PokerGame pokerGame)
+        {
+            BetPlacedInRound = true;
+
+            // check exist has to be called here as it does not use add to pot
+            bool exists = pokerGame.CheckInRoundPlayerExists(Email);
+            if (exists == false)
+            {
+                throw new Exception($"Player with email {Email} does not exist in this game");
+            }
+            HasFolded = true;
+            pokerGame.Log.Add($"{this.Name} has folded and is out of play{Environment.NewLine}");            
+
+            if (IsHuman)
+            {
+                pokerGame.RoundOfBetting();
+            }
+        }
+
+        public void Raise(PokerGame pokerGame, int amountToRaiseBy)
+        {
+            BetPlacedInRound = true;
+
+            int amountRequiredToMeetBet = (pokerGame.MinimumBet + amountToRaiseBy) - AmountBetInRound;
+            // have they got the amount to raise in their stack
+            if (amountRequiredToMeetBet > StackOfChips)
+            {
+                throw new Exception("Player does not have sufficient chips to raise by this amount");
+            }
+
+            // is the amount to raise higher than the big blind
+            if (amountToRaiseBy < pokerGame.BigBlind)
+            {
+                throw new Exception("Raise ammount must at least meet big blind");
+            }
+
+            // check the amount to raise is not bigger than the biggest stack of players still in play
+            if (amountToRaiseBy > pokerGame.LowestStackInPlay)
+            {
+                throw new Exception("Not all players can meet proposed raise amount");
+            }
+
+            pokerGame.MinimumBet = pokerGame.MinimumBet + amountToRaiseBy;
+            pokerGame.AddToPot(this, amountRequiredToMeetBet);
+            pokerGame.Log.Add($"{this.Name} has raised by {amountToRaiseBy}, {amountRequiredToMeetBet} was added to the pot");
+            pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+
+            if (IsHuman)
+            {
+                pokerGame.RoundOfBetting();
+            }
+        }
+
+        public void ChooseBettingOption(PokerGame pokerGame)
+        {
+            Random random = new Random();
+            int choice = random.Next(10);
+
+            if (choice <= 1)
+            {
+                int amountToRaiseBy = (random.Next(3) * 5) + pokerGame.BigBlind;
+                int amountRequiredToMeetBet = (pokerGame.MinimumBet + amountToRaiseBy) - AmountBetInRound;
+                              
+
+                if (amountRequiredToMeetBet > StackOfChips || pokerGame.LowestStackInPlay < pokerGame.BigBlind)
+                {
+                    Call(pokerGame);
+                }
+                else
+                {
+                    if (amountToRaiseBy > pokerGame.LowestStackInPlay && pokerGame.LowestStackInPlay > pokerGame.BigBlind)
+                    {
+                        amountToRaiseBy = pokerGame.LowestStackInPlay;
+                    }
+                    Raise(pokerGame, amountToRaiseBy);
+                }
+                              
+                
+            }
+            else if (choice >= 2 && choice <= 8)
+            {
+                Call(pokerGame);
+            }
+            else
+            {
+                Fold(pokerGame);
+            }
+        }
+
     }
 }
