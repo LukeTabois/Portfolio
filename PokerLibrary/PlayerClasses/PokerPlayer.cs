@@ -291,28 +291,40 @@ namespace PokerLibrary.PlayerClasses
             BetPlacedInRound = true;
 
             int amountRequiredToMeetBet = pokerGame.MinimumBet - AmountBetInRound;
-            if (StackOfChips < amountRequiredToMeetBet)
+
+            if (pokerGame.CheckIfPlayerBetIsValid(this, amountRequiredToMeetBet, out string errorMessage))
             {
-                pokerGame.AddToPot(this, StackOfChips);
-                pokerGame.Log.Add($"{this.Name} has gone all in, {StackOfChips} was added to the pot");
-                pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
-            }
-            else if (amountRequiredToMeetBet == 0)
-            {
-                pokerGame.Log.Add($"{this.Name} has checked");
-                pokerGame.Log.Add($"The value of the pot is still {pokerGame.Pot}{Environment.NewLine}");
+                if (StackOfChips < amountRequiredToMeetBet)
+                {
+                    pokerGame.AddToPot(this, StackOfChips);
+                    pokerGame.Log.Add($"{this.Name} has gone all in, {StackOfChips} was added to the pot");
+                    pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+                }
+                else if (amountRequiredToMeetBet == 0)
+                {
+                    pokerGame.Log.Add($"{this.Name} has checked");
+                    pokerGame.Log.Add($"The value of the pot is still {pokerGame.Pot}{Environment.NewLine}");
+                }
+                else
+                {
+                    pokerGame.AddToPot(this, amountRequiredToMeetBet);
+                    pokerGame.Log.Add($"{this.Name} has called, {amountRequiredToMeetBet} was added to the pot");
+                    pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+                }
+
+                if (IsHuman)
+                {
+                    pokerGame.RoundOfBetting();
+                }
+
+                
             }
             else
             {
-                pokerGame.AddToPot(this, amountRequiredToMeetBet);
-                pokerGame.Log.Add($"{this.Name} has called, {amountRequiredToMeetBet} was added to the pot");
-                pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+                 throw new Exception(errorMessage);
             }
-
-            if (IsHuman)
-            {
-                pokerGame.RoundOfBetting();
-            }
+            
+            
         }
 
         public void Fold(PokerGame pokerGame)
@@ -338,12 +350,7 @@ namespace PokerLibrary.PlayerClasses
         {
             BetPlacedInRound = true;
 
-            int amountRequiredToMeetBet = (pokerGame.MinimumBet + amountToRaiseBy) - AmountBetInRound;
-            // have they got the amount to raise in their stack
-            if (amountRequiredToMeetBet > StackOfChips)
-            {
-                throw new Exception("Player does not have sufficient chips to raise by this amount");
-            }
+            int amountRequiredToMeetBet = (pokerGame.MinimumBet + amountToRaiseBy) - AmountBetInRound;                                  
 
             // is the amount to raise higher than the big blind
             if (amountToRaiseBy < pokerGame.BigBlind)
@@ -357,17 +364,29 @@ namespace PokerLibrary.PlayerClasses
                 throw new Exception("Not all players can meet proposed raise amount");
             }
 
-            pokerGame.MinimumBet = pokerGame.MinimumBet + amountToRaiseBy;
-            pokerGame.AddToPot(this, amountRequiredToMeetBet);
-            pokerGame.Log.Add($"{this.Name} has raised by {amountToRaiseBy}, {amountRequiredToMeetBet} was added to the pot");
-            pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
-
-            if (IsHuman)
+            if (pokerGame.CheckIfPlayerBetIsValid(this, amountRequiredToMeetBet, out string errorMessage))
             {
-                pokerGame.RoundOfBetting();
+                pokerGame.MinimumBet = pokerGame.MinimumBet + amountToRaiseBy;
+                pokerGame.AddToPot(this, amountRequiredToMeetBet);
+                pokerGame.Log.Add($"{this.Name} has raised by {amountToRaiseBy}, {amountRequiredToMeetBet} was added to the pot");
+                pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
+
+                if (IsHuman)
+                {
+                    pokerGame.RoundOfBetting();
+                }
+
+                
             }
+            else
+            {
+                throw new Exception(errorMessage);
+            }
+
+
         }
 
+        // TODO: this is where the logic for AI happens
         public void ChooseBettingOption(PokerGame pokerGame)
         {
             Random random = new Random();

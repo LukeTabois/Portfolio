@@ -1,4 +1,5 @@
 ﻿using PokerLibrary.CardClasses;
+using PokerLibrary.PlayerClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,5 +34,25 @@ namespace PokerLibrary.PokerClasses
             SecondValue = secondValue;
         }
 
+        public override string ToString()
+        {
+            string message = "";
+                        
+            message += $"{Hand} ";
+            if (SecondValue != null)
+            {
+                message += $"({Value} and {SecondValue})";
+            }
+            else if (Value != null)
+            {
+                message += $"({Value})";
+            }
+            else
+            {
+                message += $"({HighCard})";
+            }          
+
+            return message;
+        }
     }
 }

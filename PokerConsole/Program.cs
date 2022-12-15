@@ -4,6 +4,20 @@ using PokerLibrary.PokerClasses;
 
 internal class Program
 {
+
+    public static void ShowLogEntries(PokerGame poker)
+    {
+        foreach (string logEntry in poker.Log)
+        {
+            Console.WriteLine(logEntry);
+            Thread.Sleep(500);
+        }
+        Console.WriteLine();
+        //ShowPlayerDetails(poker);
+        //Console.WriteLine();
+        poker.Log.Clear();
+    }
+
     public static void ShowHoleCards(PokerPlayer player)
     {
         foreach (Card holeCard in player.HoleCards)
@@ -75,7 +89,7 @@ internal class Program
     {        
         // create players                
         PokerPlayer playerOne = new PokerPlayer("Lukeemailaddress", "Luke", 100, false);
-        PokerPlayer playerTwo = new PokerPlayer("Dianeemailaddress", "Diane", 100, false);
+        PokerPlayer playerTwo = new PokerPlayer("Dianeemailaddress", "Diane", 100, true);
         PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 30, false);
         PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 100, false);
 
@@ -90,17 +104,74 @@ internal class Program
 
         while (playAgain)
         {
+            // run game until human players turn
             poker.StartGame();
+            ShowLogEntries(poker);
+            ShowHoleCards(playerTwo);
 
-            foreach (string logEntry in poker.Log)
-            {
-                Console.WriteLine(logEntry);
-                Thread.Sleep(500);
+            while (poker.isRoundInPlay)
+            {               
+
+                // player to take turn
+                bool isValidUserInput = false;
+                while (isValidUserInput == false)
+                {
+                    Console.WriteLine("Please select a betting option Call/Check (c), Raise (r) or Fold (f)");
+                    Console.WriteLine($"Your current hand value is {playerTwo.GetHandValue(poker.CommunityCards.ToList()).ToString()}");
+                    string userInput = Console.ReadLine();
+
+                    try
+                    {
+                        switch (userInput)
+                        {
+                            // call
+                            case "c":
+                                playerTwo.Call(poker);
+                                isValidUserInput = true;
+                                break;
+                            // raise
+                            case "r":
+                                Console.WriteLine($"Please enter an amount you wish to raise by (you have {playerTwo.StackOfChips})");
+                                string amountToRaiseByInput = Console.ReadLine();
+                                bool isValidInt = int.TryParse(amountToRaiseByInput, out int amountToRaiseBy);
+                                if (isValidInt)
+                                {
+                                    playerTwo.Raise(poker, amountToRaiseBy);
+                                    isValidUserInput = true;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("the amount to raise by is not valid");
+                                }
+                                break;
+                            // fold
+                            case "f":
+                                playerTwo.Fold(poker);
+                                isValidUserInput = true;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    Console.WriteLine();
+                }
+
+                ShowLogEntries(poker);
             }
-            Console.WriteLine();
-            ShowPlayerDetails(poker);
-            Console.WriteLine();
 
+
+
+
+
+            
+                        
+
+           
+            // invite player to play another game
             Console.WriteLine("Do you want to play another game??");
             string answer = Console.ReadLine();
 

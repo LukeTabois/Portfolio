@@ -142,17 +142,35 @@ namespace PokerLibrary.PokerClasses
         //TODO: needs to validate that it cannot be called mid round
         public void StartGame()
         {
+            // reset properties ready for new game
             Log.Clear();
             _communityCards.Clear();
             _deck.Reset();
             Pot = 0;
+
+            // ensure that players can meet minimum bet amount 
+            // and removes players that can't
             CheckPlayersCanMeetBigBlind();
+
+            // set round in play flag to true to prevent players from leaving mid game
             isRoundInPlay = true;
+
+            // set stage of game to deal
             Stage = PokerStageOfGame.Deal;
+
+            // start game log
             Log.Add($"New game started{Environment.NewLine}");
+
+            // manages postion of players to dealer throughout a game
+            // at this point add 1 to postion for existing players
+            // and add joining players to the end
             SetPlayersPositionsToDealer();
+            
+            // takes small blind from posistion 1 and big blind from postion 2
+            // for two player games takes small blind from 0 and big blind from 1
             TakeBlinds();
 
+            // deals new hole cards to each player
             foreach (PokerPlayer player in Players)
             {
                 player.ClearHoleCards();
@@ -161,7 +179,8 @@ namespace PokerLibrary.PokerClasses
             }
             Log.Add($"{Environment.NewLine}");
 
-            // this will start a new round of betting rather than continuing
+            // set postion to player to bet to -1
+            // so that a new round of betting is started rather than continuing
             PositionOfPlayerToBet = -1;
             Log.Add($"Start round of betting for hole cards{Environment.NewLine}");
             RoundOfBetting();
@@ -217,23 +236,34 @@ namespace PokerLibrary.PokerClasses
         }
 
         public void RoundOfBetting()
-        {
-            // this code is for resetting require properties for betting
-            // should only be called at the beginning of each round of betting
+        {            
+            // this is called at the beginning of each round of betting
             if (PositionOfPlayerToBet == -1)
             {
+                // sets pointer to 0 to initialise loop
                 PositionOfPlayerToBet = 0;
+
+                // if it's a new round of betting
+                // and it's not a new game
                 if (Stage != PokerStageOfGame.Deal)
                 {
+                    // set the minimum bet to 0 to allow for "checks"
                     MinimumBet = 0;
                 }
+                // if it's a new round of betting
+                // and it's a new game
                 else
                 {
+                    // set the minimum bet to the big blind for the very first round of betting
                     MinimumBet = BigBlind;
                 }
                 
+                // for all active players resets their flag that says they have placed a bet
+                // and resets amount they have bet for the round when it's not the deal
                 foreach (PokerPlayer player in ActivePlayers)
                 {
+                    // we only do this when it is not the deal
+                    // to ensure we don't overwrite the blinds
                     if (Stage != PokerStageOfGame.Deal)
                     {
                         player.AmountBetInRound = 0;
@@ -243,31 +273,25 @@ namespace PokerLibrary.PokerClasses
                 }
             }
 
+
+            // checks if there is only 1 player left in round of betting
+            // this is to handle when everyone else has folded
             if (InRoundPlayers.Count == 1)
             {
                 Log.Add("Only one player remains, move straight to showdown");
                 Showdown();
             }
+            // if there is more than 1 player left....
             else
-            {
+            {                
+
+                // gets current poker player
+                // (active player where position to dealer is equal to postion of player to bet)
                 PokerPlayer currentPlayerToBet = ActivePlayers.Single(p => p.PositionToDealer == PositionOfPlayerToBet);
 
-                if (currentPlayerToBet.HasFolded == false)
-                {
-                    if (currentPlayerToBet.IsHuman)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        //TODO: AI logic                    
-                        currentPlayerToBet.ChooseBettingOption(this);
-
-                    }
-                }
-
-
-                // sets next person to bet
+                // updates loop pointer ready for next betting player
+                // this needs to be done before betting options
+                // so that it doesn't error when humans players break out the method
                 if (PositionOfPlayerToBet == ActivePlayers.Count - 1)
                 {
                     PositionOfPlayerToBet = 0;
@@ -277,6 +301,27 @@ namespace PokerLibrary.PokerClasses
                     PositionOfPlayerToBet++;
                 }
 
+                // checks the current betting player has not folded
+                if (currentPlayerToBet.HasFolded == false)
+                {
+                    // checks whether the current betting player is human or AI
+                    if (currentPlayerToBet.IsHuman)
+                    {                                                
+                        // if the current betting player is human
+                        // break out of the loop to allow player to choose their own betting option
+                        // round of betting must be called to continue the the game once player has made their bet
+                        return;
+                    }
+                    else
+                    {
+                        // if the current betting player is an AI
+                        // automatically choose a betting option and let the game continue
+                        currentPlayerToBet.ChooseBettingOption(this);
+                    }
+                }                
+
+                // checks if all players in the round have placed a bet
+                // we need this to determine if we continue betting or go to the next stage
                 bool allPlayersPlacedBet = true;
                 foreach (PokerPlayer player in InRoundPlayers)
                 {
@@ -286,6 +331,8 @@ namespace PokerLibrary.PokerClasses
                     }
                 }
 
+                // checks if all players in the round have bet equal amounts
+                // we need this to determine if we continue betting or go to the next stage
                 bool allPlayersBetsMatch = true;
                 int amountBetByEachPlayer = InRoundPlayers.First().AmountBetInRound;
                 foreach (PokerPlayer player in InRoundPlayers)
@@ -296,11 +343,15 @@ namespace PokerLibrary.PokerClasses
                     }
                 }
 
+                // if all players have placed a bet and one player cannot continue to bet
+                // then move straight on to the showdown
                 if (allPlayersPlacedBet == true && SkipToShowdown == true)
                 {
                     Log.Add("Not all players are able to meet the minimum bet so moved straight to showdown");
                     Showdown();
                 }
+                // if all players have placed bets and they are equal and all players can continue 
+                // then move to the next stage (normal flow of play)
                 else if (allPlayersPlacedBet == true && allPlayersBetsMatch == true && SkipToShowdown == false)
                 {
                     // move onto next phase of the game
@@ -323,6 +374,7 @@ namespace PokerLibrary.PokerClasses
                             break;
                     }
                 }
+                // if all players have not placed a bet or the players bets are not equal
                 else
                 {
                     // triggers next person to bet
@@ -338,23 +390,47 @@ namespace PokerLibrary.PokerClasses
                         
         }
 
-        // made internal so not acceisble out of DLL
-        internal void AddToPot(PokerPlayer player, int amountToAdd)
+        
+        public bool CheckIfPlayerBetIsValid(PokerPlayer player, int amountToAdd, out string errorMessage)
         {
+            errorMessage = null;
+
             bool exists = CheckInRoundPlayerExists(player.Email);
             if (exists == false)
             {
-                throw new Exception($"Player with email {player.Email} does not exist in this game");
+                errorMessage = ($"Player with email {player.Email} does not exist in this game");
+                return false;
             }
 
             if (player.StackOfChips < amountToAdd)
             {
-                throw new Exception("Player does not have enough chips");
+                errorMessage = ("Player does not have enough chips");
+                return false;
             }
 
-            Pot = Pot + amountToAdd;
-            player.StackOfChips = player.StackOfChips - amountToAdd;
-            player.AmountBetInRound = player.AmountBetInRound + amountToAdd;
+            return true;
+        }
+
+
+
+
+
+        // made internal so not acceisble out of DLL
+        internal void AddToPot(PokerPlayer player, int amountToAdd)
+        {
+            bool isValid = CheckIfPlayerBetIsValid(player, amountToAdd, out string errorMessage);
+
+            if (isValid == true)
+            {
+                Pot = Pot + amountToAdd;
+                player.StackOfChips = player.StackOfChips - amountToAdd;
+                player.AmountBetInRound = player.AmountBetInRound + amountToAdd;
+            }
+            else
+            {
+                throw new Exception(errorMessage);
+            }
+            
         }
 
         //TODO: method may need to be private as will be set internally at start of game
