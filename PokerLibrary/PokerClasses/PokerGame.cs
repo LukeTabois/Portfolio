@@ -182,7 +182,7 @@ namespace PokerLibrary.PokerClasses
             // set postion to player to bet to -1
             // so that a new round of betting is started rather than continuing
             PositionOfPlayerToBet = -1;
-            
+
             // commented out as we will work on the UI interaction
             //Log.Add($"Start round of betting for hole cards{Environment.NewLine}");
             //RoundOfBetting();
@@ -379,8 +379,9 @@ namespace PokerLibrary.PokerClasses
                 // if all players have not placed a bet or the players bets are not equal
                 else
                 {
+                    // commented out as we will work on the UI interaction
                     // triggers next person to bet
-                    RoundOfBetting();
+                    //RoundOfBetting();
                 }
 
                
