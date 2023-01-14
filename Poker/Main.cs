@@ -142,6 +142,34 @@ namespace Poker
             }
         }
 
-        
+        private void btnRaise_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //TODO: need to ensure only numbers can be typed into text box
+                HumanPlayer.Raise(Poker, Convert.ToInt32(numRaiseAmount.Value));
+                DisplayNewLogEntries();
+                DisplayCommunityCards();
+
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Text = ex.Message;
+            }
+        }
+
+        private void btnCall_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                HumanPlayer.Call(Poker);
+                DisplayNewLogEntries();
+                DisplayCommunityCards();
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Text = ex.Message;
+            }
+        }
     }
 }

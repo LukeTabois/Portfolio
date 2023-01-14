@@ -43,6 +43,7 @@
             this.imgCommunityCardThree = new System.Windows.Forms.PictureBox();
             this.imgCommunityCardFour = new System.Windows.Forms.PictureBox();
             this.imgCommunityCardFive = new System.Windows.Forms.PictureBox();
+            this.numRaiseAmount = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.imgTest)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgHoleCardOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgHoleCardTwo)).BeginInit();
@@ -51,6 +52,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardThree)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardFour)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardFive)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRaiseAmount)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStartGame
@@ -126,6 +128,7 @@
             this.btnCall.TabIndex = 7;
             this.btnCall.Text = "Call";
             this.btnCall.UseVisualStyleBackColor = true;
+            this.btnCall.Click += new System.EventHandler(this.btnCall_Click);
             // 
             // btnRaise
             // 
@@ -135,6 +138,7 @@
             this.btnRaise.TabIndex = 8;
             this.btnRaise.Text = "Raise";
             this.btnRaise.UseVisualStyleBackColor = true;
+            this.btnRaise.Click += new System.EventHandler(this.btnRaise_Click);
             // 
             // btnFold
             // 
@@ -196,6 +200,13 @@
             this.imgCommunityCardFive.TabIndex = 14;
             this.imgCommunityCardFive.TabStop = false;
             // 
+            // numRaiseAmount
+            // 
+            this.numRaiseAmount.Location = new System.Drawing.Point(737, 380);
+            this.numRaiseAmount.Name = "numRaiseAmount";
+            this.numRaiseAmount.Size = new System.Drawing.Size(51, 23);
+            this.numRaiseAmount.TabIndex = 15;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -203,6 +214,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(872, 461);
+            this.Controls.Add(this.numRaiseAmount);
             this.Controls.Add(this.imgCommunityCardFive);
             this.Controls.Add(this.imgCommunityCardFour);
             this.Controls.Add(this.imgCommunityCardThree);
@@ -231,6 +243,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardThree)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardFour)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardFive)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numRaiseAmount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -252,5 +265,6 @@
         private PictureBox imgCommunityCardThree;
         private PictureBox imgCommunityCardFour;
         private PictureBox imgCommunityCardFive;
+        private NumericUpDown numRaiseAmount;
     }
 }
