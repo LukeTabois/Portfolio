@@ -202,7 +202,7 @@ namespace PokerLibrary.PokerClasses
             // this will start a new round of betting rather than continuing
             PositionOfPlayerToBet = -1;
             Log.Add($"Start round of betting for flop{Environment.NewLine}");
-            RoundOfBetting();
+            ContinueGame();
         }
         public void Turn()
         {
@@ -218,7 +218,7 @@ namespace PokerLibrary.PokerClasses
             // this will start a new round of betting rather than continuing
             PositionOfPlayerToBet = -1;
             Log.Add($"Start round of betting for turn{Environment.NewLine}");
-            RoundOfBetting();
+            ContinueGame();
         }
         public void River()
         {
@@ -234,10 +234,10 @@ namespace PokerLibrary.PokerClasses
             // this will start a new round of betting rather than continuing
             PositionOfPlayerToBet = -1;
             Log.Add($"Start round of betting for river{Environment.NewLine}");
-            RoundOfBetting();
+            ContinueGame();
         }
 
-        public void RoundOfBetting()
+        public void ContinueGame()
         {            
             // this is called at the beginning of each round of betting
             if (PositionOfPlayerToBet == -1)

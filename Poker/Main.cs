@@ -20,6 +20,27 @@ namespace Poker
             }
         }
 
+        public PokerPlayer PlayerCurrentlyBetting 
+        { 
+            get
+            {
+                return Poker.ActivePlayers.Single(p => p.PositionToDealer == Poker.PositionOfPlayerToBet);
+            }
+        }
+
+        public bool IsItHumanPlayersTurn
+        {
+            get
+            {
+                if (HumanPlayer.Name == PlayerCurrentlyBetting.Name)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
         private void DisplayNewLogEntries()
         {
             foreach (string entry in Poker.Log)
@@ -28,6 +49,10 @@ namespace Poker
             }
             txtLog.Text = $"{txtLog.Text}{System.Environment.NewLine}";
             Poker.Log.Clear();
+
+            // scrolls to the bottom of the visable log
+            txtLog.SelectionStart = txtLog.TextLength;
+            txtLog.ScrollToCaret();
         }
 
         private void DisplayCommunityCards()
@@ -62,6 +87,97 @@ namespace Poker
             
         }
 
+        private void DisplayStageOfGame()
+        {
+            // this works when stage is one word
+            lblStageOfGame.Text = Poker.Stage.ToString();
+        }
+
+        private void DisplayPlayerCurrentlyBetting()
+        {
+            lblCurrentPlayerTurn.Text = PlayerCurrentlyBetting.Name;
+        }
+
+        private void DisplayPlayerNames()
+        {
+            foreach (PokerPlayer player in Poker.ActivePlayers)
+            {
+                switch (player.PositionToDealer)
+                {
+                    case 0:
+                        if (string.IsNullOrWhiteSpace(lblPlayerOneName.Text))
+                        {
+                            lblPlayerOneName.Text = player.Name;
+                        }                        
+                        break;
+                    case 1:
+                        if (string.IsNullOrWhiteSpace(lblPlayerTwoName.Text))
+                        {
+                            lblPlayerTwoName.Text = player.Name;
+                        }                        
+                        break;
+                    case 2:
+                        if (string.IsNullOrWhiteSpace(lblPlayerThreeName.Text))
+                        {
+                            lblPlayerThreeName.Text = player.Name;
+                        }                        
+                        break;
+                    case 3:
+                        if (string.IsNullOrWhiteSpace(lblPlayerFourName.Text))
+                        {
+                            lblPlayerFourName.Text = player.Name;
+                        }                        
+                        break;
+                    default:
+                        throw new Exception("More players than expected");
+                        break;
+                }
+            }
+        }
+
+        private void DisplayStackAndPotAmounts()
+        {
+            lblPot.Text = Poker.Pot.ToString();
+        }
+
+        private void DisplayPlayerImages()
+        {
+            // show/hide image
+        }
+
+        private void DisplayPlayerTurn()
+        {
+            // show/hide image
+        }
+
+        private void DisplayCurrentDealer()
+        {
+            // show/hide image
+        }
+
+        private async void UpdateUIAndAutoContinue()
+        {            
+            DisplayCommunityCards();
+            DisplayNewLogEntries();
+            DisplayStageOfGame();
+            DisplayPlayerCurrentlyBetting();
+            DisplayPlayerNames();
+            DisplayStackAndPotAmounts();
+            DisplayPlayerImages();
+            DisplayPlayerTurn();
+            DisplayCurrentDealer();
+            await Task.Delay(3000);
+            //Thread.Sleep(3000);
+
+            // will continue playing until the human players turn
+            if ((IsItHumanPlayersTurn == false || HumanPlayer.HasFolded == true) && Poker.isRoundInPlay == true)
+            {
+                Poker.ContinueGame();
+                UpdateUIAndAutoContinue();
+            }
+        }
+
+
         public Main()
         {
 
@@ -74,15 +190,38 @@ namespace Poker
         {
             try
             {
+                // resets the UI ready for a new game
+                lblPot.Text = "0";
                 lblErrorMessage.Text = "";
+                lblStageOfGame.Text = "";
+                lblCurrentPlayerTurn.Text = "";
+                lblPlayerOneName.Text = "";
+                lblPlayerTwoName.Text = "";
+                lblPlayerThreeName.Text = "";
+                lblPlayerFourName.Text = "";
+                imgPlayerOneHighlight.BringToFront();
+                imgPlayerThreeHighlight.BringToFront();
+                imgPlayerFourHighlight.BringToFront();
+                imgPlayerOneHighlight.Visible = false;
+                imgPlayerThreeHighlight.Visible = false;
+                imgPlayerFourHighlight.Visible = false;
+                imgPlayerOneDealer.BringToFront();
+                imgPlayerTwoDealer.BringToFront();
+                imgPlayerThreeDealer.BringToFront();
+                imgPlayerFourDealer.BringToFront();
+                imgPlayerOneDealer.Visible = false;
+                imgPlayerTwoDealer.Visible = false;
+                imgPlayerThreeDealer.Visible = false;
+                imgPlayerFourDealer.Visible = false;
+
 
                 // create players
                 //TODO: allow user to enter own name
                 //TODO: allow user to choose avatar
                 //TODO: allow user to configure AI players
-                PokerPlayer playerOne = new PokerPlayer("Lukeemailaddress", "Luke", 100, false);
-                PokerPlayer playerTwo = new PokerPlayer("Dianeemailaddress", "Diane", 100, true);
-                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 30, false);
+                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 100, false);
+                PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Luke", 100, true);
+                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 100, false);
                 PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 100, false);
 
                 // create game and add players
@@ -106,6 +245,14 @@ namespace Poker
         {
             try
             {
+                // clears community cards ready for next game
+                lblPot.Text = "0";
+                imgCommunityCardOne.Image = null;
+                imgCommunityCardTwo.Image = null;
+                imgCommunityCardThree.Image = null;
+                imgCommunityCardFour.Image = null;
+                imgCommunityCardFive.Image = null;
+
                 // reset, set position to dealer, deal, take blind 
                 Poker.StartGame();
                 DisplayNewLogEntries();
@@ -115,8 +262,9 @@ namespace Poker
                 imgHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{HumanPlayer.HoleCards.Last().Image}");
 
                 // betting starts
-                Poker.RoundOfBetting();
-                DisplayNewLogEntries();
+                Poker.ContinueGame();
+                UpdateUIAndAutoContinue();
+
 
                 
             }
@@ -132,9 +280,15 @@ namespace Poker
         {
             try
             {
-                HumanPlayer.Fold(Poker);
-                DisplayNewLogEntries();
-                DisplayCommunityCards();
+                if (IsItHumanPlayersTurn)
+                {
+                    HumanPlayer.Fold(Poker);
+                    UpdateUIAndAutoContinue();
+                }
+                else
+                {
+                    MessageBox.Show("Not currently your turn", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
@@ -146,11 +300,15 @@ namespace Poker
         {
             try
             {
-                //TODO: need to ensure only numbers can be typed into text box
-                HumanPlayer.Raise(Poker, Convert.ToInt32(numRaiseAmount.Value));
-                DisplayNewLogEntries();
-                DisplayCommunityCards();
-
+                if (IsItHumanPlayersTurn)
+                {
+                    HumanPlayer.Raise(Poker, Convert.ToInt32(numRaiseAmount.Value));
+                    UpdateUIAndAutoContinue();
+                }
+                else
+                {
+                    MessageBox.Show("Not currently your turn", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
@@ -162,14 +320,36 @@ namespace Poker
         {
             try
             {
-                HumanPlayer.Call(Poker);
-                DisplayNewLogEntries();
-                DisplayCommunityCards();
+                if (IsItHumanPlayersTurn)
+                {
+                    HumanPlayer.Call(Poker);
+                    UpdateUIAndAutoContinue();
+                }
+                else
+                {
+                    MessageBox.Show("Not currently your turn", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);                        
+                }
             }
             catch (Exception ex)
             {
                 lblErrorMessage.Text = ex.Message;
             }
         }
+
+        private void btnContinuePlay_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Poker.ContinueGame();
+                UpdateUIAndAutoContinue();
+            }
+            catch (Exception ex)
+            {
+                lblErrorMessage.Text = ex.Message;
+            }
+            
+        }
+
+        
     }
 }

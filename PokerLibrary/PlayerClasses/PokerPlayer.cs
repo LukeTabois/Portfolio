@@ -314,7 +314,7 @@ namespace PokerLibrary.PlayerClasses
 
                 if (IsHuman)
                 {
-                    pokerGame.RoundOfBetting();
+                    pokerGame.ContinueGame();
                 }
 
                 
@@ -342,7 +342,7 @@ namespace PokerLibrary.PlayerClasses
 
             if (IsHuman)
             {
-                pokerGame.RoundOfBetting();
+                pokerGame.ContinueGame();
             }
         }
 
@@ -373,7 +373,7 @@ namespace PokerLibrary.PlayerClasses
 
                 if (IsHuman)
                 {
-                    pokerGame.RoundOfBetting();
+                    pokerGame.ContinueGame();
                 }
 
                 
