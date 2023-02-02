@@ -297,17 +297,20 @@ namespace PokerLibrary.PlayerClasses
                 if (StackOfChips < amountRequiredToMeetBet)
                 {
                     pokerGame.AddToPot(this, StackOfChips);
+                    pokerGame.DisplayLog.Add($"{this.Name} has gone all in, {StackOfChips} was added to the pot");
                     pokerGame.Log.Add($"{this.Name} has gone all in, {StackOfChips} was added to the pot");
                     pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
                 }
                 else if (amountRequiredToMeetBet == 0)
                 {
+                    pokerGame.DisplayLog.Add($"{this.Name} has checked");
                     pokerGame.Log.Add($"{this.Name} has checked");
                     pokerGame.Log.Add($"The value of the pot is still {pokerGame.Pot}{Environment.NewLine}");
                 }
                 else
                 {
                     pokerGame.AddToPot(this, amountRequiredToMeetBet);
+                    pokerGame.DisplayLog.Add($"{this.Name} has called, {amountRequiredToMeetBet} was added to the pot");
                     pokerGame.Log.Add($"{this.Name} has called, {amountRequiredToMeetBet} was added to the pot");
                     pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
                 }
@@ -338,6 +341,7 @@ namespace PokerLibrary.PlayerClasses
                 throw new Exception($"Player with email {Email} does not exist in this game");
             }
             HasFolded = true;
+            pokerGame.DisplayLog.Add($"{this.Name} has folded and is out of play{Environment.NewLine}");
             pokerGame.Log.Add($"{this.Name} has folded and is out of play{Environment.NewLine}");            
 
             if (IsHuman)
@@ -368,6 +372,7 @@ namespace PokerLibrary.PlayerClasses
             {
                 pokerGame.MinimumBet = pokerGame.MinimumBet + amountToRaiseBy;
                 pokerGame.AddToPot(this, amountRequiredToMeetBet);
+                pokerGame.DisplayLog.Add($"{this.Name} has raised by {amountToRaiseBy}, {amountRequiredToMeetBet} was added to the pot");
                 pokerGame.Log.Add($"{this.Name} has raised by {amountToRaiseBy}, {amountRequiredToMeetBet} was added to the pot");
                 pokerGame.Log.Add($"The value of the pot is now {pokerGame.Pot}{Environment.NewLine}");
 

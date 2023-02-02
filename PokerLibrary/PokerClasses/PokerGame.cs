@@ -126,6 +126,8 @@ namespace PokerLibrary.PokerClasses
 
         public List<string> Log { get; set; }
 
+        public List<string> DisplayLog { get; set; }
+
         public PokerGame(int smallBlind)
         {
             _deck = new Deck();
@@ -137,12 +139,14 @@ namespace PokerLibrary.PokerClasses
             MinimumBet = 0;
             Stage = PokerStageOfGame.Ready;
             Log = new List<string>();
+            DisplayLog = new List<string>();
         }
         
         //TODO: needs to validate that it cannot be called mid round
         public void StartGame()
         {
             // reset properties ready for new game
+            DisplayLog.Clear();
             Log.Clear();
             _communityCards.Clear();
             _deck.Reset();
@@ -178,7 +182,7 @@ namespace PokerLibrary.PokerClasses
                 Log.Add($"{player.Name} was dealt hole cards");
             }
             Log.Add($"{Environment.NewLine}");
-
+            DisplayLog.Add("- Hole Cards Dealt -");
             // set postion to player to bet to -1
             // so that a new round of betting is started rather than continuing
             PositionOfPlayerToBet = -1;
@@ -191,6 +195,7 @@ namespace PokerLibrary.PokerClasses
         public void Flop()
         {            
             Stage = PokerStageOfGame.Flop;
+            DisplayLog.Add("- Flop Revealed -");
             Log.Add("Flop begins");
             List<Card> flop = _deck.Draw(3);
             foreach (Card card in flop)
@@ -207,6 +212,7 @@ namespace PokerLibrary.PokerClasses
         public void Turn()
         {
             Stage = PokerStageOfGame.Turn;
+            DisplayLog.Add("- Turn Revealed -");
             Log.Add("Turn begins");
             List<Card> turn = _deck.Draw(1);
             foreach (Card card in turn)
@@ -223,6 +229,7 @@ namespace PokerLibrary.PokerClasses
         public void River()
         {
             Stage = PokerStageOfGame.River;
+            DisplayLog.Add("- River Revealed -");
             Log.Add("River begins");
             List<Card> river = _deck.Draw(1);
             foreach (Card card in river)
@@ -349,6 +356,7 @@ namespace PokerLibrary.PokerClasses
                 // then move straight on to the showdown
                 if (allPlayersPlacedBet == true && SkipToShowdown == true)
                 {
+                    DisplayLog.Add("Not all players are able to meet the minimum bet so moved straight to showdown");
                     Log.Add("Not all players are able to meet the minimum bet so moved straight to showdown");
                     Showdown();
                 }
@@ -526,6 +534,7 @@ namespace PokerLibrary.PokerClasses
             }
                         
             _players.Add(playerToJoin);
+            //DisplayLog.Add($"{playerToJoin.Name} joined the table{Environment.NewLine}");
             Log.Add($"{playerToJoin.Name} joined the table{Environment.NewLine}");
         }
 
@@ -552,6 +561,7 @@ namespace PokerLibrary.PokerClasses
                 }
 
                 _players.Remove(playerToLeave);
+                //DisplayLog.Add($"{playerToLeave.Name} left the table{Environment.NewLine}");
                 Log.Add($"{playerToLeave.Name} left the table{Environment.NewLine}");
             }
         }
@@ -620,6 +630,7 @@ namespace PokerLibrary.PokerClasses
             {
                 if (player.StackOfChips < BigBlind)
                 {
+                    DisplayLog.Add($"{player.Name} can't meet the big blind so has left the table");
                     Log.Add($"{player.Name} cannot meet the big blind");
                     Leave(player);
                 }
@@ -630,6 +641,7 @@ namespace PokerLibrary.PokerClasses
 
         public void Showdown()
         {
+            DisplayLog.Clear();
             Stage = PokerStageOfGame.Showdown;
             PokerHand currentPlayerHand;
             List<PokerPlayer> winningPlayers = new List<PokerPlayer> { InRoundPlayers.First() };
@@ -716,6 +728,7 @@ namespace PokerLibrary.PokerClasses
 
             }
 
+            DisplayLog.Add(showdownResult.ToString());
             Log.Add(showdownResult.ToString());
             isRoundInPlay = false;
             Stage = PokerStageOfGame.Ready;

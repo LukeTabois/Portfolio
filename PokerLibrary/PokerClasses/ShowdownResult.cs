@@ -35,14 +35,17 @@ namespace PokerLibrary.PokerClasses
         {
             string message = "";
 
-            message += "The winning players are....";
-            message += Environment.NewLine;
+            message += "The winning players are ";            
             foreach (PokerPlayer player in Winners)
             {
                 message += player.Name;
-                message += Environment.NewLine;
+                if (Winners.Count > 1 && player.Name != Winners.Last().Name)
+                {
+                    message += ", ";
+                }
+                
             }
-            message += $"The winning hand was a {WinningHand.Hand}";
+            message += $" with a {WinningHand.Hand}";
             if (WinningHand.SecondValue != null)
             {
                 message += $"({WinningHand.Value} and {WinningHand.SecondValue})";
@@ -61,7 +64,7 @@ namespace PokerLibrary.PokerClasses
             message += Environment.NewLine;
             if (TipToDealer > 0)
             {
-                message += $"The house was tipped the remainder of {TipToDealer}";
+                message += $"The house was tipped {TipToDealer}";
                 message += Environment.NewLine;
             }
 
