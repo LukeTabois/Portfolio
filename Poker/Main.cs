@@ -48,7 +48,7 @@ namespace Poker
         private void DisplayNewLogEntries()
         {
             // add it's your turn message to display log
-            if (Poker.PositionOfPlayerToBet >= 0 && PlayerCurrentlyBetting.IsHuman == true)
+            if (Poker.PositionOfPlayerToBet >= 0 && PlayerCurrentlyBetting.IsHuman == true && !PlayerCurrentlyBetting.HasFolded)
             {
                 Poker.DisplayLog.Add("It's your turn");
             }
@@ -180,7 +180,7 @@ namespace Poker
                 lblPlayerTwoName.Text = $"{HumanPlayer.Name}";
             }
             // dealer
-            if ((Poker.ActivePlayers.Count == 2 && HumanPlayer.PositionToDealer == 0) || HumanPlayer.PositionToDealer == 1)
+            if (HumanPlayer.PositionToDealer == 0)
             {
                 imgPlayerTwoDealer.Visible = true;
 
@@ -194,115 +194,145 @@ namespace Poker
 
             // get player for slot 1              if                 ?                     true      :           false
             int positionToDealerForTableSlotOne = (HumanPlayer.PositionToDealer == 0) ? 3 : HumanPlayer.PositionToDealer - 1;
-            PokerPlayer playerOne = Poker.ActivePlayers.Single(p => p.PositionToDealer == positionToDealerForTableSlotOne);
-            // label
-            if (string.IsNullOrWhiteSpace(lblPlayerOneName.Text))
+            PokerPlayer playerOne = Poker.ActivePlayers.SingleOrDefault(p => p.PositionToDealer == positionToDealerForTableSlotOne);
+            if (playerOne != null)
             {
-                lblPlayerOneName.Text = $"{playerOne.Name}";
-            }
-            // picture
-            if (playerOne.HasFolded)
-            {
-                imgPlayerOne.Image = Image.FromFile($"../../../images/players/{playerOne.Name}Folded.png");
+                // label
+                if (playerOne.Name != lblPlayerOneName.Text)
+                {
+                    lblPlayerOneName.Text = $"{playerOne.Name}";
+                }
+                // picture
+                if (playerOne.HasFolded)
+                {
+                    imgPlayerOne.Image = Image.FromFile($"../../../images/players/{playerOne.Name}Folded.png");
+                }
+                else
+                {
+                    imgPlayerOne.Image = Image.FromFile($"../../../images/players/{playerOne.Name}.png");
+                }
+                // highlight
+                if (playerOne.Name == PlayerCurrentlyBetting.Name && !playerOne.HasFolded)
+                {
+                    imgPlayerOneHighlight.Visible = true;
+                }
+                // dealer
+                if (playerOne.PositionToDealer == 0)
+                {
+                    imgPlayerOneDealer.Visible = true;
+
+                    imgPlayerTwoDealer.Visible = false;
+                    imgPlayerThreeDealer.Visible = false;
+                    imgPlayerFourDealer.Visible = false;
+                }
+                // stack amount
+                lblPlayerOneStackAmount.Text = playerOne.StackOfChips.ToString();
+                imgPlayerOneStack.Image = Image.FromFile(DisplayStackImage(playerOne.StackOfChips));
             }
             else
             {
-                imgPlayerOne.Image = Image.FromFile($"../../../images/players/{playerOne.Name}.png");
-            }
-            // highlight
-            if (playerOne.Name == PlayerCurrentlyBetting.Name && !playerOne.HasFolded)
-            {
-                imgPlayerOneHighlight.Visible = true;
-            }
-            // dealer
-            if ((Poker.ActivePlayers.Count == 2 && playerOne.PositionToDealer == 0) || playerOne.PositionToDealer == 1)
-            {
-                imgPlayerOneDealer.Visible = true;
-                
-                imgPlayerTwoDealer.Visible = false;
-                imgPlayerThreeDealer.Visible = false;
-                imgPlayerFourDealer.Visible = false;
-            }
-            // stack amount
-            lblPlayerOneStackAmount.Text = playerOne.StackOfChips.ToString();
-            imgPlayerOneStack.Image = Image.FromFile(DisplayStackImage(playerOne.StackOfChips));
+                lblPlayerOneName.Text = $"";
+                imgPlayerOne.Image = null;
+                lblPlayerOneStackAmount.Text = "";
+                imgPlayerOneStack.Image = null;
+            }            
 
             // get player for slot 3
             int positionToDealerForTableSlotThree = (HumanPlayer.PositionToDealer == 3) ? 0 : HumanPlayer.PositionToDealer + 1;
-            PokerPlayer playerThree = Poker.ActivePlayers.Single(p => p.PositionToDealer == positionToDealerForTableSlotThree);
-            // label
-            if (string.IsNullOrWhiteSpace(lblPlayerThreeName.Text))
+            PokerPlayer playerThree = Poker.ActivePlayers.SingleOrDefault(p => p.PositionToDealer == positionToDealerForTableSlotThree);
+            if (playerThree != null)
             {
-                lblPlayerThreeName.Text = $"{playerThree.Name}";
-            }
-            // picture
-            if (playerThree.HasFolded)
-            {
-                imgPlayerThree.Image = Image.FromFile($"../../../images/players/{playerThree.Name}Folded.png");
+                // label
+                if (playerThree.Name != lblPlayerThreeName.Text)
+                {
+                    lblPlayerThreeName.Text = $"{playerThree.Name}";
+                }
+                // picture
+                if (playerThree.HasFolded)
+                {
+                    imgPlayerThree.Image = Image.FromFile($"../../../images/players/{playerThree.Name}Folded.png");
+                }
+                else
+                {
+                    imgPlayerThree.Image = Image.FromFile($"../../../images/players/{playerThree.Name}.png");
+                }
+                // highlight
+                if (playerThree.Name == PlayerCurrentlyBetting.Name && !playerThree.HasFolded)
+                {
+                    imgPlayerThreeHighlight.Visible = true;
+                }
+                // dealer
+                if (playerThree.PositionToDealer == 0)
+                {
+                    imgPlayerThreeDealer.Visible = true;
+
+                    imgPlayerOneDealer.Visible = false;
+                    imgPlayerTwoDealer.Visible = false;
+                    imgPlayerFourDealer.Visible = false;
+                }
+                // stack amount
+                lblPlayerThreeStackAmount.Text = playerThree.StackOfChips.ToString();
+                imgPlayerThreeStack.Image = Image.FromFile(DisplayStackImage(playerThree.StackOfChips));
             }
             else
             {
-                imgPlayerThree.Image = Image.FromFile($"../../../images/players/{playerThree.Name}.png");
+                lblPlayerThreeName.Text = $"";
+                imgPlayerThree.Image = null;
+                lblPlayerThreeStackAmount.Text = "";
+                imgPlayerThreeStack.Image = null;
             }
-            // highlight
-            if (playerThree.Name == PlayerCurrentlyBetting.Name && !playerThree.HasFolded)
-            {
-                imgPlayerThreeHighlight.Visible = true;
-            }
-            // dealer
-            if ((Poker.ActivePlayers.Count == 2 && playerThree.PositionToDealer == 0) || playerThree.PositionToDealer == 1)
-            {
-                imgPlayerThreeDealer.Visible = true;
-
-                imgPlayerOneDealer.Visible = false;
-                imgPlayerTwoDealer.Visible = false;                
-                imgPlayerFourDealer.Visible = false;
-            }
-            // stack amount
-            lblPlayerThreeStackAmount.Text = playerThree.StackOfChips.ToString();
-            imgPlayerThreeStack.Image = Image.FromFile(DisplayStackImage(playerThree.StackOfChips));
 
             // get player for slot 4
             int positionToDealerForTableSlotFour = (HumanPlayer.PositionToDealer <= 1) ? HumanPlayer.PositionToDealer + 2 : HumanPlayer.PositionToDealer - 2;
-            PokerPlayer playerFour = Poker.ActivePlayers.Single(p => p.PositionToDealer == positionToDealerForTableSlotFour);
-            // label
-            if (string.IsNullOrWhiteSpace(lblPlayerFourName.Text))
+            PokerPlayer playerFour = Poker.ActivePlayers.SingleOrDefault(p => p.PositionToDealer == positionToDealerForTableSlotFour);
+            if (playerFour != null)
             {
-                lblPlayerFourName.Text = $"{playerFour.Name}";
-            }
-            // picture
-            if (playerFour.HasFolded)
-            {
-                imgPlayerFour.Image = Image.FromFile($"../../../images/players/{playerFour.Name}Folded.png");
+                // label
+                if (playerFour.Name != lblPlayerFourName.Text)
+                {
+                    lblPlayerFourName.Text = $"{playerFour.Name}";
+                }
+                // picture
+                if (playerFour.HasFolded)
+                {
+                    imgPlayerFour.Image = Image.FromFile($"../../../images/players/{playerFour.Name}Folded.png");
+                }
+                else
+                {
+                    imgPlayerFour.Image = Image.FromFile($"../../../images/players/{playerFour.Name}.png");
+                }
+                // highlight
+                if (playerFour.Name == PlayerCurrentlyBetting.Name && !playerFour.HasFolded)
+                {
+                    imgPlayerFourHighlight.Visible = true;
+                }
+                // dealer
+                if (playerFour.PositionToDealer == 0)
+                {
+                    imgPlayerFourDealer.Visible = true;
+
+                    imgPlayerOneDealer.Visible = false;
+                    imgPlayerTwoDealer.Visible = false;
+                    imgPlayerThreeDealer.Visible = false;
+
+                }
+                // stack amount
+                lblPlayerFourStackAmount.Text = playerFour.StackOfChips.ToString();
+                imgPlayerFourStack.Image = Image.FromFile(DisplayStackImage(playerFour.StackOfChips));
             }
             else
             {
-                imgPlayerFour.Image = Image.FromFile($"../../../images/players/{playerFour.Name}.png");
+                lblPlayerFourName.Text = $"";
+                imgPlayerFour.Image = null;
+                lblPlayerFourStackAmount.Text = "";
+                imgPlayerFourStack.Image = null;
             }
-            // highlight
-            if (playerFour.Name == PlayerCurrentlyBetting.Name && !playerFour.HasFolded)
-            {
-                imgPlayerFourHighlight.Visible = true;
-            }
-            // dealer
-            if ((Poker.ActivePlayers.Count == 2 && playerFour.PositionToDealer == 0) || playerFour.PositionToDealer == 1)
-            {
-                imgPlayerFourDealer.Visible = true;
-
-                imgPlayerOneDealer.Visible = false;
-                imgPlayerTwoDealer.Visible = false;
-                imgPlayerThreeDealer.Visible = false;
-                
-            }
-            // stack amount
-            lblPlayerFourStackAmount.Text = playerFour.StackOfChips.ToString();
-            imgPlayerFourStack.Image = Image.FromFile(DisplayStackImage(playerFour.StackOfChips));
+            
         }
-
-        //TODO: show players that are big and small blind
-        //TODO: hide images when player leaves the table aka no chips left
-        //TODO: What should we do if we (human player) runs out of chips, game over??
-        //TODO: Declare winner when there is only one active player in the game
+                
+        //TODO: * stop players jumping round as people leave
+        //TODO: * What should we do if we (human player) runs out of chips, game over??
+        //TODO: * Declare winner when there is only one active player in the game
         private async void UpdateUIAndAutoContinue()
         {            
             DisplayCommunityCards();
@@ -310,10 +340,10 @@ namespace Poker
             DisplayPot();
             DisplayPlayerDetails();    
             
-            int delay = 0;
+            int delay = 1000;
             if (!PlayerCurrentlyBetting.HasFolded)
             {                
-                delay = DelayMaker.Next(4000, 10000);
+                //delay = DelayMaker.Next(4000, 10000);
             }
             await Task.Delay(delay);
 
@@ -322,6 +352,11 @@ namespace Poker
             {
                 Poker.ContinueGame();
                 UpdateUIAndAutoContinue();
+            }
+
+            if (Poker.Stage == PokerStageOfGame.Ready)
+            {
+                btnStartGame.Visible = true;
             }
         }
 
@@ -438,11 +473,8 @@ namespace Poker
                 numRaiseAmount.Visible = true;
                 btnFold.Visible = true;
 
-                //TODO: show all hole cards at showdown
-                //TODO: clear table when someone wins fresh for new game
-                //TODO: dealer button direction is wrong
-                //TODO: work out when to show button again
-                //btnStartGame.Visible = false;
+                //TODO: * show all hole cards at showdown                                                
+                btnStartGame.Visible = false;
 
                 // clears community cards ready for next game
                 lblPot.Text = "0";
@@ -473,8 +505,6 @@ namespace Poker
             }
         }
 
-
-        //TODO: we need to check if it is the current players turn
         private void btnFold_Click(object sender, EventArgs e)
         {
             try

@@ -275,16 +275,7 @@ namespace PokerLibrary.PlayerClasses
             AmountBetInRound = 0;
             BetPlacedInRound = false;
         }
-        
-        //private bool CheckCanMakeBet(PokerGame pokerGame)
-        //{
-        //    if (Stack < pokerGame.MinimumBet)
-        //    {
-
-        //    }
-            
-        //    return true;
-        //}
+                
                 
         public void Call(PokerGame pokerGame)
         {
@@ -324,6 +315,7 @@ namespace PokerLibrary.PlayerClasses
             }
             else
             {
+                //TODO: * manage to fire this exception
                  throw new Exception(errorMessage);
             }
             
@@ -397,31 +389,46 @@ namespace PokerLibrary.PlayerClasses
             Random random = new Random();
             int choice = random.Next(10);
 
+            // raise 20% chance
             if (choice <= 1)
             {
-                int amountToRaiseBy = (random.Next(3) * 5) + pokerGame.BigBlind;
-                int amountRequiredToMeetBet = (pokerGame.MinimumBet + amountToRaiseBy) - AmountBetInRound;
-                              
+                
+                // this is for handling multiple raises
+                int amountRequiredToMeetExistingBet = pokerGame.MinimumBet - AmountBetInRound;
 
-                if (amountRequiredToMeetBet > StackOfChips || pokerGame.LowestStackInPlay < pokerGame.BigBlind)
+                // calculate amount to raise by using big blind plus random number up to 10
+                int amountToRaiseBy = (random.Next(10) + pokerGame.BigBlind);
+
+                // sets amount to raise by to the lowest stack in play
+                // when initial raise value is higher and the lowest value is greater than the big blind
+                if (amountToRaiseBy > pokerGame.LowestStackInPlay && pokerGame.LowestStackInPlay > pokerGame.BigBlind)
                 {
+                    amountToRaiseBy = pokerGame.LowestStackInPlay;
+                }
+                
+                // total chips that would have to added to the pot to raise successfully
+                int totalAmount = amountRequiredToMeetExistingBet + amountToRaiseBy;
+
+                // check player can meet existing amount plus raise
+                // check all player can meet a raise
+                if (totalAmount > StackOfChips || pokerGame.LowestStackInPlay < pokerGame.BigBlind)
+                {
+                    // if not call
                     Call(pokerGame);
                 }
                 else
                 {
-                    if (amountToRaiseBy > pokerGame.LowestStackInPlay && pokerGame.LowestStackInPlay > pokerGame.BigBlind)
-                    {
-                        amountToRaiseBy = pokerGame.LowestStackInPlay;
-                    }
+                    // if they can raise
                     Raise(pokerGame, amountToRaiseBy);
                 }
-                              
-                
+
             }
+            // call 70% chance
             else if (choice >= 2 && choice <= 8)
             {
                 Call(pokerGame);
             }
+            // fold 10% chance
             else
             {
                 Fold(pokerGame);

@@ -98,15 +98,15 @@
             // 
             // btnStartGame
             // 
-            this.btnStartGame.BackColor = System.Drawing.Color.Orange;
+            this.btnStartGame.BackColor = System.Drawing.Color.MidnightBlue;
             this.btnStartGame.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnStartGame.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.btnStartGame.ForeColor = System.Drawing.Color.White;
-            this.btnStartGame.Location = new System.Drawing.Point(27, 60);
+            this.btnStartGame.Location = new System.Drawing.Point(431, 365);
             this.btnStartGame.Name = "btnStartGame";
-            this.btnStartGame.Size = new System.Drawing.Size(150, 60);
+            this.btnStartGame.Size = new System.Drawing.Size(263, 46);
             this.btnStartGame.TabIndex = 0;
-            this.btnStartGame.Text = "Start Game";
+            this.btnStartGame.Text = "Start New Hand";
             this.btnStartGame.UseVisualStyleBackColor = false;
             this.btnStartGame.Click += new System.EventHandler(this.btnStartGame_Click);
             // 
@@ -410,7 +410,7 @@
             // 
             this.imgPlayerTwoDealer.BackColor = System.Drawing.Color.Transparent;
             this.imgPlayerTwoDealer.Image = ((System.Drawing.Image)(resources.GetObject("imgPlayerTwoDealer.Image")));
-            this.imgPlayerTwoDealer.Location = new System.Drawing.Point(525, 411);
+            this.imgPlayerTwoDealer.Location = new System.Drawing.Point(525, 417);
             this.imgPlayerTwoDealer.MaximumSize = new System.Drawing.Size(50, 50);
             this.imgPlayerTwoDealer.Name = "imgPlayerTwoDealer";
             this.imgPlayerTwoDealer.Size = new System.Drawing.Size(50, 50);
@@ -434,7 +434,7 @@
             // 
             this.imgPlayerFourDealer.BackColor = System.Drawing.Color.Transparent;
             this.imgPlayerFourDealer.Image = ((System.Drawing.Image)(resources.GetObject("imgPlayerFourDealer.Image")));
-            this.imgPlayerFourDealer.Location = new System.Drawing.Point(525, 175);
+            this.imgPlayerFourDealer.Location = new System.Drawing.Point(525, 167);
             this.imgPlayerFourDealer.MaximumSize = new System.Drawing.Size(50, 50);
             this.imgPlayerFourDealer.Name = "imgPlayerFourDealer";
             this.imgPlayerFourDealer.Size = new System.Drawing.Size(50, 50);

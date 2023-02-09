@@ -249,8 +249,16 @@ namespace PokerLibrary.PokerClasses
             // this is called at the beginning of each round of betting
             if (PositionOfPlayerToBet == -1)
             {
-                // sets pointer to 0 to initialise loop
-                PositionOfPlayerToBet = 0;
+                if (ActivePlayers.Count > 2)
+                {
+                    // sets pointer to 1 to initialise loop on games with more than 2 players
+                    PositionOfPlayerToBet = 1;
+                }
+                else
+                {
+                    // sets pointer to 0 to initialise loop on games with 2 players
+                    PositionOfPlayerToBet = 0;
+                }
 
                 // if it's a new round of betting
                 // and it's not a new game
@@ -480,14 +488,14 @@ namespace PokerLibrary.PokerClasses
                 // add 1 to position existing players at table
                 foreach (PokerPlayer player in ActivePlayers)
                 {
-                    if (player.PositionToDealer == ActivePlayers.Count - 1)
+                    if (player.PositionToDealer == 0)
                     {
-                        // bump last player back up to 0
-                        player.PositionToDealer = 0;
+                        // bump first player back up to last
+                        player.PositionToDealer = ActivePlayers.Count - 1;
                     }
                     else
                     {
-                        player.PositionToDealer++;
+                        player.PositionToDealer--;                        
                     }
                 }
 
