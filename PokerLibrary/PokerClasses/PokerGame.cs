@@ -143,7 +143,7 @@ namespace PokerLibrary.PokerClasses
         }
         
         //TODO: needs to validate that it cannot be called mid round
-        public void StartGame()
+        public void StartHand()
         {
             // reset properties ready for new game
             DisplayLog.Clear();
@@ -163,7 +163,7 @@ namespace PokerLibrary.PokerClasses
             Stage = PokerStageOfGame.Deal;
 
             // start game log
-            Log.Add($"New game started{Environment.NewLine}");
+            Log.Add($"New hand started{Environment.NewLine}");
 
             // manages postion of players to dealer throughout a game
             // at this point add 1 to postion for existing players

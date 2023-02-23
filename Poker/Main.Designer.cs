@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.btnStartGame = new System.Windows.Forms.Button();
+            this.btnStartHand = new System.Windows.Forms.Button();
             this.lblErrorMessage = new System.Windows.Forms.Label();
             this.imgTest = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
@@ -96,19 +96,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourStack)).BeginInit();
             this.SuspendLayout();
             // 
-            // btnStartGame
+            // btnStartHand
             // 
-            this.btnStartGame.BackColor = System.Drawing.Color.MidnightBlue;
-            this.btnStartGame.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.btnStartGame.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnStartGame.ForeColor = System.Drawing.Color.White;
-            this.btnStartGame.Location = new System.Drawing.Point(431, 365);
-            this.btnStartGame.Name = "btnStartGame";
-            this.btnStartGame.Size = new System.Drawing.Size(263, 46);
-            this.btnStartGame.TabIndex = 0;
-            this.btnStartGame.Text = "Start New Hand";
-            this.btnStartGame.UseVisualStyleBackColor = false;
-            this.btnStartGame.Click += new System.EventHandler(this.btnStartGame_Click);
+            this.btnStartHand.BackColor = System.Drawing.Color.MidnightBlue;
+            this.btnStartHand.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnStartHand.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnStartHand.ForeColor = System.Drawing.Color.White;
+            this.btnStartHand.Location = new System.Drawing.Point(431, 365);
+            this.btnStartHand.Name = "btnStartHand";
+            this.btnStartHand.Size = new System.Drawing.Size(263, 46);
+            this.btnStartHand.TabIndex = 0;
+            this.btnStartHand.Text = "Start New Hand";
+            this.btnStartHand.UseVisualStyleBackColor = false;
+            this.btnStartHand.Click += new System.EventHandler(this.btnStartHand_Click);
             // 
             // lblErrorMessage
             // 
@@ -287,8 +287,7 @@
             this.lblPlayerTwoName.Size = new System.Drawing.Size(155, 21);
             this.lblPlayerTwoName.TabIndex = 20;
             this.lblPlayerTwoName.Text = "lblPlayerTwoName";
-            this.lblPlayerTwoName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.lblPlayerTwoName.Click += new System.EventHandler(this.lblPlayerTwoName_Click);
+            this.lblPlayerTwoName.TextAlign = System.Drawing.ContentAlignment.TopCenter;            
             // 
             // lblPlayerThreeName
             // 
@@ -612,7 +611,7 @@
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.imgTest);
             this.Controls.Add(this.lblErrorMessage);
-            this.Controls.Add(this.btnStartGame);
+            this.Controls.Add(this.btnStartHand);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1141, 673);
             this.MinimumSize = new System.Drawing.Size(888, 500);
@@ -650,7 +649,7 @@
 
         #endregion
 
-        private Button btnStartGame;
+        private Button btnStartHand;
         private Label lblErrorMessage;
         private PictureBox imgTest;
         private TextBox txtLog;

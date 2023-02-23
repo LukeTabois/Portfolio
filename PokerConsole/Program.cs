@@ -105,7 +105,7 @@ internal class Program
         while (playAgain)
         {
             // run game until human players turn
-            poker.StartGame();
+            poker.StartHand();
             ShowLogEntries(poker);
             ShowHoleCards(playerTwo);
 
