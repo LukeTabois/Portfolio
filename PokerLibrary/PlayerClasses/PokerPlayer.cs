@@ -390,7 +390,7 @@ namespace PokerLibrary.PlayerClasses
             int choice = random.Next(10);
 
             // raise 20% chance
-            if (false)//choice <= 1)
+            if (choice <= 1)
             {
                 
                 // this is for handling multiple raises
@@ -424,7 +424,7 @@ namespace PokerLibrary.PlayerClasses
 
             }
             // call 70% chance
-            else if (false)//choice >= 2 && choice <= 8)
+            else if (choice >= 2 && choice <= 8)
             {
                 Call(pokerGame);
             }

@@ -408,7 +408,7 @@ namespace Poker
             int delay = 1000;
             if (!PlayerCurrentlyBetting.HasFolded)
             {
-                //delay = DelayMaker.Next(4000, 10000);
+                delay = DelayMaker.Next(4000, 10000);
             }
             await Task.Delay(delay);
 
@@ -534,10 +534,10 @@ namespace Poker
                 //TODO: allow user to enter own name
                 //TODO: allow user to choose avatar
                 //TODO: allow user to configure AI players
-                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 0, false);
+                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 100, false);
                 PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Luke", 100, true);
-                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 15, false);
-                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 0, false);
+                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 100, false);
+                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 100, false);
 
                 // create game and add players
                 //TODO: allow user to set small blind
