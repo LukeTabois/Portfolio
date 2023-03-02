@@ -394,24 +394,33 @@ namespace Poker
                 imgPlayerFourStack.Image = null;
             }
 
-        }
-              
+        }              
                 
-        //TODO: * What should we do if we (human player) runs out of chips, game over??
-        //TODO: * Declare winner when there is only one active player in the game
+        //TODO: * What should we do if we (human player) runs out of chips, game over??        
         private async void UpdateUIAndAutoContinue()
-        {            
-            DisplayCommunityCards();
-            DisplayNewLogEntries();                        
-            DisplayPot();
-            UpdateDisplayPlayerDetails();    
+        {
             
+            DisplayCommunityCards();
+            DisplayNewLogEntries();
+            DisplayPot();
+            UpdateDisplayPlayerDetails();
+
             int delay = 1000;
             if (!PlayerCurrentlyBetting.HasFolded)
-            {                
+            {
                 //delay = DelayMaker.Next(4000, 10000);
             }
             await Task.Delay(delay);
+
+            // continues to showdown if only the player is left
+            if (Poker.InRoundPlayers.Count == 1)
+            {
+                Poker.ContinueGame();
+                DisplayCommunityCards();
+                DisplayNewLogEntries();
+                DisplayPot();
+                UpdateDisplayPlayerDetails();
+            }
 
             // will continue playing until the human players turn
             if ((IsItHumanPlayersTurn == false || HumanPlayer.HasFolded == true) && Poker.isRoundInPlay == true)
@@ -420,9 +429,28 @@ namespace Poker
                 UpdateUIAndAutoContinue();
             }
 
+            
+
             if (Poker.Stage == PokerStageOfGame.Ready)
             {
-                btnStartHand.Visible = true;
+                if (Poker.ActivePlayers.Count == 1)
+                {                    
+                    btnStartHand.Visible = false;
+                    //TODO: * update messages to who has won
+                    if (MessageBox.Show("Someone Won, Would you like you another game?", "Game Over", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        //TODO: * add code to reset/start new game
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    btnStartHand.Visible = true;
+                }
+                
             }
         }
 
@@ -506,10 +534,10 @@ namespace Poker
                 //TODO: allow user to enter own name
                 //TODO: allow user to choose avatar
                 //TODO: allow user to configure AI players
-                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 100, false);
+                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 0, false);
                 PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Luke", 100, true);
-                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 100, false);
-                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 100, false);
+                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 15, false);
+                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 0, false);
 
                 // create game and add players
                 //TODO: allow user to set small blind
@@ -581,7 +609,7 @@ namespace Poker
         {
             try
             {
-                if (IsItHumanPlayersTurn)
+                if (IsItHumanPlayersTurn && Poker.isRoundInPlay == true)
                 {
                     HumanPlayer.Fold(Poker);
                     UpdateUIAndAutoContinue();
@@ -601,7 +629,7 @@ namespace Poker
         {
             try
             {
-                if (IsItHumanPlayersTurn)
+                if (IsItHumanPlayersTurn && Poker.isRoundInPlay == true)
                 {
                     HumanPlayer.Raise(Poker, Convert.ToInt32(numRaiseAmount.Value));
                     UpdateUIAndAutoContinue();
@@ -621,7 +649,7 @@ namespace Poker
         {
             try
             {
-                if (IsItHumanPlayersTurn)
+                if (IsItHumanPlayersTurn && Poker.isRoundInPlay == true)
                 {
                     HumanPlayer.Call(Poker);
                     UpdateUIAndAutoContinue();

@@ -333,7 +333,7 @@ namespace PokerLibrary.PokerClasses
                     {
                         // if the current betting player is an AI
                         // automatically choose a betting option and let the game continue
-                        currentPlayerToBet.ChooseBettingOption(this);
+                        currentPlayerToBet.ChooseBettingOption(this);                        
                     }
                 }                
 
@@ -737,10 +737,14 @@ namespace PokerLibrary.PokerClasses
             }
 
             DisplayLog.Add(showdownResult.ToString());
-            Log.Add(showdownResult.ToString());
-            isRoundInPlay = false;
+            Log.Add(showdownResult.ToString());           
+
+            isRoundInPlay = false;            
             Stage = PokerStageOfGame.Ready;
-            
+
+            // this will kick players to help determine a winner
+            CheckPlayersCanMeetBigBlind();
+
 
         }
                 
