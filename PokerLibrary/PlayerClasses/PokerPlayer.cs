@@ -342,6 +342,7 @@ namespace PokerLibrary.PlayerClasses
             }
         }
 
+        //TODO: change any UI exceptions to be message boxes where possible
         public void Raise(PokerGame pokerGame, int amountToRaiseBy)
         {
             BetPlacedInRound = true;
@@ -354,8 +355,8 @@ namespace PokerLibrary.PlayerClasses
                 throw new Exception("Raise ammount must at least meet big blind");
             }
 
-            // check the amount to raise is not bigger than the biggest stack of players still in play
-            if (amountToRaiseBy > pokerGame.LowestStackInPlay)
+            // check the amount to raise is not bigger than the lowest stack of players still in play
+            if (amountToRaiseBy > pokerGame.PlayerWithLowestStackInPlay.StackOfChips)
             {
                 throw new Exception("Not all players can meet proposed raise amount");
             }
@@ -401,9 +402,13 @@ namespace PokerLibrary.PlayerClasses
 
                 // sets amount to raise by to the lowest stack in play
                 // when initial raise value is higher and the lowest value is greater than the big blind
-                if (amountToRaiseBy > pokerGame.LowestStackInPlay && pokerGame.LowestStackInPlay > pokerGame.BigBlind)
+                int amountRequiredForPlayerWithLowestStackToMeetExistingBet = pokerGame.MinimumBet - pokerGame.PlayerWithLowestStackInPlay.AmountBetInRound;
+                
+                int lowestStackAmount = pokerGame.PlayerWithLowestStackInPlay.StackOfChips - amountRequiredForPlayerWithLowestStackToMeetExistingBet;
+                
+                if (amountToRaiseBy > pokerGame.PlayerWithLowestStackInPlay.StackOfChips && pokerGame.PlayerWithLowestStackInPlay.StackOfChips >= pokerGame.BigBlind)
                 {
-                    amountToRaiseBy = pokerGame.LowestStackInPlay;
+                    amountToRaiseBy = lowestStackAmount;
                 }
                 
                 // total chips that would have to added to the pot to raise successfully
@@ -411,7 +416,7 @@ namespace PokerLibrary.PlayerClasses
 
                 // check player can meet existing amount plus raise
                 // check all player can meet a raise
-                if (totalAmount > StackOfChips || pokerGame.LowestStackInPlay < pokerGame.BigBlind)
+                if (totalAmount > StackOfChips || lowestStackAmount < pokerGame.BigBlind)
                 {
                     // if not call
                     Call(pokerGame);

@@ -91,21 +91,21 @@ namespace PokerLibrary.PokerClasses
             }
         }
 
-        public int LowestStackInPlay 
+        public PokerPlayer PlayerWithLowestStackInPlay 
         { 
             get
             {
-                int lowestStack = InRoundPlayers.First().StackOfChips;                
+                PokerPlayer playerWithLowestStack = InRoundPlayers.First();                
 
                 foreach (PokerPlayer player in InRoundPlayers)
                 {
-                    if (player.StackOfChips < lowestStack)
+                    if (player.StackOfChips < playerWithLowestStack.StackOfChips)
                     {
-                        lowestStack = player.StackOfChips;
+                        playerWithLowestStack = player;
                     }
                 }
 
-                return lowestStack;
+                return playerWithLowestStack;
             }
         }
 

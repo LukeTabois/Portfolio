@@ -22,7 +22,7 @@ namespace Poker
         {
             get
             {
-                return Poker.Players.Single(p => p.IsHuman == true);
+                return Poker.Players.SingleOrDefault(p => p.IsHuman == true);
             }
         }
 
@@ -96,6 +96,7 @@ namespace Poker
                 return false;
             }
         }
+               
 
         private void DisplayNewLogEntries()
         {
@@ -252,7 +253,7 @@ namespace Poker
                 lblPlayerTwoName.Text = $"{HumanPlayer.Name}";
             }
             // dealer
-            if (HumanPlayer.PositionToDealer == 0)
+            if (HumanPlayer?.PositionToDealer == 0)
             {
                 imgPlayerTwoDealer.Visible = true;
 
@@ -261,8 +262,11 @@ namespace Poker
                 imgPlayerFourDealer.Visible = false;
             }
             // stack amount
-            lblPlayerTwoStackAmount.Text = HumanPlayer.StackOfChips.ToString();
-            imgPlayerTwoStack.Image = Image.FromFile(DisplayStackImage(HumanPlayer.StackOfChips));
+            lblPlayerTwoStackAmount.Text = HumanPlayer?.StackOfChips.ToString();
+            if (HumanPlayer != null)
+            {
+                imgPlayerTwoStack.Image = Image.FromFile(DisplayStackImage(HumanPlayer.StackOfChips));
+            }            
             
             // player one details
             if (RightPlayer != null)
@@ -394,108 +398,42 @@ namespace Poker
                 imgPlayerFourStack.Image = null;
             }
 
-        }              
-                
-        //TODO: * What should we do if we (human player) runs out of chips, game over??        
-        private async void UpdateUIAndAutoContinue()
-        {
-            
-            DisplayCommunityCards();
-            DisplayNewLogEntries();
-            DisplayPot();
-            UpdateDisplayPlayerDetails();
-
-            int delay = 1000;
-            if (!PlayerCurrentlyBetting.HasFolded)
-            {
-                delay = DelayMaker.Next(4000, 10000);
-            }
-            await Task.Delay(delay);
-
-            // continues to showdown if only the player is left
-            if (Poker.InRoundPlayers.Count == 1)
-            {
-                Poker.ContinueGame();
-                DisplayCommunityCards();
-                DisplayNewLogEntries();
-                DisplayPot();
-                UpdateDisplayPlayerDetails();
-            }
-
-            // will continue playing until the human players turn
-            if ((IsItHumanPlayersTurn == false || HumanPlayer.HasFolded == true) && Poker.isRoundInPlay == true)
-            {
-                Poker.ContinueGame();
-                UpdateUIAndAutoContinue();
-            }
-
-            
-
-            if (Poker.Stage == PokerStageOfGame.Ready)
-            {
-                if (Poker.ActivePlayers.Count == 1)
-                {                    
-                    btnStartHand.Visible = false;
-                    //TODO: * update messages to who has won
-                    if (MessageBox.Show("Someone Won, Would you like you another game?", "Game Over", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
-                    {
-                        //TODO: * add code to reset/start new game
-                    }
-                    else
-                    {
-                        this.Close();
-                    }
-                }
-                else
-                {
-                    btnStartHand.Visible = true;
-                }
-                
-            }
         }
-
-
-        public Main()
-        {
-
-            InitializeComponent();
-
-            IsNewGame = true;
-            DelayMaker = new Random();
-            // allow transparent overlay
-            imgPlayerOne.Controls.Add(imgPlayerOneHighlight);
-            imgPlayerOneHighlight.Location = new Point(0, 0);
-            imgPlayerThree.Controls.Add(imgPlayerThreeHighlight);
-            imgPlayerThreeHighlight.Location = new Point(0, 0);
-            imgPlayerFour.Controls.Add(imgPlayerFourHighlight);
-            imgPlayerFourHighlight.Location = new Point(0, 0);
-
-            imgPlayerOneStack.Controls.Add(lblPlayerOneStackAmount);
-            lblPlayerOneStackAmount.Location = new Point(0, 0);
-
-            imgPlayerTwoStack.Controls.Add(lblPlayerTwoStackAmount);
-            lblPlayerTwoStackAmount.Location = new Point(0, 0);
-
-            imgPlayerThreeStack.Controls.Add(lblPlayerThreeStackAmount);
-            lblPlayerThreeStackAmount.Location = new Point(0, 0);
-
-            imgPlayerFourStack.Controls.Add(lblPlayerFourStackAmount);
-            lblPlayerFourStackAmount.Location = new Point(0, 0);
-
-            imgPot.Controls.Add(lblPot);
-            lblPot.Location = new Point(0, 0);
-        }
-
-        
-
-        private void Main_Load(object sender, EventArgs e)
+                
+        private void ResetGame()
         {
             try
             {
+                IsNewGame = true;
+
+                // clears UI from previous ended games
+                btnStartHand.Text = "Start New Game";
+                imgPlayerOne.Image = null;
+                imgPlayerThree.Image = null;
+                imgPlayerFour.Image = null;
+                imgPlayerOneHighlight.Visible = false;
+                imgPlayerThreeHighlight.Visible = false;
+                imgPlayerFourHighlight.Visible = false;
+                imgPlayerOneDealer.Visible = false;
+                imgPlayerThreeDealer.Visible = false;
+                imgPlayerFourDealer.Visible = false;
+                imgPlayerOneStack.Image = null;
+                imgPlayerThreeStack.Image = null;
+                imgPlayerFourStack.Image = null;
+                imgPlayerTwoStack.Image = null;
+                imgHoleCardOne.Image = null;
+                imgHoleCardTwo.Image = null;
+                imgPot.Image = null;
+                imgCommunityCardOne.Image = null;
+                imgCommunityCardTwo.Image = null;
+                imgCommunityCardThree.Image = null;
+                imgCommunityCardFour.Image = null;
+                imgCommunityCardFive.Image = null;
+
                 // resets the UI ready for a new game
                 lblPot.Text = "";
                 lblDisplayLog.Text = "";
-                lblErrorMessage.Text = "";                
+                lblErrorMessage.Text = "";
                 lblPlayerOneName.Text = "";
                 lblPlayerTwoName.Text = "";
                 lblPlayerThreeName.Text = "";
@@ -534,10 +472,10 @@ namespace Poker
                 //TODO: allow user to enter own name
                 //TODO: allow user to choose avatar
                 //TODO: allow user to configure AI players
-                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 100, false);
-                PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Luke", 100, true);
-                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 100, false);
-                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 100, false);
+                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 50, false);
+                PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Luke", 50, true);
+                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 50, false);
+                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 50, false);
 
                 // create game and add players
                 //TODO: allow user to set small blind
@@ -556,7 +494,120 @@ namespace Poker
             {
                 lblErrorMessage.Text = ex.Message;
             }
+        }
+               
+                
+        private async void UpdateUIAndAutoContinue()
+        {
+            DisplayCommunityCards();
+            DisplayNewLogEntries();
+            DisplayPot();
+            UpdateDisplayPlayerDetails();
+
+            // handles when the human player is out
+            if (HumanPlayer == null || (HumanPlayer.HasFolded == true && HumanPlayer.StackOfChips < Poker.BigBlind))
+            {
+                btnStartHand.Visible = false;
+                if (MessageBox.Show("You can no longer meet the big blind, Would you like you another game?", "Game Over", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                {                    
+                    ResetGame();
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
+
+            // this if handles when a round or game has come to an end
+            if (Poker.Stage == PokerStageOfGame.Ready)
+            {
+                if (Poker.ActivePlayers.Count == 1)
+                {                    
+                    btnStartHand.Visible = false;                    
+                    if (MessageBox.Show($"{Poker.ActivePlayers.First().Name} Won, Would you like you another game?", "Game Over", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                    {
+                        ResetGame();
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    btnStartHand.Visible = true;
+                }                
+            }
+            // this else handles the game that is still in progress
+            else
+            {
+                // continues to showdown if only the player is left
+                if (Poker.InRoundPlayers.Count == 1 && IsItHumanPlayersTurn == true)
+                {
+                    Poker.ContinueGame();
+                    UpdateUIAndAutoContinue();
+                }
+
+                // will continue playing until the human players turn
+                // creates a delay when it is not the humans turn and the game is in progress
+                // simulates that the AI is thinking about their turn
+                if (Poker.InRoundPlayers.Count > 1 && (IsItHumanPlayersTurn == false || HumanPlayer.HasFolded == true))
+                {
+                    int delay = 1000;
+                    if (!PlayerCurrentlyBetting.HasFolded)
+                    {
+                        delay = DelayMaker.Next(4000, 10000);
+                    }
+                    await Task.Delay(delay);
+
+                    Poker.ContinueGame();
+                    UpdateUIAndAutoContinue();
+                }
+
+                // do nothing if it is the human players turn, they haven't folded and the round is still in play
+                
+                
+            }
+
+        }
+
+
+        public Main()
+        {
+
+            InitializeComponent();
+
             
+            DelayMaker = new Random();
+            // allow transparent overlay
+            imgPlayerOne.Controls.Add(imgPlayerOneHighlight);
+            imgPlayerOneHighlight.Location = new Point(0, 0);
+            imgPlayerThree.Controls.Add(imgPlayerThreeHighlight);
+            imgPlayerThreeHighlight.Location = new Point(0, 0);
+            imgPlayerFour.Controls.Add(imgPlayerFourHighlight);
+            imgPlayerFourHighlight.Location = new Point(0, 0);
+
+            imgPlayerOneStack.Controls.Add(lblPlayerOneStackAmount);
+            lblPlayerOneStackAmount.Location = new Point(0, 0);
+
+            imgPlayerTwoStack.Controls.Add(lblPlayerTwoStackAmount);
+            lblPlayerTwoStackAmount.Location = new Point(0, 0);
+
+            imgPlayerThreeStack.Controls.Add(lblPlayerThreeStackAmount);
+            lblPlayerThreeStackAmount.Location = new Point(0, 0);
+
+            imgPlayerFourStack.Controls.Add(lblPlayerFourStackAmount);
+            lblPlayerFourStackAmount.Location = new Point(0, 0);
+
+            imgPot.Controls.Add(lblPot);
+            lblPot.Location = new Point(0, 0);
+        }
+
+        
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            ResetGame();
         }
 
         private void btnStartHand_Click(object sender, EventArgs e)
@@ -570,6 +621,7 @@ namespace Poker
 
                 //TODO: * show all hole cards at showdown                                                
                 btnStartHand.Visible = false;
+                btnStartHand.Text = "Start New Hand";
 
                 // clears community cards ready for next game
                 lblPot.Text = "0";
