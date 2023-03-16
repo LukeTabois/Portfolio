@@ -80,7 +80,20 @@ namespace Poker
         { 
             get
             {
-                return Poker.ActivePlayers.Single(p => p.PositionToDealer == Poker.PositionOfPlayerToBet);
+                PokerPlayer playerCurrentlyBetting = Poker.ActivePlayers.SingleOrDefault(p => p.PositionToDealer == Poker.PositionOfPlayerToBet);
+                if (playerCurrentlyBetting == null)
+                {
+                    if (Poker.PositionOfPlayerToBet >= Poker.ActivePlayers.Count - 1)
+                    {
+                        Poker.PositionOfPlayerToBet = 0;
+                    }
+                    else
+                    {
+                        Poker.PositionOfPlayerToBet++;
+                    }
+                }
+                playerCurrentlyBetting = Poker.ActivePlayers.SingleOrDefault(p => p.PositionToDealer == Poker.PositionOfPlayerToBet);
+                return playerCurrentlyBetting;
             }
         }
 
@@ -88,7 +101,7 @@ namespace Poker
         {
             get
             {
-                if (HumanPlayer.Name == PlayerCurrentlyBetting.Name)
+                if (HumanPlayer.Name == PlayerCurrentlyBetting?.Name)
                 {
                     return true;
                 }
@@ -99,7 +112,7 @@ namespace Poker
                
 
         private void DisplayNewLogEntries()
-        {
+        {            
             // add it's your turn message to display log
             if (Poker.PositionOfPlayerToBet >= 0 && PlayerCurrentlyBetting.IsHuman == true && !PlayerCurrentlyBetting.HasFolded)
             {
@@ -280,13 +293,15 @@ namespace Poker
                 if (RightPlayer.HasFolded)
                 {
                     imgPlayerOne.Image = Image.FromFile($"../../../images/players/{RightPlayer.Name}Folded.png");
+                    imgPlayerOneHoleCardOne.Image = null;
+                    imgPlayerOneHoleCardTwo.Image = null;
                 }
                 else
                 {
                     imgPlayerOne.Image = Image.FromFile($"../../../images/players/{RightPlayer.Name}.png");
                 }
                 // highlight
-                if (RightPlayer.Name == PlayerCurrentlyBetting.Name && !RightPlayer.HasFolded)
+                if (RightPlayer.Name == PlayerCurrentlyBetting?.Name && !RightPlayer.HasFolded)
                 {
                     imgPlayerOneHighlight.Visible = true;
                 }
@@ -309,6 +324,9 @@ namespace Poker
                 imgPlayerOne.Image = null;
                 lblPlayerOneStackAmount.Text = "";
                 imgPlayerOneStack.Image = null;
+                imgPlayerOneHoleCardOne.Image = null;
+                imgPlayerOneHoleCardTwo.Image = null;
+
             }
             
             // player three details
@@ -323,13 +341,15 @@ namespace Poker
                 if (LeftPlayer.HasFolded)
                 {
                     imgPlayerThree.Image = Image.FromFile($"../../../images/players/{LeftPlayer.Name}Folded.png");
+                    imgPlayerThreeHoleCardOne.Image = null;
+                    imgPlayerThreeHoleCardTwo.Image = null;
                 }
                 else
                 {
                     imgPlayerThree.Image = Image.FromFile($"../../../images/players/{LeftPlayer.Name}.png");
                 }
                 // highlight
-                if (LeftPlayer.Name == PlayerCurrentlyBetting.Name && !LeftPlayer.HasFolded)
+                if (LeftPlayer.Name == PlayerCurrentlyBetting?.Name && !LeftPlayer.HasFolded)
                 {
                     imgPlayerThreeHighlight.Visible = true;
                 }
@@ -352,6 +372,8 @@ namespace Poker
                 imgPlayerThree.Image = null;
                 lblPlayerThreeStackAmount.Text = "";
                 imgPlayerThreeStack.Image = null;
+                imgPlayerThreeHoleCardOne.Image = null;
+                imgPlayerThreeHoleCardTwo.Image = null;
             }
 
             // player four details
@@ -366,13 +388,15 @@ namespace Poker
                 if (TopPlayer.HasFolded)
                 {
                     imgPlayerFour.Image = Image.FromFile($"../../../images/players/{TopPlayer.Name}Folded.png");
+                    imgPlayerFourHoleCardOne.Image = null;
+                    imgPlayerFourHoleCardTwo.Image = null;
                 }
                 else
                 {
                     imgPlayerFour.Image = Image.FromFile($"../../../images/players/{TopPlayer.Name}.png");
                 }
                 // highlight
-                if (TopPlayer.Name == PlayerCurrentlyBetting.Name && !TopPlayer.HasFolded)
+                if (TopPlayer.Name == PlayerCurrentlyBetting?.Name && !TopPlayer.HasFolded)
                 {
                     imgPlayerFourHighlight.Visible = true;
                 }
@@ -396,6 +420,8 @@ namespace Poker
                 imgPlayerFour.Image = null;
                 lblPlayerFourStackAmount.Text = "";
                 imgPlayerFourStack.Image = null;
+                imgPlayerFourHoleCardOne.Image = null;
+                imgPlayerFourHoleCardTwo.Image = null;
             }
 
         }
@@ -429,6 +455,14 @@ namespace Poker
                 imgCommunityCardThree.Image = null;
                 imgCommunityCardFour.Image = null;
                 imgCommunityCardFive.Image = null;
+                imgPlayerOneHoleCardOne.Image = null;
+                imgPlayerOneHoleCardTwo.Image = null;
+                imgPlayerThreeHoleCardOne.Image = null;
+                imgPlayerThreeHoleCardTwo.Image = null;
+                imgPlayerFourHoleCardOne.Image = null;
+                imgPlayerFourHoleCardTwo.Image = null;
+
+
 
                 // resets the UI ready for a new game
                 lblPot.Text = "";
@@ -504,6 +538,9 @@ namespace Poker
             DisplayPot();
             UpdateDisplayPlayerDetails();
 
+
+                       
+
             // handles when the human player is out
             if (HumanPlayer == null || (HumanPlayer.HasFolded == true && HumanPlayer.StackOfChips < Poker.BigBlind))
             {
@@ -536,6 +573,25 @@ namespace Poker
                 else
                 {
                     btnStartHand.Visible = true;
+
+                    if (RightPlayer != null && !RightPlayer.HasFolded)
+                    {
+                        imgPlayerOneHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{RightPlayer.HoleCards.First().Image}");
+                        imgPlayerOneHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{RightPlayer.HoleCards.Last().Image}");
+                    }
+
+                    if (LeftPlayer != null && !LeftPlayer.HasFolded)
+                    {
+                        imgPlayerThreeHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{LeftPlayer.HoleCards.First().Image}");
+                        imgPlayerThreeHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{LeftPlayer.HoleCards.Last().Image}");
+                    }
+
+                    if (TopPlayer != null && !TopPlayer.HasFolded)
+                    {
+                        imgPlayerFourHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{TopPlayer.HoleCards.First().Image}");
+                        imgPlayerFourHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{TopPlayer.HoleCards.Last().Image}");
+                    }                    
+
                 }                
             }
             // this else handles the game that is still in progress
@@ -643,6 +699,16 @@ namespace Poker
                 // show my hole cards                
                 imgHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{HumanPlayer.HoleCards.First().Image}");
                 imgHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{HumanPlayer.HoleCards.Last().Image}");
+
+                // show back of other player hole cards
+                imgPlayerOneHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+                imgPlayerOneHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+
+                imgPlayerThreeHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+                imgPlayerThreeHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+
+                imgPlayerFourHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+                imgPlayerFourHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
 
                 // betting starts
                 Poker.ContinueGame();

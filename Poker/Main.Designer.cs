@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.btnStartHand = new System.Windows.Forms.Button();
             this.lblErrorMessage = new System.Windows.Forms.Label();
-            this.imgTest = new System.Windows.Forms.PictureBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.imgHoleCardOne = new System.Windows.Forms.PictureBox();
             this.imgHoleCardTwo = new System.Windows.Forms.PictureBox();
@@ -70,7 +69,12 @@
             this.lblPlayerFourStackAmount = new System.Windows.Forms.Label();
             this.txtDisplayLog = new System.Windows.Forms.TextBox();
             this.lblDisplayLog = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.imgTest)).BeginInit();
+            this.imgPlayerOneHoleCardOne = new System.Windows.Forms.PictureBox();
+            this.imgPlayerOneHoleCardTwo = new System.Windows.Forms.PictureBox();
+            this.imgPlayerThreeHoleCardOne = new System.Windows.Forms.PictureBox();
+            this.imgPlayerThreeHoleCardTwo = new System.Windows.Forms.PictureBox();
+            this.imgPlayerFourHoleCardOne = new System.Windows.Forms.PictureBox();
+            this.imgPlayerFourHoleCardTwo = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.imgHoleCardOne)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgHoleCardTwo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardOne)).BeginInit();
@@ -94,6 +98,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerTwoStack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerThreeStack)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourStack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerOneHoleCardOne)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerOneHoleCardTwo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerThreeHoleCardOne)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerThreeHoleCardTwo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourHoleCardOne)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourHoleCardTwo)).BeginInit();
             this.SuspendLayout();
             // 
             // btnStartHand
@@ -122,18 +132,6 @@
             this.lblErrorMessage.TabIndex = 2;
             this.lblErrorMessage.Text = "lblError";
             // 
-            // imgTest
-            // 
-            this.imgTest.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.imgTest.Image = ((System.Drawing.Image)(resources.GetObject("imgTest.Image")));
-            this.imgTest.InitialImage = null;
-            this.imgTest.Location = new System.Drawing.Point(1013, 472);
-            this.imgTest.Name = "imgTest";
-            this.imgTest.Size = new System.Drawing.Size(100, 150);
-            this.imgTest.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.imgTest.TabIndex = 3;
-            this.imgTest.TabStop = false;
-            // 
             // txtLog
             // 
             this.txtLog.BackColor = System.Drawing.Color.Black;
@@ -142,7 +140,7 @@
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(268, 69);
+            this.txtLog.Size = new System.Drawing.Size(268, 205);
             this.txtLog.TabIndex = 4;
             // 
             // imgHoleCardOne
@@ -287,7 +285,7 @@
             this.lblPlayerTwoName.Size = new System.Drawing.Size(155, 21);
             this.lblPlayerTwoName.TabIndex = 20;
             this.lblPlayerTwoName.Text = "lblPlayerTwoName";
-            this.lblPlayerTwoName.TextAlign = System.Drawing.ContentAlignment.TopCenter;            
+            this.lblPlayerTwoName.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // lblPlayerThreeName
             // 
@@ -564,6 +562,72 @@
             this.lblDisplayLog.TabIndex = 44;
             this.lblDisplayLog.Text = "lblDisplayLog";
             // 
+            // imgPlayerOneHoleCardOne
+            // 
+            this.imgPlayerOneHoleCardOne.BackColor = System.Drawing.Color.Transparent;
+            this.imgPlayerOneHoleCardOne.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imgPlayerOneHoleCardOne.Location = new System.Drawing.Point(937, 380);
+            this.imgPlayerOneHoleCardOne.Name = "imgPlayerOneHoleCardOne";
+            this.imgPlayerOneHoleCardOne.Size = new System.Drawing.Size(63, 87);
+            this.imgPlayerOneHoleCardOne.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgPlayerOneHoleCardOne.TabIndex = 45;
+            this.imgPlayerOneHoleCardOne.TabStop = false;
+            // 
+            // imgPlayerOneHoleCardTwo
+            // 
+            this.imgPlayerOneHoleCardTwo.BackColor = System.Drawing.Color.Transparent;
+            this.imgPlayerOneHoleCardTwo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imgPlayerOneHoleCardTwo.Location = new System.Drawing.Point(1006, 380);
+            this.imgPlayerOneHoleCardTwo.Name = "imgPlayerOneHoleCardTwo";
+            this.imgPlayerOneHoleCardTwo.Size = new System.Drawing.Size(63, 87);
+            this.imgPlayerOneHoleCardTwo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgPlayerOneHoleCardTwo.TabIndex = 46;
+            this.imgPlayerOneHoleCardTwo.TabStop = false;
+            // 
+            // imgPlayerThreeHoleCardOne
+            // 
+            this.imgPlayerThreeHoleCardOne.BackColor = System.Drawing.Color.Transparent;
+            this.imgPlayerThreeHoleCardOne.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imgPlayerThreeHoleCardOne.Location = new System.Drawing.Point(48, 380);
+            this.imgPlayerThreeHoleCardOne.Name = "imgPlayerThreeHoleCardOne";
+            this.imgPlayerThreeHoleCardOne.Size = new System.Drawing.Size(63, 87);
+            this.imgPlayerThreeHoleCardOne.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgPlayerThreeHoleCardOne.TabIndex = 47;
+            this.imgPlayerThreeHoleCardOne.TabStop = false;
+            // 
+            // imgPlayerThreeHoleCardTwo
+            // 
+            this.imgPlayerThreeHoleCardTwo.BackColor = System.Drawing.Color.Transparent;
+            this.imgPlayerThreeHoleCardTwo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imgPlayerThreeHoleCardTwo.Location = new System.Drawing.Point(117, 380);
+            this.imgPlayerThreeHoleCardTwo.Name = "imgPlayerThreeHoleCardTwo";
+            this.imgPlayerThreeHoleCardTwo.Size = new System.Drawing.Size(63, 87);
+            this.imgPlayerThreeHoleCardTwo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgPlayerThreeHoleCardTwo.TabIndex = 48;
+            this.imgPlayerThreeHoleCardTwo.TabStop = false;
+            // 
+            // imgPlayerFourHoleCardOne
+            // 
+            this.imgPlayerFourHoleCardOne.BackColor = System.Drawing.Color.Transparent;
+            this.imgPlayerFourHoleCardOne.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imgPlayerFourHoleCardOne.Location = new System.Drawing.Point(348, 30);
+            this.imgPlayerFourHoleCardOne.Name = "imgPlayerFourHoleCardOne";
+            this.imgPlayerFourHoleCardOne.Size = new System.Drawing.Size(63, 87);
+            this.imgPlayerFourHoleCardOne.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgPlayerFourHoleCardOne.TabIndex = 49;
+            this.imgPlayerFourHoleCardOne.TabStop = false;
+            // 
+            // imgPlayerFourHoleCardTwo
+            // 
+            this.imgPlayerFourHoleCardTwo.BackColor = System.Drawing.Color.Transparent;
+            this.imgPlayerFourHoleCardTwo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.imgPlayerFourHoleCardTwo.Location = new System.Drawing.Point(417, 30);
+            this.imgPlayerFourHoleCardTwo.Name = "imgPlayerFourHoleCardTwo";
+            this.imgPlayerFourHoleCardTwo.Size = new System.Drawing.Size(63, 87);
+            this.imgPlayerFourHoleCardTwo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.imgPlayerFourHoleCardTwo.TabIndex = 50;
+            this.imgPlayerFourHoleCardTwo.TabStop = false;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -571,6 +635,12 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1125, 634);
+            this.Controls.Add(this.imgPlayerFourHoleCardTwo);
+            this.Controls.Add(this.imgPlayerFourHoleCardOne);
+            this.Controls.Add(this.imgPlayerThreeHoleCardTwo);
+            this.Controls.Add(this.imgPlayerThreeHoleCardOne);
+            this.Controls.Add(this.imgPlayerOneHoleCardTwo);
+            this.Controls.Add(this.imgPlayerOneHoleCardOne);
             this.Controls.Add(this.lblDisplayLog);
             this.Controls.Add(this.txtDisplayLog);
             this.Controls.Add(this.lblPlayerFourStackAmount);
@@ -609,7 +679,6 @@
             this.Controls.Add(this.imgHoleCardTwo);
             this.Controls.Add(this.imgHoleCardOne);
             this.Controls.Add(this.txtLog);
-            this.Controls.Add(this.imgTest);
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.btnStartHand);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -618,7 +687,6 @@
             this.Name = "Main";
             this.Text = "Poker";
             this.Load += new System.EventHandler(this.Main_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.imgTest)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgHoleCardOne)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgHoleCardTwo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgCommunityCardOne)).EndInit();
@@ -642,6 +710,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerTwoStack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerThreeStack)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourStack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerOneHoleCardOne)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerOneHoleCardTwo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerThreeHoleCardOne)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerThreeHoleCardTwo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourHoleCardOne)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPlayerFourHoleCardTwo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -651,7 +725,6 @@
 
         private Button btnStartHand;
         private Label lblErrorMessage;
-        private PictureBox imgTest;
         private TextBox txtLog;
         private PictureBox imgHoleCardOne;
         private PictureBox imgHoleCardTwo;
@@ -690,5 +763,11 @@
         private Label lblPlayerFourStackAmount;
         private TextBox txtDisplayLog;
         private Label lblDisplayLog;
+        private PictureBox imgPlayerOneHoleCardOne;
+        private PictureBox imgPlayerOneHoleCardTwo;
+        private PictureBox imgPlayerThreeHoleCardOne;
+        private PictureBox imgPlayerThreeHoleCardTwo;
+        private PictureBox imgPlayerFourHoleCardOne;
+        private PictureBox imgPlayerFourHoleCardTwo;
     }
 }

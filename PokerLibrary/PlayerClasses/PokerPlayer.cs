@@ -189,7 +189,7 @@ namespace PokerLibrary.PlayerClasses
             // sets to the highest value in the list
             int previousCardValue = (int)cards.First().Value;
             // will count is cards are in descending order
-            int straightCounter = 0;
+            int straightCounter = 1;
             // loops through each card in cards list
             foreach (Card card in cards)
             {
@@ -202,7 +202,7 @@ namespace PokerLibrary.PlayerClasses
                 // handles if cards are not the same value
                 else if((int)card.Value != previousCardValue)
                 {
-                    straightCounter = 0;
+                    straightCounter = 1;
                     highestCardValueInStraight = card.Value;
                 }
 
