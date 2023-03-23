@@ -3,13 +3,15 @@ using PokerLibrary.CardClasses;
 using PokerLibrary.PlayerClasses;
 using PokerLibrary.PokerClasses;
 using System.Numerics;
+using System.Reflection;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Poker
 {
     public partial class Main : Form
     {
-        //imgTest.Image = Image.FromFile($"../../../images/playingcards/{hand.First().Image}");
+        //imgTest.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{hand.First().Image}");
+        public string SolutionDirectory { get; set; }
 
         public PokerGame Poker { get; set; }
 
@@ -160,21 +162,21 @@ namespace Poker
                 case 3:
                     if (imgCommunityCardOne.Image == null)
                     {
-                        imgCommunityCardOne.Image = Image.FromFile($"../../../images/playingcards/{Poker.CommunityCards.ElementAt(0).Image}");
-                        imgCommunityCardTwo.Image = Image.FromFile($"../../../images/playingcards/{Poker.CommunityCards.ElementAt(1).Image}");
-                        imgCommunityCardThree.Image = Image.FromFile($"../../../images/playingcards/{Poker.CommunityCards.ElementAt(2).Image}");
+                        imgCommunityCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{Poker.CommunityCards.ElementAt(0).Image}");
+                        imgCommunityCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{Poker.CommunityCards.ElementAt(1).Image}");
+                        imgCommunityCardThree.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{Poker.CommunityCards.ElementAt(2).Image}");
                     }                    
                     break;
                 case 4:
                     if (imgCommunityCardFour.Image == null)
                     {
-                        imgCommunityCardFour.Image = Image.FromFile($"../../../images/playingcards/{Poker.CommunityCards.ElementAt(3).Image}");
+                        imgCommunityCardFour.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{Poker.CommunityCards.ElementAt(3).Image}");
                     }                    
                     break;
                 case 5:
                     if (imgCommunityCardFive.Image == null)
                     {
-                        imgCommunityCardFive.Image = Image.FromFile($"../../../images/playingcards/{Poker.CommunityCards.ElementAt(4).Image}");
+                        imgCommunityCardFive.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{Poker.CommunityCards.ElementAt(4).Image}");
                     }                    
                     break;
                 default:
@@ -196,39 +198,39 @@ namespace Poker
 
             if (stackAmount > 200)
             {
-                return $"../../../images/chips/BluePokerChips9.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips9.png";
             }
             else if (stackAmount > 175 && stackAmount <= 200)
             {
-                return $"../../../images/chips/BluePokerChips8.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips8.png";
             }
             else if (stackAmount > 150 && stackAmount <= 175)
             {
-                return $"../../../images/chips/BluePokerChips7.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips7.png";
             }
             else if (stackAmount > 125 && stackAmount <= 150)
             {
-                return $"../../../images/chips/BluePokerChips6.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips6.png";
             }
             else if (stackAmount > 100 && stackAmount <= 125)
             {
-                return $"../../../images/chips/BluePokerChips5.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips5.png";
             }
             else if (stackAmount > 75 && stackAmount <= 100)
             {
-                return $"../../../images/chips/BluePokerChips4.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips4.png";
             }
             else if (stackAmount > 50 && stackAmount <= 75)
             {
-                return $"../../../images/chips/BluePokerChips3.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips3.png";
             }
             else if (stackAmount > 25 && stackAmount <= 50)
             {
-                return $"../../../images/chips/BluePokerChips2.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips2.png";
             }
             else
             {
-                return $"../../../images/chips/BluePokerChips1.png";
+                return $"{SolutionDirectory}\\images\\chips\\BluePokerChips1.png";
             }
         }
 
@@ -292,13 +294,13 @@ namespace Poker
                 // picture
                 if (RightPlayer.HasFolded)
                 {
-                    imgPlayerOne.Image = Image.FromFile($"../../../images/players/{RightPlayer.Name}Folded.png");
+                    imgPlayerOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\players\\{RightPlayer.Name}Folded.png");
                     imgPlayerOneHoleCardOne.Image = null;
                     imgPlayerOneHoleCardTwo.Image = null;
                 }
                 else
                 {
-                    imgPlayerOne.Image = Image.FromFile($"../../../images/players/{RightPlayer.Name}.png");
+                    imgPlayerOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\players\\{RightPlayer.Name}.png");
                 }
                 // highlight
                 if (RightPlayer.Name == PlayerCurrentlyBetting?.Name && !RightPlayer.HasFolded)
@@ -340,13 +342,13 @@ namespace Poker
                 // picture
                 if (LeftPlayer.HasFolded)
                 {
-                    imgPlayerThree.Image = Image.FromFile($"../../../images/players/{LeftPlayer.Name}Folded.png");
+                    imgPlayerThree.Image = Image.FromFile($"{SolutionDirectory}\\images\\players\\{LeftPlayer.Name}Folded.png");
                     imgPlayerThreeHoleCardOne.Image = null;
                     imgPlayerThreeHoleCardTwo.Image = null;
                 }
                 else
                 {
-                    imgPlayerThree.Image = Image.FromFile($"../../../images/players/{LeftPlayer.Name}.png");
+                    imgPlayerThree.Image = Image.FromFile($"{SolutionDirectory}\\images\\players\\{LeftPlayer.Name}.png");
                 }
                 // highlight
                 if (LeftPlayer.Name == PlayerCurrentlyBetting?.Name && !LeftPlayer.HasFolded)
@@ -387,13 +389,13 @@ namespace Poker
                 // picture
                 if (TopPlayer.HasFolded)
                 {
-                    imgPlayerFour.Image = Image.FromFile($"../../../images/players/{TopPlayer.Name}Folded.png");
+                    imgPlayerFour.Image = Image.FromFile($"{SolutionDirectory}\\images\\players\\{TopPlayer.Name}Folded.png");
                     imgPlayerFourHoleCardOne.Image = null;
                     imgPlayerFourHoleCardTwo.Image = null;
                 }
                 else
                 {
-                    imgPlayerFour.Image = Image.FromFile($"../../../images/players/{TopPlayer.Name}.png");
+                    imgPlayerFour.Image = Image.FromFile($"{SolutionDirectory}\\images\\players\\{TopPlayer.Name}.png");
                 }
                 // highlight
                 if (TopPlayer.Name == PlayerCurrentlyBetting?.Name && !TopPlayer.HasFolded)
@@ -577,20 +579,20 @@ namespace Poker
 
                     if (RightPlayer != null && !RightPlayer.HasFolded)
                     {
-                        imgPlayerOneHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{RightPlayer.HoleCards.First().Image}");
-                        imgPlayerOneHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{RightPlayer.HoleCards.Last().Image}");
+                        imgPlayerOneHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{RightPlayer.HoleCards.First().Image}");
+                        imgPlayerOneHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{RightPlayer.HoleCards.Last().Image}");
                     }
 
                     if (LeftPlayer != null && !LeftPlayer.HasFolded)
                     {
-                        imgPlayerThreeHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{LeftPlayer.HoleCards.First().Image}");
-                        imgPlayerThreeHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{LeftPlayer.HoleCards.Last().Image}");
+                        imgPlayerThreeHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{LeftPlayer.HoleCards.First().Image}");
+                        imgPlayerThreeHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{LeftPlayer.HoleCards.Last().Image}");
                     }
 
                     if (TopPlayer != null && !TopPlayer.HasFolded)
                     {
-                        imgPlayerFourHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{TopPlayer.HoleCards.First().Image}");
-                        imgPlayerFourHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{TopPlayer.HoleCards.Last().Image}");
+                        imgPlayerFourHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{TopPlayer.HoleCards.First().Image}");
+                        imgPlayerFourHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{TopPlayer.HoleCards.Last().Image}");
                     }                    
 
                 }                
@@ -664,6 +666,7 @@ namespace Poker
 
         private void Main_Load(object sender, EventArgs e)
         {
+            SolutionDirectory = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             ResetGame();
         }
 
@@ -697,18 +700,18 @@ namespace Poker
                 DisplayNewLogEntries();
 
                 // show my hole cards                
-                imgHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/{HumanPlayer.HoleCards.First().Image}");
-                imgHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/{HumanPlayer.HoleCards.Last().Image}");
+                imgHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{HumanPlayer.HoleCards.First().Image}");
+                imgHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\{HumanPlayer.HoleCards.Last().Image}");
 
                 // show back of other player hole cards
-                imgPlayerOneHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
-                imgPlayerOneHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+                imgPlayerOneHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\back_of_card.png");
+                imgPlayerOneHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\back_of_card.png");
 
-                imgPlayerThreeHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
-                imgPlayerThreeHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+                imgPlayerThreeHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\back_of_card.png");
+                imgPlayerThreeHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\back_of_card.png");
 
-                imgPlayerFourHoleCardOne.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
-                imgPlayerFourHoleCardTwo.Image = Image.FromFile($"../../../images/playingcards/back_of_card.png");
+                imgPlayerFourHoleCardOne.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\back_of_card.png");
+                imgPlayerFourHoleCardTwo.Image = Image.FromFile($"{SolutionDirectory}\\images\\playingcards\\back_of_card.png");
 
                 // betting starts
                 Poker.ContinueGame();
