@@ -461,6 +461,7 @@ namespace Poker
                 imgPlayerThreeHoleCardTwo.Image = null;
                 imgPlayerFourHoleCardOne.Image = null;
                 imgPlayerFourHoleCardTwo.Image = null;
+                lblErrorMessage.Text = "";
 
 
 
@@ -506,10 +507,10 @@ namespace Poker
                 //TODO: allow user to enter own name
                 //TODO: allow user to choose avatar
                 //TODO: allow user to configure AI players
-                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 50, false);
-                PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Luke", 50, true);
-                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 50, false);
-                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 50, false);
+                PokerPlayer playerOne = new PokerPlayer("Dianeemailaddress", "Diane", 100, false);
+                PokerPlayer playerTwo = new PokerPlayer("Lukeemailaddress", "Player", 100, true);
+                PokerPlayer playerThree = new PokerPlayer("Ericemailaddress", "Eric", 100, false);
+                PokerPlayer playerFour = new PokerPlayer("Billemailaddress", "Bill", 100, false);
 
                 // create game and add players
                 //TODO: allow user to set small blind
@@ -609,10 +610,10 @@ namespace Poker
                 // simulates that the AI is thinking about their turn
                 if (Poker.InRoundPlayers.Count > 1 && (IsItHumanPlayersTurn == false || HumanPlayer.HasFolded == true))
                 {
-                    int delay = 1000;
+                    int delay = 2500;
                     if (!PlayerCurrentlyBetting.HasFolded)
                     {
-                        delay = DelayMaker.Next(4000, 10000);
+                        delay = DelayMaker.Next(5000, 10000);
                     }
                     await Task.Delay(delay);
 
@@ -674,8 +675,7 @@ namespace Poker
                 btnRaise.Visible = true;
                 numRaiseAmount.Visible = true;
                 btnFold.Visible = true;
-
-                //TODO: * show all hole cards at showdown                                                
+                                                                                
                 btnStartHand.Visible = false;
                 btnStartHand.Text = "Start New Hand";
 

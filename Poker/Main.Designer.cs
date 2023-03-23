@@ -142,6 +142,7 @@
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtLog.Size = new System.Drawing.Size(268, 205);
             this.txtLog.TabIndex = 4;
+            this.txtLog.Visible = false;
             // 
             // imgHoleCardOne
             // 
@@ -553,12 +554,12 @@
             // 
             this.lblDisplayLog.AutoSize = true;
             this.lblDisplayLog.BackColor = System.Drawing.Color.Transparent;
-            this.lblDisplayLog.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.lblDisplayLog.Font = new System.Drawing.Font("Segoe UI", 12.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblDisplayLog.ForeColor = System.Drawing.Color.DarkOrange;
-            this.lblDisplayLog.Location = new System.Drawing.Point(12, 516);
-            this.lblDisplayLog.MaximumSize = new System.Drawing.Size(410, 100);
+            this.lblDisplayLog.Location = new System.Drawing.Point(12, 498);
+            this.lblDisplayLog.MaximumSize = new System.Drawing.Size(400, 120);
             this.lblDisplayLog.Name = "lblDisplayLog";
-            this.lblDisplayLog.Size = new System.Drawing.Size(132, 25);
+            this.lblDisplayLog.Size = new System.Drawing.Size(120, 23);
             this.lblDisplayLog.TabIndex = 44;
             this.lblDisplayLog.Text = "lblDisplayLog";
             // 
@@ -682,6 +683,7 @@
             this.Controls.Add(this.lblErrorMessage);
             this.Controls.Add(this.btnStartHand);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1141, 673);
             this.MinimumSize = new System.Drawing.Size(888, 500);
             this.Name = "Main";
