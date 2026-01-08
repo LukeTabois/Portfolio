@@ -502,7 +502,7 @@
                 }
                 else if(isPlayerTurn == true)
                 {
-                    Console.WriteLine("You stupid fuckin moron pick another");
+                    Console.WriteLine("Coordinate provided was already selected, please pick another");
                     Console.WriteLine();
                 }
             }
